@@ -394,16 +394,25 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const mid = Math.ceil(items.length / 2);
     items.forEach((item, index) => {
-      const link = document.createElement("a");
-      link.className = "dash-link-item";
-      link.target = "_blank";
-      link.href = `https://search.shopping.naver.com/search/all?query=${encodeURIComponent(item)}`;
-      link.innerHTML = `<span>🏷️</span> ${item}`;
+      const linkContainer = document.createElement("div");
+      linkContainer.className = "dash-link-item";
+      linkContainer.style.display = "flex";
+      linkContainer.style.flexDirection = "column";
+      linkContainer.style.gap = "8px";
+      linkContainer.style.cursor = "default";
+      
+      linkContainer.innerHTML = `
+        <div style="font-weight:600; color:#4a4a4a; display:flex; align-items:center; gap:6px;"><span>🏷️</span> ${item}</div>
+        <div style="display:flex; gap:8px;">
+          <a href="https://search.shopping.naver.com/search/all?query=${encodeURIComponent(item)}" target="_blank" style="flex:1; padding:6px 0; text-align:center; background:#03c75a; color:white; border-radius:6px; font-size:0.85rem; text-decoration:none; font-weight:600; transition:opacity 0.2s;">네이버</a>
+          <a href="https://www.musinsa.com/search/musinsa/integration?type=&q=${encodeURIComponent(item)}" target="_blank" style="flex:1; padding:6px 0; text-align:center; background:#000000; color:white; border-radius:6px; font-size:0.85rem; text-decoration:none; font-weight:600; transition:opacity 0.2s;">무신사</a>
+        </div>
+      `;
       
       if (index < mid) {
-        dashLinksTop.appendChild(link);
+        dashLinksTop.appendChild(linkContainer);
       } else {
-        dashLinksBottom.appendChild(link);
+        dashLinksBottom.appendChild(linkContainer);
       }
     });
 
@@ -418,12 +427,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const getPhotoUrl = (kw) => {
       const closerData = window.CLOSER_DATA || (typeof CLOSER_DATA !== "undefined" ? CLOSER_DATA : null);
       const collection = (closerData && closerData.fallbackImages) ? closerData.fallbackImages : {};
-      const imgId = collection[kw] || collection["default"] || "1483985988355-763728e1935b";
+      const imgKeys = Object.values(collection);
+      const randomImg = imgKeys[Math.floor(Math.random() * imgKeys.length)];
+      const imgId = collection[kw] || randomImg || "1483985988355-763728e1935b";
       return `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
     };
 
     const photoUrl = getPhotoUrl(unsplashKeyword);
-    const title = stylingData.title;
+    const title = `[${chosenWhen}] ${stylingData.title}`;
     const bodyAdvice = body.length > 0 ? `선택하신 신체특성(${body.join(", ")})을 보완하기 위해 실루엣의 균형을 완벽히 잡았습니다.` : "";
     const descr = `<strong>[AI 분석 처방]</strong> ${chosenWhen} ${chosenWhere}에서 ${chosenRole}로서 가장 돋보일 수 있는 연출입니다. ${stylingData.descr} <br><br><em>${bodyAdvice}</em>`;
 
@@ -475,7 +486,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const kw = aiResult.unsplashKeyword || "fashion";
             const closerData = window.CLOSER_DATA || (typeof CLOSER_DATA !== "undefined" ? CLOSER_DATA : null);
             const collection = (closerData && closerData.fallbackImages) ? closerData.fallbackImages : {};
-            const imgId = collection[kw] || collection["default"] || "1483985988355-763728e1935b";
+            const imgKeys = Object.values(collection);
+            const randomImg = imgKeys[Math.floor(Math.random() * imgKeys.length)];
+            const imgId = collection[kw] || randomImg || "1483985988355-763728e1935b";
             const photoUrl = `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
             
             renderDashboardResult(title, descr, photoUrl, aiResult.items);

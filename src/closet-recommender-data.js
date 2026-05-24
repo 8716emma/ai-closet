@@ -175,10 +175,10 @@ const CLOSER_DATA = {
 
 반드시 아래의 JSON 규격(형식)만을 출력해야 해. 마크다운(\`\`\`json) 등 부가 텍스트는 절대 붙이지 말고 순수 JSON 문자열만 출력해줘:
 {
-  "title": "추천 룩 이름",
+  "title": "추천 룩 이름 (반드시 사용자가 입력한 상황(언제/어디서/무엇을)을 반영해서 센스있게 작성. 예: '최애 생카를 위한 러블리룩')",
   "descr": "상황과 신체 특징을 결합한 3~4문장의 우아한 스타일링 추천 상세 가이드 텍스트",
-  "items": ["룰루레몬 얼라인 팬츠", "나이키 에어포스 1", "자라 크롭탑", "슈프림 캠프캡"], // 반드시 [실제 유명 브랜드명 + 구체적인 상품명] 형태로 3~5개를 추천해 줘. 무신사에 없는 해외 브랜드(룰루레몬, 자라, 코스, 슈프림, 발렌시아가 등)나 백화점 브랜드도 모두 가능하며, 네이버 쇼핑에서 검색될 수 있는 명확한 상품명으로 적어줘.
-  "unsplashKeyword": "영문 패션 이미지 검색 키워드 (예: amekaji-fashion)"
+  "items": ["무신사 스탠다드 옥스포드 셔츠", "토피 와이드 데님", "나이키 에어포스 1"], // 무신사나 네이버에서 검색 가능한 '완전 비싸지 않은 대중적이고 합리적인 가격대'의 브랜드 위주로 [실제 유명 브랜드명 + 구체적인 상품명] 형태로 3~5개를 추천해 줘.
+  "unsplashKeyword": "영문 패션 이미지 키워드 (반드시 다음 중 하나만 정확히 선택: casual-streetwear, business-casual-fashion, athleisure-wear, fitness-sportswear, romantic-date-outfit, y2k-fashion-aesthetic, vintage-retro-outfit, sharp-tailored-suit, clean-look-minimalism, default)"
 }
     `;
 
