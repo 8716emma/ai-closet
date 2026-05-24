@@ -38,37 +38,37 @@ const CLOSER_DATA = {
   
   // 스타일별 핀터레스트 레퍼런스 룩북 데이터베이스 (고화질 Unsplash 패션 화보 매핑)
   referenceLooks: {
-    "캐주얼": { imgId: "https://i.pinimg.com/736x/87/fc/b4/87fcb4a8e26bd7d9f94eb9b2ef8eb2e6.jpg", descr: "스트릿한 무드의 오버핏 셔츠와 와이드 팬츠, 청키한 스니커즈 조합" },
-    "꾸안꾸": { imgId: "https://i.pinimg.com/736x/26/5d/7c/265d7c5ba65c2b03e0591ce8e1a4de1f.jpg", descr: "군더더기 없는 미니멀한 화이트 블라우스와 블랙 슬랙스, 미니멀 토트백" },
-    "오피스": { imgId: "https://i.pinimg.com/736x/55/c2/c0/55c2c0199047248b61c563065b74659b.jpg", descr: "깔끔한 블레이저 자켓, 이너 니트, 슬림핏 슬랙스와 로퍼 조합" },
-    "트레이닝": { imgId: "https://i.pinimg.com/736x/67/f6/00/67f6002f2324ce622834b6b694b8e23b.jpg", descr: "스포티한 레깅스와 크롭 탑, 그리고 가벼운 바람막이 자켓 조합" },
-    "남친·여친룩": { imgId: "https://i.pinimg.com/736x/91/97/35/919735d4ff3e4142db37dc9a997d9183.jpg", descr: "데이트를 위한 러블리한 가디건과 스커트, 메리제인 슈즈 조합" },
-    "단정해": { imgId: "https://i.pinimg.com/736x/26/5d/7c/265d7c5ba65c2b03e0591ce8e1a4de1f.jpg", descr: "깔끔하고 단정한 미니멀 스타일의 니트와 슬랙스 조합" },
-    "학생핏(교복+사복)": { imgId: "https://i.pinimg.com/736x/87/fc/b4/87fcb4a8e26bd7d9f94eb9b2ef8eb2e6.jpg", descr: "학생다운 풋풋한 맨투맨과 데님 팬츠, 캔버스화 조합" },
-    "Y2K": { imgId: "https://i.pinimg.com/736x/48/84/c8/4884c83abdb6ecad3df32d716839be9b.jpg", descr: "Y2K 감성의 크롭 티셔츠, 로우라이즈 팬츠, 볼드한 벨트 조합" },
-    "빈티지": { imgId: "https://i.pinimg.com/736x/f6/d8/67/f6d867cbbdc552ab86f5c88b90ed9d22.jpg", descr: "빈티지한 아메카지 스타일의 카고 팬츠와 워크 자켓 조합" },
-    "화려함": { imgId: "https://i.pinimg.com/736x/87/fc/b4/87fcb4a8e26bd7d9f94eb9b2ef8eb2e6.jpg", descr: "컬러감이 돋보이는 화려한 패턴의 상의와 와이드 팬츠" },
-    "오너핏": { imgId: "https://i.pinimg.com/736x/1a/0e/9d/1a0e9dc320959fc93b6e828a50de8cfb.jpg", descr: "고급스러운 수트 셋업과 레더 구두 조합" },
-    "청스타일": { imgId: "https://i.pinimg.com/736x/48/84/c8/4884c83abdb6ecad3df32d716839be9b.jpg", descr: "트렌디한 데님 자켓과 데님 팬츠의 청청 코디" },
-    "수트": { imgId: "https://i.pinimg.com/736x/1a/0e/9d/1a0e9dc320959fc93b6e828a50de8cfb.jpg", descr: "세련된 쓰리피스 수트와 옥스포드 슈즈 조합" },
-    "캠퍼스룩": { imgId: "https://i.pinimg.com/736x/87/fc/b4/87fcb4a8e26bd7d9f94eb9b2ef8eb2e6.jpg", descr: "대학생 캠퍼스 룩의 정석, 후드티와 조거팬츠, 백팩" },
-    "깔끔": { imgId: "https://i.pinimg.com/736x/26/5d/7c/265d7c5ba65c2b03e0591ce8e1a4de1f.jpg", descr: "미니멀리즘 감성의 정갈한 셔츠와 슬랙스" },
-    "블랙정장": { imgId: "https://i.pinimg.com/736x/1a/0e/9d/1a0e9dc320959fc93b6e828a50de8cfb.jpg", descr: "올블랙 포멀 수트와 시크한 로퍼" },
-    "드레스": { imgId: "https://i.pinimg.com/736x/91/97/35/919735d4ff3e4142db37dc9a997d9183.jpg", descr: "우아하고 페미닌한 롱 드레스와 가디건" },
-    "러블리": { imgId: "https://i.pinimg.com/736x/91/97/35/919735d4ff3e4142db37dc9a997d9183.jpg", descr: "사랑스러운 무드의 블라우스와 플리츠 스커트" },
-    "MZ스타일": { imgId: "https://i.pinimg.com/736x/48/84/c8/4884c83abdb6ecad3df32d716839be9b.jpg", descr: "힙하고 트렌디한 고프코어 룩, 나일론 자켓과 카고 팬츠" },
-    "선생님 스타일": { imgId: "https://i.pinimg.com/736x/55/c2/c0/55c2c0199047248b61c563065b74659b.jpg", descr: "신뢰감을 주는 단정한 셔츠와 테이퍼드 슬랙스" },
-    "운동복": { imgId: "https://i.pinimg.com/736x/a2/2f/1b/a22f1bc2499d0eec9f6a7cb84982bb2b.jpg", descr: "편안한 기능성 스포츠웨어와 런닝화" },
-    "편한 스타일": { imgId: "https://i.pinimg.com/736x/67/f6/00/67f6002f2324ce622834b6b694b8e23b.jpg", descr: "집 앞 마실에 제격인 스웨트 셋업" },
-    "종교 스타일": { imgId: "https://i.pinimg.com/736x/f6/d8/67/f6d867cbbdc552ab86f5c88b90ed9d22.jpg", descr: "노출이 없는 단정하고 포멀한 니트와 롱 스커트/슬랙스" },
-    "화려한 스타일": { imgId: "https://i.pinimg.com/736x/87/fc/b4/87fcb4a8e26bd7d9f94eb9b2ef8eb2e6.jpg", descr: "시선을 사로잡는 비비드한 컬러와 화려한 패턴의 코디" },
-    "파자마": { imgId: "https://i.pinimg.com/736x/67/f6/00/67f6002f2324ce622834b6b694b8e23b.jpg", descr: "부드럽고 편안한 라운지웨어 셋업" },
-    "모나미룩": { imgId: "https://i.pinimg.com/736x/26/5d/7c/265d7c5ba65c2b03e0591ce8e1a4de1f.jpg", descr: "블랙 앤 화이트의 깔끔한 모나미룩" },
-    "형형색색": { imgId: "https://i.pinimg.com/736x/87/fc/b4/87fcb4a8e26bd7d9f94eb9b2ef8eb2e6.jpg", descr: "컬러 블록이 돋보이는 스트릿 캐주얼" },
-    "무채색": { imgId: "https://i.pinimg.com/736x/26/5d/7c/265d7c5ba65c2b03e0591ce8e1a4de1f.jpg", descr: "그레이, 블랙, 화이트로 구성된 시크한 무채색 코디" },
-    "귀여운 스타일": { imgId: "https://i.pinimg.com/736x/91/97/35/919735d4ff3e4142db37dc9a997d9183.jpg", descr: "동글동글한 오버핏 맨투맨과 와이드 팬츠의 귀여운 조합" },
-    "하이틴": { imgId: "https://i.pinimg.com/736x/48/84/c8/4884c83abdb6ecad3df32d716839be9b.jpg", descr: "미국 하이틴 영화 감성의 크롭 가디건과 체크 스커트" },
-    "default": { imgId: "https://i.pinimg.com/736x/2c/31/58/2c3158c33e21ea5c4cf848e4740e5361.jpg", descr: "호불호 없는 깔끔한 놈코어 데일리 룩 (맨투맨과 데님 팬츠)" }
+    "캐주얼": { imgId: "src/assets/images/casual.png", descr: "스트릿한 무드의 오버핏 셔츠와 와이드 팬츠, 청키한 스니커즈 조합" },
+    "꾸안꾸": { imgId: "src/assets/images/casual.png", descr: "군더더기 없는 미니멀한 화이트 블라우스와 블랙 슬랙스, 미니멀 토트백" },
+    "오피스": { imgId: "src/assets/images/casual.png", descr: "깔끔한 블레이저 자켓, 이너 니트, 슬림핏 슬랙스와 로퍼 조합" },
+    "트레이닝": { imgId: "src/assets/images/casual.png", descr: "스포티한 레깅스와 크롭 탑, 그리고 가벼운 바람막이 자켓 조합" },
+    "남친·여친룩": { imgId: "src/assets/images/casual.png", descr: "데이트를 위한 러블리한 가디건과 스커트, 메리제인 슈즈 조합" },
+    "단정해": { imgId: "src/assets/images/casual.png", descr: "깔끔하고 단정한 미니멀 스타일의 니트와 슬랙스 조합" },
+    "학생핏(교복+사복)": { imgId: "src/assets/images/casual.png", descr: "학생다운 풋풋한 맨투맨과 데님 팬츠, 캔버스화 조합" },
+    "Y2K": { imgId: "src/assets/images/casual.png", descr: "Y2K 감성의 크롭 티셔츠, 로우라이즈 팬츠, 볼드한 벨트 조합" },
+    "빈티지": { imgId: "src/assets/images/casual.png", descr: "빈티지한 아메카지 스타일의 카고 팬츠와 워크 자켓 조합" },
+    "화려함": { imgId: "src/assets/images/casual.png", descr: "컬러감이 돋보이는 화려한 패턴의 상의와 와이드 팬츠" },
+    "오너핏": { imgId: "src/assets/images/casual.png", descr: "고급스러운 수트 셋업과 레더 구두 조합" },
+    "청스타일": { imgId: "src/assets/images/casual.png", descr: "트렌디한 데님 자켓과 데님 팬츠의 청청 코디" },
+    "수트": { imgId: "src/assets/images/casual.png", descr: "세련된 쓰리피스 수트와 옥스포드 슈즈 조합" },
+    "캠퍼스룩": { imgId: "src/assets/images/casual.png", descr: "대학생 캠퍼스 룩의 정석, 후드티와 조거팬츠, 백팩" },
+    "깔끔": { imgId: "src/assets/images/casual.png", descr: "미니멀리즘 감성의 정갈한 셔츠와 슬랙스" },
+    "블랙정장": { imgId: "src/assets/images/casual.png", descr: "올블랙 포멀 수트와 시크한 로퍼" },
+    "드레스": { imgId: "src/assets/images/casual.png", descr: "우아하고 페미닌한 롱 드레스와 가디건" },
+    "러블리": { imgId: "src/assets/images/casual.png", descr: "사랑스러운 무드의 블라우스와 플리츠 스커트" },
+    "MZ스타일": { imgId: "src/assets/images/casual.png", descr: "힙하고 트렌디한 고프코어 룩, 나일론 자켓과 카고 팬츠" },
+    "선생님 스타일": { imgId: "src/assets/images/casual.png", descr: "신뢰감을 주는 단정한 셔츠와 테이퍼드 슬랙스" },
+    "운동복": { imgId: "src/assets/images/casual.png", descr: "편안한 기능성 스포츠웨어와 런닝화" },
+    "편한 스타일": { imgId: "src/assets/images/casual.png", descr: "집 앞 마실에 제격인 스웨트 셋업" },
+    "종교 스타일": { imgId: "src/assets/images/casual.png", descr: "노출이 없는 단정하고 포멀한 니트와 롱 스커트/슬랙스" },
+    "화려한 스타일": { imgId: "src/assets/images/casual.png", descr: "시선을 사로잡는 비비드한 컬러와 화려한 패턴의 코디" },
+    "파자마": { imgId: "src/assets/images/casual.png", descr: "부드럽고 편안한 라운지웨어 셋업" },
+    "모나미룩": { imgId: "src/assets/images/casual.png", descr: "블랙 앤 화이트의 깔끔한 모나미룩" },
+    "형형색색": { imgId: "src/assets/images/casual.png", descr: "컬러 블록이 돋보이는 스트릿 캐주얼" },
+    "무채색": { imgId: "src/assets/images/casual.png", descr: "그레이, 블랙, 화이트로 구성된 시크한 무채색 코디" },
+    "귀여운 스타일": { imgId: "src/assets/images/casual.png", descr: "동글동글한 오버핏 맨투맨과 와이드 팬츠의 귀여운 조합" },
+    "하이틴": { imgId: "src/assets/images/casual.png", descr: "미국 하이틴 영화 감성의 크롭 가디건과 체크 스커트" },
+    "default": { imgId: "src/assets/images/casual.png", descr: "호불호 없는 깔끔한 놈코어 데일리 룩 (맨투맨과 데님 팬츠)" }
   },
 
   fetchRealAIRecommendation: async (promptData, apiConfig) => {
@@ -105,7 +105,7 @@ const CLOSER_DATA = {
 [엄격한 금지사항]
 1. 언어: 출력은 오직 순수 한국어(한글)로만 작성해라. 한자(漢字)와 일본어(ひらがな, カタカナ, パンツ 등)는 단 한 글자라도 포함되면 절대 안 된다! (예: 感觉 -> 느낌, パンツ -> 팬츠, 合わせ면 -> 매치하면)
 2. 명품 브랜드 절대 금지: 발렌시아가, 샤넬, 구찌, 디올, 프라다, 톰브라운 등 고가의 명품 브랜드는 절대로 추천하지 마라! 유저가 살 수 있는 합리적인 가격대의 브랜드(예: 무신사 스탠다드, 토피, 커버낫, 스파오, 에잇세컨즈, 나이키, 뉴발란스, 쿠어, 드로우핏 등) 위주로 추천할 것.
-3. 추천 아이템에 단순히 "반팔 티셔츠"라고 적지 마라. 반드시 "무신사 스탠다드 릴렉스 핏 반팔 티셔츠" 처럼 [정확한 브랜드명 + 핵심 상품명]으로 구체적으로 적어라.
+3. 추천 아이템은 반드시 무신사 검색이 잘 되도록 [가성비 브랜드명 + 핵심 키워드 1개~2개]로만 짧게 적어라. (예: "무신사 스탠다드 반팔 티", "토피 와이드 데님", "쿠어 니트", "스파오 슬랙스", "나이키 에어포스") 절대 길고 복잡하게 적지 마라!
 4. 상품명에 [블랙] 같은 괄호나 색상을 넣지 마라.
 
 반드시 아래의 JSON 규격만을 출력해 (마크다운 없이 순수 JSON만):
