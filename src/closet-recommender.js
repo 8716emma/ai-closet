@@ -177,8 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
       saveUsers(users);
       state.isLoggedIn = true; state.credits = 10; state.currentUserEmail = idValue;
       enterApp();
-      const type = isEmailFormat(idValue) ? "이메일" : "아이디";
-      alert(`회원가입 완료! (${type}: ${idValue}) 기본 10 CP가 무상 지급됩니다.`);
+      alert("회원가입 성공!");
     } else {
       const user = findUser(normId);
       if (!user) {
@@ -197,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       state.isLoggedIn = true; state.credits = user.credits ?? 10; state.currentUserEmail = user.email;
       enterApp();
-      alert(`로그인 성공! 환영합니다 👗 (남은 크레딧: ${state.credits} CP)`);
+      alert("로그인 성공!");
     }
   };
 
@@ -231,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
       state.currentUserEmail = googleEmail;
 
       enterApp();
-      alert(`구글 로그인 성공! (계정: ${googleEmail} | 남은 크레딧: ${state.credits} CP)`);
+      alert("구글 로그인 성공!");
     } catch (err) {
       console.error("구글 토큰 파싱 에러:", err);
       alert("구글 인증 정보를 읽어오는 도중 오류가 발생했습니다.");
@@ -271,7 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
         state.currentUserEmail = googleEmail;
 
         enterApp();
-        alert(`[로컬 가상 연동] 구글 소셜 로그인 성공! (진짜 구글 SSO 팝업 연동을 원하시면 구글 콘솔에 깃허브 Pages 도메인 주소 등록이 100% 저장/반영되었는지 꼭 확인해주세요!)`);
+        alert("구글 연동 성공!");
       });
     }
   };
