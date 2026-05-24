@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     passwordVisible: false,
     currentWeather: { temp: 22, condition: "평소에 (맑음 ☀️)" },
     selectedTags: {
+      gender: [],
       when: [],
       where: [],
       role: [],
@@ -345,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 8. 6대 카테고리 태그 동적 렌더링
   const renderTags = () => {
-    const categories = ["when", "where", "role", "style", "why", "body"];
+    const categories = ["gender", "when", "where", "role", "style", "why", "body"];
     const closerData = window.CLOSER_DATA || (typeof CLOSER_DATA !== "undefined" ? CLOSER_DATA : null);
     if (!closerData) {
       console.error("CLOSER_DATA를 찾을 수 없습니다.");
@@ -431,8 +432,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const collection = (closerData && closerData.fallbackImages) ? closerData.fallbackImages : {};
       const imgKeys = Object.values(collection);
       const randomImg = imgKeys[Math.floor(Math.random() * imgKeys.length)];
-      const imgId = collection[kw] || randomImg || "1483985988355-763728e1935b";
-      return `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
+      const imgId = collection[kw] || randomImg || "https://i.pinimg.com/736x/2c/31/58/2c3158c33e21ea5c4cf848e4740e5361.jpg";
+      return imgId.startsWith('http') ? imgId : `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
     };
 
     const photoUrl = getPhotoUrl(unsplashKeyword);
@@ -451,7 +452,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const { when, where, role, style, why, body } = state.selectedTags;
+    const { gender, when, where, role, style, why, body } = state.selectedTags;
     if (style.length === 0) {
       alert("원하시는 스타일(어떻게)을 최소 1개 이상 선택해 주세요!");
       return;
@@ -490,8 +491,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const collection = (closerData && closerData.fallbackImages) ? closerData.fallbackImages : {};
             const imgKeys = Object.values(collection);
             const randomImg = imgKeys[Math.floor(Math.random() * imgKeys.length)];
-            const imgId = collection[kw] || randomImg || "1483985988355-763728e1935b";
-            const photoUrl = `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
+            const imgId = collection[kw] || randomImg || "https://i.pinimg.com/736x/2c/31/58/2c3158c33e21ea5c4cf848e4740e5361.jpg";
+            const photoUrl = imgId.startsWith('http') ? imgId : `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
             
             renderDashboardResult(title, descr, photoUrl, aiResult.items);
             setTimeout(() => { alert("실시간 리얼 AI 스타일링 처방이 성공적으로 완료되었습니다! (-2 CP)"); }, 100);

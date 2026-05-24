@@ -166,6 +166,7 @@ const CLOSER_DATA = {
     const promptText = `
 너는 전세계 최고의 퍼스널 패션 스타일리스트야.
 다음 조건과 날씨에 맞춰 극적으로 세련된 패션 스타일링 처방전과 세부 아이템을 추천해 줘:
+- 성별: ${promptData.gender && promptData.gender.length > 0 ? promptData.gender.join(", ") : "무관"}
 - 언제: ${promptData.when.join(", ") || "평소에"}
 - 어디서: ${promptData.where.join(", ") || "카페"}
 - 무엇을(역할): ${promptData.role.join(", ") || "하객"}

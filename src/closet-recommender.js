@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     passwordVisible: false,
     currentWeather: { temp: 22, condition: "평소에 (맑음 ☀️)" },
     selectedTags: {
+      gender: [],
       when: [],
       where: [],
       role: [],
@@ -345,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 8. 6대 카테고리 태그 동적 렌더링
   const renderTags = () => {
-    const categories = ["when", "where", "role", "style", "why", "body"];
+    const categories = ["gender", "when", "where", "role", "style", "why", "body"];
     const closerData = window.CLOSER_DATA || (typeof CLOSER_DATA !== "undefined" ? CLOSER_DATA : null);
     if (!closerData) {
       console.error("CLOSER_DATA를 찾을 수 없습니다.");
@@ -451,7 +452,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const { when, where, role, style, why, body } = state.selectedTags;
+    const { gender, when, where, role, style, why, body } = state.selectedTags;
     if (style.length === 0) {
       alert("원하시는 스타일(어떻게)을 최소 1개 이상 선택해 주세요!");
       return;
