@@ -74,7 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultShopLink = document.getElementById("result-shop-link");
 
   const emailSubscribeCheck = document.getElementById("email-subscribe-check");
-  const copyBackendCodeBtn = document.getElementById("copy-backend-code-btn");
 
   const paymentModal = document.getElementById("payment-modal");
   const closePaymentModalBtn = document.getElementById("close-payment-modal-btn");
@@ -463,16 +462,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 11. 메일링 구독 및 백엔드 복사 로직
+  // 11. 메일링 구독 로직
   emailSubscribeCheck.addEventListener("change", (e) => {
     if (e.target.checked) alert("매일 아침 8시 날씨 연동 스타일링 처방 자동 메일 수신 동의가 저장되었습니다.");
-  });
-
-  copyBackendCodeBtn.addEventListener("click", () => {
-    const codeText = document.getElementById("backend-code-template").textContent.trim();
-    navigator.clipboard.writeText(codeText)
-      .then(() => alert("Node.js 크론 백엔드 코드가 클립보드에 무결하게 복사되었습니다."))
-      .catch(() => alert("복사 실패. 브라우저 설정을 확인해주세요."));
   });
 
   // 12. 결제 팝업 내 버튼 처리

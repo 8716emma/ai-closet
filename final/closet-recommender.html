@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Closet Recommender - 스마트 옷 추천 스튜디오</title>
-  <link rel="stylesheet" href="src/closet-recommender.css?v=2.2">
+  <link rel="stylesheet" href="src/closet-recommender.css?v=2.3">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
@@ -138,32 +138,6 @@
           <label for="email-subscribe-check" style="font-weight: 700; font-size: 0.85rem; cursor: pointer;">매일 아침 추천 서비스 수신 동의</label>
         </div>
         
-        <!-- 백엔드 로직 예시 시뮬레이션 -->
-        <div class="backend-box">
-          <h4>
-            <span>⚙️ Node.js 크론백엔드 백그라운드 스크립트 예시</span>
-            <button id="copy-backend-code-btn" class="copy-btn">복사하기</button>
-          </h4>
-          <code id="backend-code-template">
-const cron = require('node-cron');
-const nodemailer = require('nodemailer');
-const weatherAPI = require('./weather');
-
-// 매일 아침 8:00 스케줄 자동 구동
-cron.schedule('0 8 * * *', async () => {
-  const users = await db.getMailSubscribers();
-  for (let user of users) {
-    const weather = await weatherAPI.getToday(user.area);
-    const styling = AI.generateStyling(user.presets, weather);
-    await mailer.send({
-      to: user.email,
-      subject: '[AI Closet] 오늘의 날씨 맞춤 스타일링 처방전',
-      html: `&lt;h3&gt;안녕 ${user.name}님!&lt;/h3&gt; 오늘의 날씨는 ${weather}도 이며 추천 룩은 ${styling.title} 입니다.`
-    });
-  }
-});
-          </code>
-        </div>
       </div>
 
     </div>
