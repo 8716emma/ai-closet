@@ -463,9 +463,32 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 11. 메일링 구독 로직
+  const emailSubscribeInputGroup = document.getElementById("email-subscribe-input-group");
+  const subscribeEmailInput = document.getElementById("subscribe-email-input");
+  const saveSubscribeBtn = document.getElementById("save-subscribe-btn");
+
   emailSubscribeCheck.addEventListener("change", (e) => {
-    if (e.target.checked) alert("매일 아침 8시 날씨 연동 스타일링 처방 자동 메일 수신 동의가 저장되었습니다.");
+    if (e.target.checked) {
+      emailSubscribeInputGroup.style.display = "block";
+      // 로그인한 유저의 이메일이 있다면 자동 채우기
+      if (state.currentUserEmail && state.currentUserEmail.includes("@")) {
+        subscribeEmailInput.value = state.currentUserEmail;
+      }
+    } else {
+      emailSubscribeInputGroup.style.display = "none";
+    }
   });
+
+  if (saveSubscribeBtn) {
+    saveSubscribeBtn.addEventListener("click", () => {
+      const emailVal = subscribeEmailInput.value.trim();
+      if (!emailVal || !emailVal.includes("@")) {
+        alert("정확한 이메일 주소를 입력해주세요!");
+        return;
+      }
+      alert(`[${emailVal}] 주소로 매일 아침 8시 추천 메일 수신 등록이 완료되었습니다!`);
+    });
+  }
 
   // 12. 결제 팝업 내 버튼 처리
   closePaymentModalBtn.addEventListener("click", () => paymentModal.style.display = "none");
