@@ -286,7 +286,6 @@ document.addEventListener("DOMContentLoaded", () => {
         googleLoginBtn,
         { theme: "outline", size: "large", width: 336, text: "signin_with" }
       );
-      google.accounts.id.prompt();
       
       // 구글 SDK가 정상 로드 및 렌더링될 기회를 넉넉히 제공 (1.2초 -> 2.5초 조율)
       setTimeout(() => {
