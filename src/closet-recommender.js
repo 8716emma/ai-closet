@@ -444,6 +444,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const { gender, when, where, role, style, why, body } = state.selectedTags;
+    const customContext = document.getElementById('custom-context') ? document.getElementById('custom-context').value.trim() : '';
     if (style.length === 0) {
       alert("원하시는 스타일(어떻게)을 최소 1개 이상 선택해 주세요!");
       return;
@@ -473,7 +474,7 @@ document.addEventListener("DOMContentLoaded", () => {
       fullscreenDashboard.style.display = "flex";
 
       if (closerData && closerData.fetchRealAIRecommendation) {
-        closerData.fetchRealAIRecommendation({ when, where, role, style, why, body, weather: state.currentWeather }, API_CONFIG)
+        closerData.fetchRealAIRecommendation({ gender, when, where, role, style, why, body, customContext, weather: state.currentWeather }, API_CONFIG)
           .then(aiResult => {
             const title = aiResult.title;
             const descr = `<strong>[실시간 AI 분석 처방]</strong> ${aiResult.descr}`;
