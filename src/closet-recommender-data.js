@@ -141,16 +141,16 @@ const CLOSER_DATA = {
   
   // 4. 로컬 폴백 매칭 이미지 데이터베이스 (Unsplash ID)
   fallbackImages: {
-    "casual-streetwear": "1509631179647-0177331693ae",
-    "business-casual-fashion": "1487222477894-8943e31ef7b2",
-    "athleisure-wear": "1479064555552-3ef4979f8908",
-    "fitness-sportswear": "1518611012118-696072aa579a",
-    "romantic-date-outfit": "1539109136881-3be0616acf4b",
-    "y2k-fashion-aesthetic": "1582639506598-a28a3064d4b3",
-    "vintage-retro-outfit": "1508214751196-bcfd4ca60f91",
-    "sharp-tailored-suit": "1593032465175-481ac7f401a0",
+    "casual-streetwear": "1489987707023-afbc8247ca18",
+    "business-casual-fashion": "1516762689616-00613e4b7858",
+    "athleisure-wear": "1515243445-5e60a1698eb3",
+    "fitness-sportswear": "1523381210434-271e8be1f52b",
+    "romantic-date-outfit": "1434389678369-e85df649f29d",
+    "y2k-fashion-aesthetic": "1550614000474-5fa7b2521c7e",
+    "vintage-retro-outfit": "1490481651871-ab68de25d43d",
+    "sharp-tailored-suit": "1600185365483-26d7a4cc07c0",
     "clean-look-minimalism": "1445205170230-053b83016050",
-    "default": "1483985988355-763728e1935b"
+    "default": "1489987707023-afbc8247ca18"
   },
 
   // 5. 실시간 AI API 비동기 Fetch 통신 엔진 (500줄 규칙 준수용 이관)
@@ -176,8 +176,8 @@ const CLOSER_DATA = {
 반드시 아래의 JSON 규격(형식)만을 출력해야 해. 마크다운(\`\`\`json) 등 부가 텍스트는 절대 붙이지 말고 순수 JSON 문자열만 출력해줘:
 {
   "title": "추천 룩 이름 (반드시 사용자가 입력한 상황(언제/어디서/무엇을)을 반영해서 센스있게 작성. 예: '최애 생카를 위한 러블리룩')",
-  "descr": "상황과 신체 특징을 결합한 3~4문장의 우아한 스타일링 추천 상세 가이드 텍스트",
-  "items": ["무신사 스탠다드 옥스포드 셔츠", "토피 와이드 데님", "나이키 에어포스 1"], // 무신사나 네이버에서 검색 가능한 '완전 비싸지 않은 대중적이고 합리적인 가격대'의 브랜드 위주로 [실제 유명 브랜드명 + 구체적인 상품명] 형태로 3~5개를 추천해 줘.
+  "descr": "상황과 신체 특징을 결합한 3~4문장의 스타일링 가이드 텍스트 (명심할 것: 반드시 100% 한국어로만 작성하고 일본어/영어를 섞어 쓰지 마라!)",
+  "items": ["무신사 스탠다드 옥스포드 셔츠", "토피 와이드 데님", "컨버스 척테일러"], // 반드시 '무신사'와 '네이버' 양쪽 모두에서 검색 결과가 나오는 대중적이고 합리적인 가격의 입점 브랜드(무신사 스탠다드, 스파오, 커버낫, 토피, 디스이즈네버댓 등) 위주로 [실제 유명 브랜드명 + 구체적인 상품명] 3~5개를 추천해 줘. 룰루레몬 등 무신사에 없는 해외 브랜드 절대 금지. 100% 한국어로 작성.
   "unsplashKeyword": "영문 패션 이미지 키워드 (반드시 다음 중 하나만 정확히 선택: casual-streetwear, business-casual-fashion, athleisure-wear, fitness-sportswear, romantic-date-outfit, y2k-fashion-aesthetic, vintage-retro-outfit, sharp-tailored-suit, clean-look-minimalism, default)"
 }
     `;

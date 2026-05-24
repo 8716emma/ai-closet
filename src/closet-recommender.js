@@ -403,9 +403,9 @@ document.addEventListener("DOMContentLoaded", () => {
       
       linkContainer.innerHTML = `
         <div style="font-weight:600; color:#4a4a4a; display:flex; align-items:center; gap:6px;"><span>🏷️</span> ${item}</div>
-        <div style="display:flex; gap:8px;">
-          <a href="https://search.shopping.naver.com/search/all?query=${encodeURIComponent(item)}" target="_blank" style="flex:1; padding:6px 0; text-align:center; background:#03c75a; color:white; border-radius:6px; font-size:0.85rem; text-decoration:none; font-weight:600; transition:opacity 0.2s;">네이버</a>
-          <a href="https://www.musinsa.com/search/musinsa/integration?type=&q=${encodeURIComponent(item)}" target="_blank" style="flex:1; padding:6px 0; text-align:center; background:#000000; color:white; border-radius:6px; font-size:0.85rem; text-decoration:none; font-weight:600; transition:opacity 0.2s;">무신사</a>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <a href="https://search.shopping.naver.com/search/all?query=${encodeURIComponent(item)}" target="_blank" style="box-sizing:border-box; display:flex; align-items:center; justify-content:center; flex:1; height:32px; background:#03c75a; color:white; border-radius:6px; font-size:13px; text-decoration:none; font-weight:700; transition:opacity 0.2s; padding:0; margin:0; line-height:1;">네이버</a>
+          <a href="https://www.musinsa.com/search/musinsa/integration?type=&q=${encodeURIComponent(item)}" target="_blank" style="box-sizing:border-box; display:flex; align-items:center; justify-content:center; flex:1; height:32px; background:#000000; color:white; border-radius:6px; font-size:13px; text-decoration:none; font-weight:700; transition:opacity 0.2s; padding:0; margin:0; line-height:1;">무신사</a>
         </div>
       `;
       
