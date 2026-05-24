@@ -431,8 +431,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const collection = (closerData && closerData.fallbackImages) ? closerData.fallbackImages : {};
       const imgKeys = Object.values(collection);
       const randomImg = imgKeys[Math.floor(Math.random() * imgKeys.length)];
-      const imgId = collection[kw] || randomImg || "1483985988355-763728e1935b";
-      return `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
+      const imgId = collection[kw] || randomImg || "https://i.pinimg.com/736x/2c/31/58/2c3158c33e21ea5c4cf848e4740e5361.jpg";
+      return imgId.startsWith('http') ? imgId : `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
     };
 
     const photoUrl = getPhotoUrl(unsplashKeyword);
@@ -490,8 +490,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const collection = (closerData && closerData.fallbackImages) ? closerData.fallbackImages : {};
             const imgKeys = Object.values(collection);
             const randomImg = imgKeys[Math.floor(Math.random() * imgKeys.length)];
-            const imgId = collection[kw] || randomImg || "1483985988355-763728e1935b";
-            const photoUrl = `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
+            const imgId = collection[kw] || randomImg || "https://i.pinimg.com/736x/2c/31/58/2c3158c33e21ea5c4cf848e4740e5361.jpg";
+            const photoUrl = imgId.startsWith('http') ? imgId : `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
             
             renderDashboardResult(title, descr, photoUrl, aiResult.items);
             setTimeout(() => { alert("실시간 리얼 AI 스타일링 처방이 성공적으로 완료되었습니다! (-2 CP)"); }, 100);

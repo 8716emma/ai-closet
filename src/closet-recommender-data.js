@@ -5,6 +5,7 @@
 
 const CLOSER_DATA = {
   // 1. 기획 조건 키워드 목록
+  gender: ["여성", "남성", "젠더리스"],
   when: [
     "비 올 때", "평소에", "축제 있는 날", "면접", "놀러", "운동", "학교", "데이트", "여행", 
     "특별한 날", "한여름", "환절기", "겨울", "한파", "비·눈 올 때", "미세먼지 심할 때", "장마 때", 
@@ -141,16 +142,16 @@ const CLOSER_DATA = {
   
   // 4. 로컬 폴백 매칭 이미지 데이터베이스 (Unsplash ID)
   fallbackImages: {
-    "casual-streetwear": "1509631179647-0177331693ae",
-    "business-casual-fashion": "1487222477894-8943e31ef7b2",
-    "athleisure-wear": "1479064555552-3ef4979f8908",
-    "fitness-sportswear": "1518611012118-696072aa579a",
-    "romantic-date-outfit": "1539109136881-3be0616acf4b",
-    "y2k-fashion-aesthetic": "1529139574466-a303027c1d8b",
-    "vintage-retro-outfit": "1508214751196-bcfd4ca60f91",
-    "sharp-tailored-suit": "1593032465175-481ac7f401a0",
-    "clean-look-minimalism": "1515886657613-9f3515b0c78f",
-    "default": "1483985988355-763728e1935b"
+    "casual-streetwear": "https://i.pinimg.com/736x/87/fc/b4/87fcb4a8e26bd7d9f94eb9b2ef8eb2e6.jpg",
+    "business-casual-fashion": "https://i.pinimg.com/736x/55/c2/c0/55c2c0199047248b61c563065b74659b.jpg",
+    "athleisure-wear": "https://i.pinimg.com/736x/67/f6/00/67f6002f2324ce622834b6b694b8e23b.jpg",
+    "fitness-sportswear": "https://i.pinimg.com/736x/a2/2f/1b/a22f1bc2499d0eec9f6a7cb84982bb2b.jpg",
+    "romantic-date-outfit": "https://i.pinimg.com/736x/91/97/35/919735d4ff3e4142db37dc9a997d9183.jpg",
+    "y2k-fashion-aesthetic": "https://i.pinimg.com/736x/48/84/c8/4884c83abdb6ecad3df32d716839be9b.jpg",
+    "vintage-retro-outfit": "https://i.pinimg.com/736x/f6/d8/67/f6d867cbbdc552ab86f5c88b90ed9d22.jpg",
+    "sharp-tailored-suit": "https://i.pinimg.com/736x/1a/0e/9d/1a0e9dc320959fc93b6e828a50de8cfb.jpg",
+    "clean-look-minimalism": "https://i.pinimg.com/736x/26/5d/7c/265d7c5ba65c2b03e0591ce8e1a4de1f.jpg",
+    "default": "https://i.pinimg.com/736x/2c/31/58/2c3158c33e21ea5c4cf848e4740e5361.jpg"
   },
 
   // 5. 실시간 AI API 비동기 Fetch 통신 엔진 (500줄 규칙 준수용 이관)
