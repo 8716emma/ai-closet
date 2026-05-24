@@ -2,17 +2,17 @@
  * AI Closet Recommender - Premium Soft Latte CSS
  * ============================================================ */
 :root {
-  --bg-ivory: #F9F9F8;          /* BACKGROUND (배경) */
-  --bg-ivory-dark: #EBE4D3;     /* SUCCESS (성공) 보조 배경 */
-  --primary-brown: #D2C49D;     /* PRIMARY (주색) */
-  --primary-light: #E0D4B2;     /* 밝은 주색 (호버용) */
-  --primary-dark: #A58656;      /* TEXT (글자색) 진한 브라운 */
-  --accent-orange: #BFA47A;     /* 보조 액센트 */
+  --bg-ivory: #F4F3F0;          /* BACKGROUND (배경) - 살짝 더 짙은 크림 */
+  --bg-ivory-dark: #E5DCC5;     /* SUCCESS (성공) 보조 배경 - 더 차분한 베이지 */
+  --primary-brown: #C1AC82;     /* PRIMARY (주색) - 이전보다 한 톤 다운된 샌드 브라운 */
+  --primary-light: #D4C29B;     /* 밝은 주색 (호버용) */
+  --primary-dark: #886A3E;      /* TEXT (글자색) 진한 브라운 */
+  --accent-orange: #A88B5D;     /* 보조 액센트 */
   --card-bg: #FFFFFF;           /* SURFACE (카드 배경) */
-  --border: #A58656;            /* 진한 테두리 (포커스 등) */
-  --border-light: #EAEBF0;      /* BORDER (테두리색) */
-  --text: #A58656;              /* TEXT (글자색) */
-  --text-muted: #C2AB8A;        /* 흐린 글자색 */
+  --border: #886A3E;            /* 진한 테두리 (포커스 등) */
+  --border-light: #E0E1E6;      /* BORDER (테두리색) */
+  --text: #7A5B30;              /* TEXT (글자색) - 더 또렷한 가독성 */
+  --text-muted: #A58E6E;        /* 흐린 글자색 */
   --white: #FFFFFF;
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
