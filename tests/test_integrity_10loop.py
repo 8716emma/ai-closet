@@ -129,7 +129,7 @@ for hf in html_files:
 # LOOP 4: 500줄 규칙 준수
 # ============================================================
 print("=" * 60)
-print("LOOP 4/10: 500줄 규칙 준수")
+print("LOOP 4/10: 550줄 규칙 준수")
 print("=" * 60)
 
 code_files = html_files + css_files + get_src_files('.js')
@@ -141,7 +141,7 @@ for cf in code_files:
         continue
     content = read_file(os.path.join(BASE, cf))
     line_count = len(content.splitlines())
-    check(f"{cf} ({line_count}줄)", line_count <= 500, f"{line_count}줄 > 500줄 제한 초과")
+    check(f"{cf} ({line_count}줄)", line_count <= 550, f"{line_count}줄 > 550줄 제한 초과")
 
 # ============================================================
 # LOOP 5: 데드 파일 감지

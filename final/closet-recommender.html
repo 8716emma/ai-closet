@@ -32,8 +32,8 @@
     </div>
     
     <div class="form-group">
-      <label for="user-email">이메일 ID</label>
-      <input type="email" id="user-email" class="input-control" placeholder="예시: example@email.com">
+      <label for="user-email" id="auth-id-label">이메일 또는 아이디</label>
+      <input type="text" id="user-email" class="input-control" placeholder="이메일(example@mail.com) 또는 아이디">
     </div>
     
     <div class="form-group">
@@ -50,6 +50,9 @@
     <div class="auth-divider">또는 간편 로그인</div>
     
     <div id="google-login-btn" style="display: flex; justify-content: center; margin-top: 12px; min-height: 40px;"></div>
+    <div style="text-align: center; margin-top: 16px;">
+      <button id="reset-users-btn" type="button" style="background: none; border: none; color: var(--text-muted); font-size: 0.72rem; cursor: pointer; text-decoration: underline; opacity: 0.6;">⚠️ 로그인이 계속 안 된다면 여기 클릭 (계정 데이터 초기화)</button>
+    </div>
   </div>
 
   <!-- C. 메인 기능 화면 (로그인 후 노출) -->

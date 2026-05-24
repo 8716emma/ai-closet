@@ -95,20 +95,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 4. 로그인 / 회원가입 상태 토글
   let isSignupMode = false;
+  const AUTH_MODES = {
+    login:  ["로그인합니다", "따뜻하고 단정한 당신만을 위한 스타일 스튜디오", "로그인하기", "새로 회원가입 하기"],
+    signup: ["회원가입합니다", "아이디 또는 이메일로 가입하고 풀 스타일을 시작하세요!", "가입 완료하기", "기존 계정으로 로그인하기"]
+  };
+  const idLabel = document.getElementById("auth-id-label");
+  const setAuthMode = (mode) => {
+    isSignupMode = (mode === "signup");
+    const [t, s, btn, tog] = AUTH_MODES[mode];
+    authTitle.textContent = `AI 옷 추천 ${t}`;
+    authSubtitle.textContent = s; submitLoginBtn.textContent = btn; toggleSignupBtn.textContent = tog;
+    if (idLabel) idLabel.textContent = isSignupMode ? "아이디 또는 이메일" : "이메일 또는 아이디";
+  };
+  const switchToLoginMode = () => setAuthMode("login");
   toggleSignupBtn.addEventListener("click", (e) => {
     if (e) e.preventDefault();
-    isSignupMode = !isSignupMode;
-    if (isSignupMode) {
-      authTitle.textContent = "AI 옷 추천 회원가입";
-      authSubtitle.textContent = "구글 소셜 연동 및 메일 가입을 통한 스타일 혁신";
-      submitLoginBtn.textContent = "이메일로 가입 완료";
-      toggleSignupBtn.textContent = "기존 계정으로 로그인하기";
-    } else {
-      authTitle.textContent = "AI 옷 추천 로그인";
-      authSubtitle.textContent = "따뜻하고 단정한 당신만을 위한 스타일 스튜디오";
-      submitLoginBtn.textContent = "이메일로 로그인";
-      toggleSignupBtn.textContent = "새로 회원가입 하기";
-    }
+    setAuthMode(isSignupMode ? "login" : "signup");
   });
 
   // 5. 로그인 성공 시 앱 메인 진입 처리기
@@ -123,77 +125,79 @@ document.addEventListener("DOMContentLoaded", () => {
     triggerWeatherUpdate();
   };
 
-  // 5-2. 크레딧 동기화 헬퍼
+  // 5-2. 크레딧 동기화 헬퍼 (대소문자 무시)
   const syncUserCredits = () => {
     if (!state.currentUserEmail) return;
     const users = loadUsers();
-    const user = users.find(u => u.email === state.currentUserEmail);
+    const normCurrent = state.currentUserEmail.toLowerCase();
+    const user = users.find(u => u.email.toLowerCase() === normCurrent);
     if (user) {
       user.credits = state.credits;
       saveUsers(users);
     }
   };
 
-  // 5-3. 로그인 및 회원가입 실행 시뮬레이터 (대소문자 무시 및 소셜 연동/데모 계정 친절 안내 탑재)
+  // 5-3. 로그인 및 회원가입 (이메일 + 아이디 겸용)
+  const isEmailFormat = (v) => v.includes("@");
+  const isValidId = (v) => /^[a-zA-Z0-9가-힣._-]{2,20}$/.test(v);
   const performLoginOrSignup = (e) => {
     if (e) e.preventDefault();
-    const emailValue = emailInput.value ? emailInput.value.trim() : "";
+    const idValue = emailInput.value ? emailInput.value.trim() : "";
     const passwordValue = passwordInput.value ? passwordInput.value.trim() : "";
 
-    if (!emailValue || !passwordValue) {
-      alert("오류: 이메일 ID와 비밀번호를 모두 입력해 주세요!");
+    if (!idValue || !passwordValue) {
+      alert("오류: 아이디(또는 이메일)와 비밀번호를 모두 입력해 주세요!");
+      return;
+    }
+    if (isSignupMode && !isEmailFormat(idValue) && !isValidId(idValue)) {
+      alert("오류: 아이디는 2~20자, 영문/숫자/한글/밑줄/점 조합만 가능합니다.");
       return;
     }
 
     const users = loadUsers();
-    const normEmail = emailValue.toLowerCase();
+    const normId = idValue.toLowerCase();
+    const findUser = (norm) => users.find(u => (u.email || "").toLowerCase() === norm);
 
     if (isSignupMode) {
-      const existUser = users.find(u => u.email.toLowerCase() === normEmail);
-      if (existUser) {
-        let msg = "오류: 이미 가입된 이메일 계정입니다. 로그인 화면으로 전환해 주세요.";
-        if (normEmail === "test@naver.com") {
-          msg += " (데모용 테스트 계정의 비밀번호는 123456입니다.)";
-        } else if (existUser.password === "sns") {
-          msg += " (구글 간편 로그인으로 이미 가입된 계정입니다. 구글 로그인 버튼을 사용해 주세요!)";
+      if (findUser(normId)) {
+        switchToLoginMode();
+        const existUser = findUser(normId);
+        if (existUser && existUser.password === "sns") {
+          alert("이미 구글 간편 로그인으로 가입된 계정입니다! 아래 구글 로그인 버튼을 사용해 주세요.");
+        } else {
+          const type = isEmailFormat(idValue) ? "이메일" : "아이디";
+          let msg = `이미 가입된 ${type}입니다. 로그인 모드로 전환했으니 비밀번호를 입력해 로그인해 주세요!`;
+          if (normId === "test@naver.com") msg += " (데모 계정 비밀번호: 123456)";
+          alert(msg);
         }
-        alert(msg);
         return;
       }
-      
-      const newUser = { email: emailValue, password: passwordValue, credits: 10 };
+      const newUser = { email: idValue, password: passwordValue, credits: 10 };
       users.push(newUser);
       saveUsers(users);
-
-      state.isLoggedIn = true;
-      state.credits = 10;
-      state.currentUserEmail = emailValue;
+      state.isLoggedIn = true; state.credits = 10; state.currentUserEmail = idValue;
       enterApp();
-      alert(`축하합니다! 회원가입이 완료되었습니다. 기본 10 CP가 무상 지급됩니다.`);
+      const type = isEmailFormat(idValue) ? "이메일" : "아이디";
+      alert(`회원가입 완료! (${type}: ${idValue}) 기본 10 CP가 무상 지급됩니다.`);
     } else {
-      const user = users.find(u => u.email.toLowerCase() === normEmail);
+      const user = findUser(normId);
       if (!user) {
-        alert("오류: 가입되지 않은 이메일 계정입니다! 회원가입을 먼저 완료해 주세요.");
+        const type = isEmailFormat(idValue) ? "이메일" : "아이디";
+        alert(`오류: 가입된 ${type}이 없습니다! 회원가입을 먼저 해 주세요.`);
         return;
       }
       if (user.password === "sns") {
-        alert("오류: 이 계정은 구글 간편 로그인 계정입니다. 아래의 '구글 계정으로 로그인' 버튼을 이용해 주세요!");
+        alert("오류: 구글 간편 로그인 계정입니다. 아래 '구글 계정으로 로그인' 버튼을 이용해 주세요!");
         return;
       }
       if (user.password !== passwordValue) {
-        let errorMsg = "오류: 비밀번호가 일치하지 않습니다! 다시 확인해 주세요.";
-        if (normEmail === "test@naver.com") {
-          errorMsg += " (데모용 테스트 계정의 비밀번호는 123456입니다.)";
-        }
-        alert(errorMsg);
-        return;
+        let err = "오류: 비밀번호가 일치하지 않습니다! 다시 확인해 주세요.";
+        if (normId === "test@naver.com") err += " (데모 계정 비밀번호: 123456)";
+        alert(err); return;
       }
-
-      state.isLoggedIn = true;
-      state.credits = user.credits ?? 10;
-      state.currentUserEmail = user.email;
+      state.isLoggedIn = true; state.credits = user.credits ?? 10; state.currentUserEmail = user.email;
       enterApp();
-      alert(`스튜디오 로그인 성공! (남은 크레딧: ${state.credits} CP)`);
+      alert(`로그인 성공! 환영합니다 👗 (남은 크레딧: ${state.credits} CP)`);
     }
   };
 
@@ -301,6 +305,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   submitLoginBtn.addEventListener("click", performLoginOrSignup);
+
+  const resetUsersBtn = document.getElementById("reset-users-btn");
+  if (resetUsersBtn) resetUsersBtn.addEventListener("click", () => {
+    if (window.confirm("계정 데이터를 전체 삭제하고 다시 시작하시겠습니까?\n데모 계정: test@naver.com / 123456")) {
+      localStorage.removeItem("closet_users"); alert("초기화 완료! 데모 계정으로 로그인하거나 새로 회원가입 하세요."); location.reload();
+    }
+  });
 
   logoutBtn.addEventListener("click", (e) => {
     if (e) e.preventDefault();
