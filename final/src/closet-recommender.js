@@ -254,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
         state.currentUserEmail = googleEmail;
 
         enterApp();
-        alert(`[로컬 간편 연동] 구글 소셜 로그인 성공! (남은 크레딧: ${state.credits} CP)`);
+        alert(`[로컬 가상 연동] 구글 소셜 로그인 성공! (진짜 구글 SSO 팝업 연동을 원하시면 구글 콘솔에 깃허브 Pages 도메인 주소 등록이 100% 저장/반영되었는지 꼭 확인해주세요!)`);
       });
     }
   };
@@ -272,12 +272,12 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       google.accounts.id.prompt();
       
-      // 모종의 차단으로 돔이 1.2초 동안 계속 비어 있을 때를 대비한 셰도우 폴백 타이머
+      // 구글 SDK가 정상 로드 및 렌더링될 기회를 넉넉히 제공 (1.2초 -> 2.5초 조율)
       setTimeout(() => {
         if (googleLoginBtn && googleLoginBtn.innerHTML.trim() === "") {
           showFallbackGoogleButton();
         }
-      }, 1200);
+      }, 2500);
     } catch (e) {
       console.warn("구글 SDK 마운트 오류, 로컬 폴백을 기동합니다.", e);
       showFallbackGoogleButton();
