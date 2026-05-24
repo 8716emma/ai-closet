@@ -139,15 +139,18 @@ const CLOSER_DATA = {
     }
   },
   
-  // 4. 로컬 폴백 매칭 이미지 데이터베이스
+  // 4. 로컬 폴백 매칭 이미지 데이터베이스 (Unsplash ID)
   fallbackImages: {
-    "casual-streetwear": "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=600&q=80",
-    "business-casual-fashion": "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?auto=format&fit=crop&w=600&q=80",
-    "athleisure-wear": "https://images.unsplash.com/photo-1479064555552-3ef4979f8908?auto=format&fit=crop&w=600&q=80",
-    "romantic-date-outfit": "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=600&q=80",
-    "y2k-fashion-aesthetic": "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=600&q=80",
-    "vintage-retro-outfit": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80",
-    "sharp-tailored-suit": "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?auto=format&fit=crop&w=600&q=80"
+    "casual-streetwear": "1509631179647-0177331693ae",
+    "business-casual-fashion": "1487222477894-8943e31ef7b2",
+    "athleisure-wear": "1479064555552-3ef4979f8908",
+    "fitness-sportswear": "1518611012118-696072aa579a",
+    "romantic-date-outfit": "1539109136881-3be0616acf4b",
+    "y2k-fashion-aesthetic": "1529139574466-a303027c1d8b",
+    "vintage-retro-outfit": "1508214751196-bcfd4ca60f91",
+    "sharp-tailored-suit": "1593032465175-481ac7f401a0",
+    "clean-look-minimalism": "1445205170230-053b83016050",
+    "default": "1483985988355-763728e1935b"
   },
 
   // 5. 실시간 AI API 비동기 Fetch 통신 엔진 (500줄 규칙 준수용 이관)
@@ -174,7 +177,7 @@ const CLOSER_DATA = {
 {
   "title": "추천 룩 이름",
   "descr": "상황과 신체 특징을 결합한 3~4문장의 우아한 스타일링 추천 상세 가이드 텍스트",
-  "items": ["무신사 스탠다드 오버사이즈 옥스포드 셔츠", "토피 와이드 데님 팬츠", "아디다스 삼바 비건 화이트 블랙", "예일 에코백"], // 단순한 의류 종류가 아니라, 쇼핑몰(무신사 등)에서 곧바로 특정 상품 1개를 짚어서 구매할 수 있도록 반드시 [실제 유명 브랜드명 + 구체적인 상품명] 형태로 3~5개를 추천해 줘. (예: "반팔티" (X) -> "마하그리드 베이직 로고 티셔츠" (O))
+  "items": ["무신사 스탠다드 스웨트 셔츠", "나이키 런닝화", "아디다스 트랙 팬츠"], // 반드시 '무신사(Musinsa)' 쇼핑몰에서 실제로 검색되는 대중적인 국내외 입점 브랜드(무신사 스탠다드, 커버낫, 디스이즈네버댓, 나이키, 아디다스 등)와 '한글 상품명'을 결합해서 3~5개 추천해 줘. 룰루레몬 등 무신사에 없는 브랜드나 복잡한 영문 상품명은 절대 금지.
   "unsplashKeyword": "영문 패션 이미지 검색 키워드 (예: amekaji-fashion)"
 }
     `;
