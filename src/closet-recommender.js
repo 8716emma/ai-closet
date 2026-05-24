@@ -397,7 +397,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const link = document.createElement("a");
       link.className = "dash-link-item";
       link.target = "_blank";
-      link.href = `https://www.musinsa.com/search/musinsa/integration?type=&q=${encodeURIComponent(item)}`;
+      link.href = `https://search.shopping.naver.com/search/all?query=${encodeURIComponent(item)}`;
       link.innerHTML = `<span>🏷️</span> ${item}`;
       
       if (index < mid) {
