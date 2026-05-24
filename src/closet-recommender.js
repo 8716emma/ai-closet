@@ -397,7 +397,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const link = document.createElement("a");
       link.className = "dash-link-item";
       link.target = "_blank";
-      link.href = `https://www.musinsa.com/search/goods?keyword=${encodeURIComponent(item)}`;
+      link.href = `https://www.musinsa.com/search/musinsa/integration?type=&q=${encodeURIComponent(item)}`;
       link.innerHTML = `<span>🏷️</span> ${item}`;
       
       if (index < mid) {
@@ -417,7 +417,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const unsplashKeyword = (closerData && closerData.unsplashKeywords) ? closerData.unsplashKeywords[chosenStyle] || "fashion-style" : "fashion-style";
     const selectUnsplashQuery = (kw) => {
       const collection = (closerData && closerData.fallbackImages) ? closerData.fallbackImages : {};
-      return collection[kw] || `https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80&sig=${Math.floor(Math.random() * 100)}`;
+      const imgId = collection[kw];
+      if (imgId) return imgId;
+      
+      const photoList = [
+        "1515886657613-9f3515b0c78f", "1483985988355-763728e1935b", "1487222477894-8943e31ef7b2",
+        "1479064555552-3ef4979f8908", "1539109136881-3be0616acf4b", "1529139574466-a303027c1d8b",
+        "1508214751196-bcfd4ca60f91", "1593032465175-481ac7f401a0", "1485230823990-bc0dd59f6667",
+        "1495385794356-15371f348ea3", "1469334031218-e382a71b716b", "1503342394128-c104d54dba01"
+      ];
+      const randomPhoto = photoList[Math.floor(Math.random() * photoList.length)];
+      return `https://images.unsplash.com/photo-${randomPhoto}?auto=format&fit=crop&w=600&q=80`;
     };
 
     const photoUrl = selectUnsplashQuery(unsplashKeyword);
@@ -471,7 +481,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const title = aiResult.title;
             const descr = `<strong>[실시간 AI 분석 처방]</strong> ${aiResult.descr}`;
             const kw = aiResult.unsplashKeyword || "fashion";
-            const photoUrl = `https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80&sig=${Math.floor(Math.random() * 100)}&q=${encodeURIComponent(kw)}`;
+            const photoList = [
+              "1515886657613-9f3515b0c78f", "1483985988355-763728e1935b", "1487222477894-8943e31ef7b2",
+              "1479064555552-3ef4979f8908", "1539109136881-3be0616acf4b", "1529139574466-a303027c1d8b",
+              "1508214751196-bcfd4ca60f91", "1593032465175-481ac7f401a0", "1485230823990-bc0dd59f6667",
+              "1495385794356-15371f348ea3", "1469334031218-e382a71b716b", "1503342394128-c104d54dba01"
+            ];
+            const randomPhoto = photoList[Math.floor(Math.random() * photoList.length)];
+            const photoUrl = `https://images.unsplash.com/photo-${randomPhoto}?auto=format&fit=crop&w=600&q=80`;
             
             renderDashboardResult(title, descr, photoUrl, aiResult.items);
             setTimeout(() => { alert("실시간 리얼 AI 스타일링 처방이 성공적으로 완료되었습니다! (-2 CP)"); }, 100);
