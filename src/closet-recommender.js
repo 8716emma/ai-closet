@@ -134,26 +134,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // 5-3. 로그인 및 회원가입 실행 시뮬레이터 (공백 차단 및 미가입 로그인 불가 패치)
+  // 5-3. 로그인 및 회원가입 실행 시뮬레이터 (대소문자 무시 및 소셜 연동/데모 계정 친절 안내 탑재)
   const performLoginOrSignup = (e) => {
     if (e) e.preventDefault();
-    
     const emailValue = emailInput.value ? emailInput.value.trim() : "";
     const passwordValue = passwordInput.value ? passwordInput.value.trim() : "";
 
-    // 1) 빈 값 차단
     if (!emailValue || !passwordValue) {
       alert("오류: 이메일 ID와 비밀번호를 모두 입력해 주세요!");
       return;
     }
 
     const users = loadUsers();
+    const normEmail = emailValue.toLowerCase();
 
     if (isSignupMode) {
-      // 회원가입 모드
-      const existUser = users.find(u => u.email === emailValue);
+      const existUser = users.find(u => u.email.toLowerCase() === normEmail);
       if (existUser) {
-        alert("오류: 이미 가입된 이메일 계정입니다. 로그인으로 전환해 주세요.");
+        let msg = "오류: 이미 가입된 이메일 계정입니다. 로그인 화면으로 전환해 주세요.";
+        if (normEmail === "test@naver.com") {
+          msg += " (데모용 테스트 계정의 비밀번호는 123456입니다.)";
+        } else if (existUser.password === "sns") {
+          msg += " (구글 간편 로그인으로 이미 가입된 계정입니다. 구글 로그인 버튼을 사용해 주세요!)";
+        }
+        alert(msg);
         return;
       }
       
@@ -164,21 +168,30 @@ document.addEventListener("DOMContentLoaded", () => {
       state.isLoggedIn = true;
       state.credits = 10;
       state.currentUserEmail = emailValue;
-
       enterApp();
       alert(`축하합니다! 회원가입이 완료되었습니다. 기본 10 CP가 무상 지급됩니다.`);
     } else {
-      // 로그인 모드 (미가입자 차단)
-      const user = users.find(u => u.email === emailValue && u.password === passwordValue);
+      const user = users.find(u => u.email.toLowerCase() === normEmail);
       if (!user) {
-        alert("오류: 가입되지 않은 회원이거나 비밀번호가 맞지 않습니다! 계정을 확인하거나 회원가입을 먼저 완료해 주세요.");
+        alert("오류: 가입되지 않은 이메일 계정입니다! 회원가입을 먼저 완료해 주세요.");
+        return;
+      }
+      if (user.password === "sns") {
+        alert("오류: 이 계정은 구글 간편 로그인 계정입니다. 아래의 '구글 계정으로 로그인' 버튼을 이용해 주세요!");
+        return;
+      }
+      if (user.password !== passwordValue) {
+        let errorMsg = "오류: 비밀번호가 일치하지 않습니다! 다시 확인해 주세요.";
+        if (normEmail === "test@naver.com") {
+          errorMsg += " (데모용 테스트 계정의 비밀번호는 123456입니다.)";
+        }
+        alert(errorMsg);
         return;
       }
 
       state.isLoggedIn = true;
       state.credits = user.credits ?? 10;
-      state.currentUserEmail = emailValue;
-
+      state.currentUserEmail = user.email;
       enterApp();
       alert(`스튜디오 로그인 성공! (남은 크레딧: ${state.credits} CP)`);
     }
@@ -291,30 +304,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   logoutBtn.addEventListener("click", (e) => {
     if (e) e.preventDefault();
-    state.isLoggedIn = false;
-    state.currentUserEmail = "";
-    emailInput.value = "";
-    passwordInput.value = "";
-    authScreen.style.display = "block";
-    mainScreen.style.display = "none";
-    headerCredits.style.display = "none";
-    sidebarToggleBtn.style.display = "none";
-    logoutBtn.style.display = "none";
+    state.isLoggedIn = false; state.currentUserEmail = "";
+    emailInput.value = ""; passwordInput.value = "";
+    authScreen.style.display = "block"; mainScreen.style.display = "none";
+    headerCredits.style.display = "none"; sidebarToggleBtn.style.display = "none"; logoutBtn.style.display = "none";
     alert("로그아웃 되었습니다.");
   });
 
   // 6. 크레딧 차감 및 업데이트 로직
-  const updateCreditUI = () => {
-    navCreditCount.textContent = `${state.credits} CP`;
-  };
+  const updateCreditUI = () => { navCreditCount.textContent = `${state.credits} CP`; };
 
   // 7. 실시간 오늘 기상청 연동 날씨 (랜덤 시뮬레이션 탈피)
-  const weatherConditions = [
-    { temp: 24, condition: "맑고 따뜻한 초여름 날씨 ☀️" }
-  ];
-
   const triggerWeatherUpdate = () => {
-    // 오늘 서울 기상청 실시간 실제 날씨 고정 적용 (24°C / 맑음)
     state.currentWeather = { temp: 24, condition: "맑고 따뜻한 초여름 날씨 ☀️" };
     weatherWidget.innerHTML = `<span>🌡️ 현재 기온: <strong>${state.currentWeather.temp}°C</strong> | 기후: <strong>${state.currentWeather.condition}</strong></span>`;
   };
@@ -455,9 +456,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 11. 메일링 구독 및 백엔드 복사 로직
   emailSubscribeCheck.addEventListener("change", (e) => {
-    if (e.target.checked) {
-      alert("매일 아침 8시 날씨 연동 스타일링 처방 자동 메일 수신 동의가 저장되었습니다.");
-    }
+    if (e.target.checked) alert("매일 아침 8시 날씨 연동 스타일링 처방 자동 메일 수신 동의가 저장되었습니다.");
   });
 
   copyBackendCodeBtn.addEventListener("click", () => {
@@ -468,25 +467,26 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 12. 결제 팝업 내 버튼 처리
-  closePaymentModalBtn.addEventListener("click", () => {
-    paymentModal.style.display = "none";
-  });
+  closePaymentModalBtn.addEventListener("click", () => paymentModal.style.display = "none");
 
   chargeCreditBtn.addEventListener("click", () => {
-    state.credits += 10;
-    updateCreditUI();
-    syncUserCredits();
+    state.credits += 10; updateCreditUI(); syncUserCredits();
     paymentModal.style.display = "none";
     alert("🪙 10 크레딧(CP) 충전이 완료되었습니다!");
   });
 
   subscribePremiumBtn.addEventListener("click", () => {
-    state.credits = 9999;
-    navCreditCount.textContent = "PREMIUM";
-    syncUserCredits();
+    state.credits = 9999; navCreditCount.textContent = "PREMIUM"; syncUserCredits();
     paymentModal.style.display = "none";
     alert("⭐ 프리미엄 무제한 정기 구독 멤버십이 활성화되었습니다!");
   });
+
+  const sidebarProfileBtn = document.getElementById("sidebar-profile-btn");
+  if (sidebarProfileBtn) {
+    sidebarProfileBtn.addEventListener("click", () => {
+      alert(`회원 정보: ${state.currentUserEmail || "손님"} (현재 ${state.credits} CP 보유)`);
+    });
+  }
 
   renderTags();
 });
