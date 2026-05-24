@@ -142,16 +142,16 @@ const CLOSER_DATA = {
   
   // 4. 로컬 폴백 매칭 이미지 데이터베이스 (Unsplash ID)
   fallbackImages: {
-    "casual-streetwear": "https://i.pinimg.com/736x/87/fc/b4/87fcb4a8e26bd7d9f94eb9b2ef8eb2e6.jpg",
-    "business-casual-fashion": "https://i.pinimg.com/736x/55/c2/c0/55c2c0199047248b61c563065b74659b.jpg",
-    "athleisure-wear": "https://i.pinimg.com/736x/67/f6/00/67f6002f2324ce622834b6b694b8e23b.jpg",
-    "fitness-sportswear": "https://i.pinimg.com/736x/a2/2f/1b/a22f1bc2499d0eec9f6a7cb84982bb2b.jpg",
-    "romantic-date-outfit": "https://i.pinimg.com/736x/91/97/35/919735d4ff3e4142db37dc9a997d9183.jpg",
-    "y2k-fashion-aesthetic": "https://i.pinimg.com/736x/48/84/c8/4884c83abdb6ecad3df32d716839be9b.jpg",
-    "vintage-retro-outfit": "https://i.pinimg.com/736x/f6/d8/67/f6d867cbbdc552ab86f5c88b90ed9d22.jpg",
-    "sharp-tailored-suit": "https://i.pinimg.com/736x/1a/0e/9d/1a0e9dc320959fc93b6e828a50de8cfb.jpg",
-    "clean-look-minimalism": "https://i.pinimg.com/736x/26/5d/7c/265d7c5ba65c2b03e0591ce8e1a4de1f.jpg",
-    "default": "https://i.pinimg.com/736x/2c/31/58/2c3158c33e21ea5c4cf848e4740e5361.jpg"
+    "casual-streetwear": "src/assets/images/casual.png",
+    "business-casual-fashion": "src/assets/images/office.png",
+    "athleisure-wear": "src/assets/images/casual.png",
+    "fitness-sportswear": "src/assets/images/casual.png",
+    "romantic-date-outfit": "src/assets/images/casual.png",
+    "y2k-fashion-aesthetic": "src/assets/images/y2k.png",
+    "vintage-retro-outfit": "src/assets/images/y2k.png",
+    "sharp-tailored-suit": "src/assets/images/office.png",
+    "clean-look-minimalism": "src/assets/images/office.png",
+    "default": "src/assets/images/casual.png"
   },
 
   // 5. 실시간 AI API 비동기 Fetch 통신 엔진 (500줄 규칙 준수용 이관)
@@ -179,7 +179,7 @@ const CLOSER_DATA = {
 {
   "title": "추천 룩 이름 (사용자가 입력한 상황(언제/어디서/무엇을)을 반영. 예: '최애 생카를 위한 러블리룩')",
   "descr": "상황과 신체 특징을 결합한 3~4문장의 스타일링 가이드 (100% 한국어 필수)",
-  "items": ["무신사 스탠다드 릴렉스 핏 크루 넥 반팔 티셔츠 [블랙]", "토피 2WAY 스트링 와이드 데님 팬츠 [로우 블랙]", "나이키 에어포스 1 '07 화이트", "잔스포츠 하프파인트 미니 백팩"], // (매우 중요) 검색을 방해하는 [상의] 같은 접두어는 절대 쓰지 말고 오직 '정확한 상품 풀네임'만 적어라. 반드시 1번째는 상의, 2번째는 하의, 3번째는 신발, 4번째는 액세서리로 총 4개를 순서대로 정확하게 추천할 것. 무신사 입점 브랜드 위주.
+  "items": ["무신사 스탠다드 릴렉스 핏 반팔 티셔츠", "토피 와이드 데님 팬츠", "나이키 에어포스 1 화이트", "잔스포츠 미니 백팩"], // (매우 중요) 무신사 검색이 잘 되도록 색상이나 [블랙] 같은 괄호 특수문자는 전부 빼고 오직 간결한 '브랜드명 + 핵심 상품명'만 적어라. 반드시 1번째는 상의, 2번째는 하의, 3번째는 신발, 4번째는 액세서리로 총 4개를 순서대로 정확하게 추천할 것. 무신사 입점 브랜드 위주.
   "unsplashKeyword": "영문 패션 이미지 키워드 (반드시 다음 중 하나만 정확히 선택: casual-streetwear, business-casual-fashion, athleisure-wear, fitness-sportswear, romantic-date-outfit, y2k-fashion-aesthetic, vintage-retro-outfit, sharp-tailored-suit, clean-look-minimalism, default)"
 }
     `;
