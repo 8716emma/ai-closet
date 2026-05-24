@@ -67,11 +67,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const refreshWeatherBtn = document.getElementById("refresh-weather-btn");
 
   const getRecommendationBtn = document.getElementById("get-recommendation-btn");
-  const resultPhoto = document.getElementById("result-photo");
-  const resultTitle = document.getElementById("result-title");
-  const resultDescr = document.getElementById("result-descr");
-  const resultTagsContainer = document.getElementById("result-tags-container");
-  const resultShopLink = document.getElementById("result-shop-link");
+  const fullscreenDashboard = document.getElementById("fullscreen-dashboard");
+  const dashLinksTop = document.getElementById("dash-links-top");
+  const dashLinksBottom = document.getElementById("dash-links-bottom");
+  const dashResultPhoto = document.getElementById("dash-result-photo");
+  const dashResultTitle = document.getElementById("dash-result-title");
+  const dashResultDescr = document.getElementById("dash-result-descr");
+  const dashCloseBtn = document.getElementById("dash-close-btn");
+  
+  if (dashCloseBtn) {
+    dashCloseBtn.addEventListener("click", () => {
+      fullscreenDashboard.style.display = "none";
+      mainScreen.style.display = "grid";
+    });
+  }
+
 
   const emailSubscribeCheck = document.getElementById("email-subscribe-check");
 
@@ -373,6 +383,34 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // 9-4. 공통 결과 렌더링 헬퍼 (전체화면 대시보드)
+  const renderDashboardResult = (title, descr, photoUrl, items) => {
+    dashResultTitle.textContent = title;
+    dashResultDescr.innerHTML = descr;
+    dashResultPhoto.src = photoUrl;
+    
+    dashLinksTop.innerHTML = "";
+    dashLinksBottom.innerHTML = "";
+    
+    const mid = Math.ceil(items.length / 2);
+    items.forEach((item, index) => {
+      const link = document.createElement("a");
+      link.className = "dash-link-item";
+      link.target = "_blank";
+      link.href = `https://www.musinsa.com/search/${encodeURIComponent(item)}`;
+      link.innerHTML = `<span>🏷️</span> ${item}`;
+      
+      if (index < mid) {
+        dashLinksTop.appendChild(link);
+      } else {
+        dashLinksBottom.appendChild(link);
+      }
+    });
+
+    mainScreen.style.display = "none";
+    fullscreenDashboard.style.display = "flex";
+  };
+
   // 9-3. 로컬 폴백 매칭 도우미
   const applyLocalFallback = (stylingData, chosenWhen, chosenWhere, chosenRole, body, chosenStyle) => {
     const closerData = window.CLOSER_DATA || (typeof CLOSER_DATA !== "undefined" ? CLOSER_DATA : null);
@@ -382,22 +420,13 @@ document.addEventListener("DOMContentLoaded", () => {
       return collection[kw] || `https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80&sig=${Math.floor(Math.random() * 100)}`;
     };
 
-    resultPhoto.src = selectUnsplashQuery(unsplashKeyword);
-    resultTitle.textContent = stylingData.title;
+    const photoUrl = selectUnsplashQuery(unsplashKeyword);
+    const title = stylingData.title;
     const bodyAdvice = body.length > 0 ? `선택하신 신체특성(${body.join(", ")})을 보완하기 위해 실루엣의 균형을 완벽히 잡았습니다.` : "";
-    resultDescr.innerHTML = `<strong>[AI 분석 처방]</strong> ${chosenWhen} ${chosenWhere}에서 ${chosenRole}로서 가장 돋보일 수 있는 연출입니다. ${stylingData.descr} <br><br><em>${bodyAdvice}</em>`;
+    const descr = `<strong>[AI 분석 처방]</strong> ${chosenWhen} ${chosenWhere}에서 ${chosenRole}로서 가장 돋보일 수 있는 연출입니다. ${stylingData.descr} <br><br><em>${bodyAdvice}</em>`;
 
-    resultTagsContainer.innerHTML = "";
-    stylingData.items.forEach(item => {
-      const itemTag = document.createElement("span");
-      itemTag.className = "result-item-tag";
-      itemTag.textContent = `🏷️ ${item}`;
-      resultTagsContainer.appendChild(itemTag);
-    });
-
-    resultShopLink.href = stylingData.links.startsWith("http") ? stylingData.links : `https://www.musinsa.com/search/${encodeURIComponent(chosenStyle)}`;
-    resultShopLink.innerHTML = `👜 ${chosenStyle} 룩 쇼핑 링크로 바로가기`;
-    alert("추천 스타일링 처방이 안전하게 완료되었습니다! (-2 CP)");
+    renderDashboardResult(title, descr, photoUrl, stylingData.items);
+    setTimeout(() => { alert("추천 스타일링 처방이 안전하게 완료되었습니다! (-2 CP)"); }, 100);
   };
 
   // 10. AI 옷 추천 실행 엔진
@@ -428,27 +457,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 실시간 AI API 연동 분기
     if (API_CONFIG.apiKey && API_CONFIG.apiKey !== "YOUR_API_KEY_HERE" && API_CONFIG.apiKey.trim() !== "") {
-      resultTitle.textContent = "AI가 패션 스타일 분석 중입니다...";
-      resultDescr.textContent = "기온 정보와 신체 특징을 결합하여 최적의 패션 처방전을 빌드하고 있습니다. 잠시만 기다려주세요.";
-      resultTagsContainer.innerHTML = "<span class='result-item-tag'>🔄 AI 연동 분석 중...</span>";
+      dashResultTitle.textContent = "AI가 패션 스타일 분석 중입니다...";
+      dashResultDescr.textContent = "기온 정보와 신체 특징을 결합하여 최적의 패션 처방전을 빌드하고 있습니다. 잠시만 기다려주세요.";
+      dashLinksTop.innerHTML = "<span>🔄 AI 연동 분석 중...</span>";
+      dashLinksBottom.innerHTML = "";
+      
+      mainScreen.style.display = "none";
+      fullscreenDashboard.style.display = "flex";
 
       if (closerData && closerData.fetchRealAIRecommendation) {
         closerData.fetchRealAIRecommendation({ when, where, role, style, why, body, weather: state.currentWeather }, API_CONFIG)
           .then(aiResult => {
-            resultTitle.textContent = aiResult.title;
-            resultDescr.innerHTML = `<strong>[실시간 AI 분석 처방]</strong> ${aiResult.descr}`;
-            resultTagsContainer.innerHTML = "";
-            aiResult.items.forEach(item => {
-              const itemTag = document.createElement("span");
-              itemTag.className = "result-item-tag";
-              itemTag.textContent = `🏷️ ${item}`;
-              resultTagsContainer.appendChild(itemTag);
-            });
+            const title = aiResult.title;
+            const descr = `<strong>[실시간 AI 분석 처방]</strong> ${aiResult.descr}`;
             const kw = aiResult.unsplashKeyword || "fashion";
-            resultPhoto.src = `https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80&sig=${Math.floor(Math.random() * 100)}&q=${encodeURIComponent(kw)}`;
-            resultShopLink.href = `https://www.musinsa.com/search/${encodeURIComponent(aiResult.title)}`;
-            resultShopLink.innerHTML = `👜 AI 추천 상품 검색하러 가기`;
-            alert("실시간 리얼 AI 스타일링 처방이 성공적으로 완료되었습니다! (-2 CP)");
+            const photoUrl = `https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80&sig=${Math.floor(Math.random() * 100)}&q=${encodeURIComponent(kw)}`;
+            
+            renderDashboardResult(title, descr, photoUrl, aiResult.items);
+            setTimeout(() => { alert("실시간 리얼 AI 스타일링 처방이 성공적으로 완료되었습니다! (-2 CP)"); }, 100);
           })
           .catch(err => {
             alert("AI API 호출 도중 오류가 발생했습니다. API 키 및 설정을 확인해주세요. (임시 로컬 코디로 대체합니다.)");

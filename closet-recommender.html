@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Closet Recommender - 스마트 옷 추천 스튜디오</title>
-  <link rel="stylesheet" href="src/closet-recommender.css?v=2.4">
+  <link rel="stylesheet" href="src/closet-recommender.css?v=2.5">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
@@ -109,22 +109,10 @@
     <!-- Right: 추천 결과 카드 & 추가 옵션 -->
     <div class="side-results-panel">
       
-      <!-- AI 분석 결과 카드 -->
-      <div class="result-card">
-        <div class="result-image-wrapper">
-          <span class="result-badge">AI RECOMMENDATION</span>
-          <img id="result-photo" class="result-image" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80" alt="추천 의상 프리뷰">
-        </div>
-        <div class="result-content">
-          <h3 id="result-title" class="result-title">조건을 선택하고 추천 버튼을 눌러주세요.</h3>
-          <p id="result-descr" class="result-descr">
-            날씨 데이터와 신체비율, 상황 키워드를 조합하여 AI 디자이너가 최상의 톤온톤 옷 레이어링 매치 리포트를 발급합니다.
-          </p>
-          <div id="result-tags-container" class="result-items">
-            <!-- 동적 바인딩 의상 셋팅 태그 -->
-          </div>
-          <a id="result-shop-link" href="#" target="_blank" class="btn btn-accent" style="width: 100%;">👜 쇼핑 링크로 바로가기</a>
-        </div>
+      <!-- AI 분석 결과 안내 패널 -->
+      <div class="main-panel" style="text-align: center; padding: 40px 20px;">
+        <h3 style="color: var(--primary-dark); margin-bottom: 12px;">조건을 입력하고 추천을 받아보세요</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">버튼을 누르면 화면 전체에 상세 분석 리포트 대시보드가 열립니다.</p>
       </div>
 
       <!-- 자동 메일 수신 & 백엔드 시뮬레이터 -->
@@ -144,6 +132,42 @@
         
       </div>
 
+    </div>
+  </div>
+
+  <!-- F. 전체화면 추천 결과 대시보드 -->
+  <div id="fullscreen-dashboard" class="fullscreen-dashboard" style="display: none;">
+    <div class="dashboard-container">
+      
+      <!-- 좌측 열: 상의 및 액세서리 -->
+      <div class="dash-col dash-col-left">
+        <h3 class="dash-col-title">👕 추천 상의 및 포인트</h3>
+        <div id="dash-links-top" class="dash-links-wrapper">
+          <!-- 동적 생성 -->
+        </div>
+      </div>
+      
+      <!-- 중앙 열: 이미지 및 설명 -->
+      <div class="dash-col dash-col-center">
+        <div class="dash-image-wrapper">
+          <img id="dash-result-photo" src="" alt="추천 의상 프리뷰">
+          <span class="dash-badge">AI STYLING</span>
+        </div>
+        <div class="dash-content">
+          <h2 id="dash-result-title">분석 중...</h2>
+          <p id="dash-result-descr">잠시만 기다려주세요.</p>
+          <button id="dash-close-btn" class="btn btn-primary" style="margin-top: 24px; width: 100%; padding: 14px;">↺ 다시 선택하기 (돌아가기)</button>
+        </div>
+      </div>
+      
+      <!-- 우측 열: 하의 및 신발 -->
+      <div class="dash-col dash-col-right">
+        <h3 class="dash-col-title">👖 추천 하의 및 신발</h3>
+        <div id="dash-links-bottom" class="dash-links-wrapper">
+          <!-- 동적 생성 -->
+        </div>
+      </div>
+      
     </div>
   </div>
 
@@ -184,6 +208,6 @@
   <!-- 데이터 스크립트 임포트 -->
   <script src="src/closet-recommender-data.js"></script>
   <!-- 로직 스크립트 임포트 -->
-  <script src="src/closet-recommender.js?v=2.4"></script>
+  <script src="src/closet-recommender.js?v=2.5"></script>
 </body>
 </html>
