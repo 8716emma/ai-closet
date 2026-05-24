@@ -427,7 +427,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const applyLocalFallback = (stylingData, chosenWhen, chosenWhere, chosenRole, body, chosenStyle) => {
     const closerData = window.CLOSER_DATA || (typeof CLOSER_DATA !== "undefined" ? CLOSER_DATA : null);
     const chosenRef = closerData.referenceLooks[chosenStyle] || closerData.referenceLooks["default"];
-    const photoUrl = `https://images.unsplash.com/photo-${chosenRef.imgId}?auto=format&fit=crop&w=600&q=80`;
+    const photoUrl = chosenRef.imgId.startsWith('http') ? chosenRef.imgId : `https://images.unsplash.com/photo-${chosenRef.imgId}?auto=format&fit=crop&w=600&q=80`;
     const title = `[${chosenWhen}] ${stylingData.title}`;
     const bodyAdvice = body.length > 0 ? `선택하신 신체특성(${body.join(", ")})을 보완하기 위해 실루엣의 균형을 완벽히 잡았습니다.` : "";
     const descr = `<strong>[AI 분석 처방]</strong> ${chosenWhen} ${chosenWhere}에서 ${chosenRole}로서 가장 돋보일 수 있는 연출입니다. ${stylingData.descr} <br><br><em>${bodyAdvice}</em>`;
@@ -479,7 +479,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const title = aiResult.title;
             const descr = `<strong>[실시간 AI 분석 처방]</strong> ${aiResult.descr}`;
             const imgId = aiResult.referenceImageId || "1483985988355-763728e1935b";
-            const photoUrl = `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
+            const photoUrl = imgId.startsWith('http') ? imgId : `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
             
             renderDashboardResult(title, descr, photoUrl, aiResult.items);
             setTimeout(() => { alert("실시간 리얼 AI 스타일링 처방이 성공적으로 완료되었습니다! (-2 CP)"); }, 100);
