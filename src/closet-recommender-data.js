@@ -74,7 +74,10 @@ const CLOSER_DATA = {
   fetchRealAIRecommendation: async (promptData, apiConfig) => {
     let provider = apiConfig.provider;
     let apiKey = apiConfig.apiKey ? apiConfig.apiKey.trim() : "";
-    if (apiKey.startsWith("gsk_")) provider = "groq";
+    
+    if (apiKey.startsWith("gsk_")) {
+      provider = "groq";
+    }
 
     // 사용자가 고른 스타일에 매칭되는 레퍼런스 룩북 추출
     const chosenStyle = promptData.style[0] || "default";
@@ -83,27 +86,32 @@ const CLOSER_DATA = {
     const promptText = `
 너는 전세계 최고의 퍼스널 패션 스타일리스트야.
 사용자가 다음 조건의 패션 스타일링을 원하고 있어:
-- 성별: ${promptData.gender.length > 0 ? promptData.gender.join(", ") : "무관"}
+- 성별: ${promptData.gender && promptData.gender.length > 0 ? promptData.gender.join(", ") : "무관"}
 - 언제: ${promptData.when.join(", ") || "평소에"}
 - 어디서: ${promptData.where.join(", ") || "카페"}
 - 무엇을(역할): ${promptData.role.join(", ") || "하객"}
 - 어떻게(스타일): ${promptData.style.join(", ") || "캐주얼"}
-- 추가 요청사항: ${promptData.customContext || '없음'}
+- 왜(대상): ${promptData.why && promptData.why.length > 0 ? promptData.why.join(", ") : "친구"}
+- 신체 특징 및 비율: ${promptData.body && promptData.body.length > 0 ? promptData.body.join(", ") : "보통 체형"}
+- 추가 요청사항: ${promptData.customContext || "없음"}
 - 오늘 날씨: 기온 ${promptData.weather.temp}°C (${promptData.weather.condition})
 
 [가장 중요한 핵심 지시사항!!!]
-유저에게 보여줄 핀터레스트 레퍼런스 룩북 사진의 코디는 다음과 같아:
+유저에게 보여줄 실제 핀터레스트 레퍼런스 화보 사진의 코디는 다음과 같아:
 "${refLook.descr}"
 
-너는 반드시 **위 레퍼런스 사진 속 코디와 최대한 똑같은 룩을 연출할 수 있도록** 무신사에서 살 수 있는 실제 의류 4가지를 찾아 추천해줘야 해.
-예시 데이터를 절대 베끼지 말고, 매번 새롭고 다양한 브랜드(토피, 무신사 스탠다드, 나이키 등)로 창의적으로 검색해라.
-무신사 검색이 잘 되도록 상품명에 [블랙] 같은 괄호나 색상을 절대 넣지 말고 '브랜드명 + 기본 상품명'만 적어라.
+너는 반드시 **위 레퍼런스 사진 속 코디와 최대한 똑같은 룩을 연출할 수 있도록** 실제 무신사에서 살 수 있는 의류 4가지를 찾아 추천해줘야 해.
+
+[엄격한 금지사항]
+1. 절대 일본어(히라가나, 가타카나)나 중국어(한자)를 섞어 쓰지 마라! 무조건 100% 한국어 표준어만 사용해라. (예: 合わせ면 -> 매치하면)
+2. 추천 아이템에 단순히 "반팔 티셔츠"라고 적지 마라. 반드시 "아디다스 파이어버드 트랙탑" 처럼 [정확한 브랜드명 + 핵심 상품명]으로 구체적으로 적어라.
+3. 상품명에 [블랙] 같은 괄호나 색상을 넣지 마라.
 
 반드시 아래의 JSON 규격만을 출력해 (마크다운 없이 순수 JSON만):
 {
   "title": "추천 룩 이름 (레퍼런스 사진 느낌을 살린 매력적인 제목)",
-  "descr": "레퍼런스 사진과 유저의 신체 특징을 고려하여 이 옷들을 어떻게 입어야 하는지 설명하는 3~4문장의 가이드 (중국어, 일본어 절대 금지! 100% 자연스러운 한국어 표준어만 작성할 것)",
-  "items": ["무신사 스탠다드 반팔 티셔츠", "토피 데님 팬츠", "나이키 에어포스 1 화이트", "잔스포츠 미니 백팩"] 
+  "descr": "레퍼런스 사진의 코디를 똑같이 구현하기 위한 스타일링 가이드. 100% 자연스러운 한국어 표준어만 사용할 것.",
+  "items": ["(예: 무신사 스탠다드 릴렉스 핏 블레이저)", "(예: 리바이스 501 오리지널 핏 청바지)", "(예: 나이키 코르테즈 화이트)", "(예: 잔스포츠 수퍼브레이크 백팩)"] 
 }
     `;
 
@@ -132,7 +140,6 @@ const CLOSER_DATA = {
         resultData = JSON.parse(resJson.choices[0].message.content.trim());
       }
       
-      // 결과 데이터에 우리가 선택했던 핀터레스트 레퍼런스 이미지 ID를 강제로 꽂아넣음
       resultData.referenceImageId = refLook.imgId;
       return resultData;
     } catch (error) {
