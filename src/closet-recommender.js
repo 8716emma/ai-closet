@@ -426,17 +426,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // 9-3. 로컬 폴백 매칭 도우미
   const applyLocalFallback = (stylingData, chosenWhen, chosenWhere, chosenRole, body, chosenStyle) => {
     const closerData = window.CLOSER_DATA || (typeof CLOSER_DATA !== "undefined" ? CLOSER_DATA : null);
-    const unsplashKeyword = (closerData && closerData.unsplashKeywords) ? closerData.unsplashKeywords[chosenStyle] || "fashion-style" : "fashion-style";
-    const getPhotoUrl = (kw) => {
-      const closerData = window.CLOSER_DATA || (typeof CLOSER_DATA !== "undefined" ? CLOSER_DATA : null);
-      const collection = (closerData && closerData.fallbackImages) ? closerData.fallbackImages : {};
-      const imgKeys = Object.values(collection);
-      const randomImg = imgKeys[Math.floor(Math.random() * imgKeys.length)];
-      const imgId = collection[kw] || randomImg || "https://i.pinimg.com/736x/2c/31/58/2c3158c33e21ea5c4cf848e4740e5361.jpg";
-      return (imgId.startsWith('http') || imgId.startsWith('src/')) ? imgId : `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
-    };
-
-    const photoUrl = getPhotoUrl(unsplashKeyword);
+    const chosenRef = closerData.referenceLooks[chosenStyle] || closerData.referenceLooks["default"];
+    const photoUrl = `https://images.unsplash.com/photo-${chosenRef.imgId}?auto=format&fit=crop&w=600&q=80`;
     const title = `[${chosenWhen}] ${stylingData.title}`;
     const bodyAdvice = body.length > 0 ? `선택하신 신체특성(${body.join(", ")})을 보완하기 위해 실루엣의 균형을 완벽히 잡았습니다.` : "";
     const descr = `<strong>[AI 분석 처방]</strong> ${chosenWhen} ${chosenWhere}에서 ${chosenRole}로서 가장 돋보일 수 있는 연출입니다. ${stylingData.descr} <br><br><em>${bodyAdvice}</em>`;
@@ -486,13 +477,8 @@ document.addEventListener("DOMContentLoaded", () => {
           .then(aiResult => {
             const title = aiResult.title;
             const descr = `<strong>[실시간 AI 분석 처방]</strong> ${aiResult.descr}`;
-            const kw = aiResult.unsplashKeyword || "fashion";
-            const closerData = window.CLOSER_DATA || (typeof CLOSER_DATA !== "undefined" ? CLOSER_DATA : null);
-            const collection = (closerData && closerData.fallbackImages) ? closerData.fallbackImages : {};
-            const imgKeys = Object.values(collection);
-            const randomImg = imgKeys[Math.floor(Math.random() * imgKeys.length)];
-            const imgId = collection[kw] || randomImg || "https://i.pinimg.com/736x/2c/31/58/2c3158c33e21ea5c4cf848e4740e5361.jpg";
-            const photoUrl = (imgId.startsWith('http') || imgId.startsWith('src/')) ? imgId : `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
+            const imgId = aiResult.referenceImageId || "1483985988355-763728e1935b";
+            const photoUrl = `https://images.unsplash.com/photo-${imgId}?auto=format&fit=crop&w=600&q=80`;
             
             renderDashboardResult(title, descr, photoUrl, aiResult.items);
             setTimeout(() => { alert("실시간 리얼 AI 스타일링 처방이 성공적으로 완료되었습니다! (-2 CP)"); }, 100);
