@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAS 2.4 — 디자인 시스템 코어</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23111111%22/><text x=%2250%22 y=%2272%22 font-size=%2275%22 font-family=%22monospace%22 font-weight=%22bold%22 text-anchor=%22middle%22 fill=%22%23ffffff%22>V</text></svg>">
+<link rel="stylesheet" href="design-controller.css">
+
+</head>
+<body>
+<div class="app">
+  
+  <div class="controls">
+    <div class="header">
+      <a href="../index.html" class="back-link">← 허브로 돌아가기</a>
+      <h1>디자인 시스템 코어</h1>
+      <p>글로벌 Top-Tier 테마 & AI 시스템 프롬프트</p>
+    </div>
+
+    <!-- 프리셋 (Top Tier Styles) -->
+    <div class="group">
+      <h3>디자인 프리셋</h3>
+      <div class="preset-grid">
+        <button class="btn-preset" onclick="applyPreset('vercel')">Vercel</button>
+        <button class="btn-preset" onclick="applyPreset('linear')">Linear</button>
+        <button class="btn-preset" onclick="applyPreset('stripe')">Stripe</button>
+        <button class="btn-preset" onclick="applyPreset('apple')">Apple HIG</button>
+        <button class="btn-preset" onclick="applyPreset('google')">Google M3</button>
+        <button class="btn-preset active" onclick="applyPreset('neobrutal')">Neo-Brutal</button>
+        <button class="btn-preset" onclick="applyPreset('untitled')">Untitled UI</button>
+        <button class="btn-preset" onclick="applyPreset('shadcn')">shadcn/ui</button>
+        <button class="btn-preset" onclick="applyPreset('glow')">Glow UI</button>
+        <button class="btn-preset" onclick="applyPreset('ant')">Ant Design</button>
+        <button class="btn-preset" onclick="applyPreset('carbon')">IBM Carbon</button>
+        <button class="btn-preset" onclick="applyPreset('awwwards')">Awwwards</button>
+      </div>
+    </div>
+
+    <!-- 통합된 프롬프트 아틀리에 영역 -->
+    <div class="group">
+      <h3>AI 에이전트 시스템 프롬프트</h3>
+      <textarea id="aiPrompt" class="prompt-box" readonly></textarea>
+      <button class="btn btn-primary" onclick="copyAgentPrompt()" style="width: 100%;">프롬프트 복사 (에이전트에게 전달)</button>
+    </div>
+
+    <!-- 세부 토큰 조정 (기존 컨트롤러 기능) -->
+    <div class="group">
+      <h3>세부 토큰 제어 (Manual Override)</h3>
+      
+      <!-- 타이포그래피 -->
+      <div class="field">
+        <label>폰트 패밀리</label>
+        <select id="fontFamily" onchange="update()">
+          <option value="'Inter', 'Pretendard', sans-serif">Inter</option>
+          <option value="'Geist Mono', 'Pretendard', monospace">Geist Mono</option>
+          <option value="'Pretendard', sans-serif">Pretendard (한글 권장)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>기준 크기 (Base Size) <span id="fsVal">16px</span></label>
+        <input type="range" id="fontSize" min="12" max="24" value="16" step="1" oninput="update()">
+      </div>
+      <div class="field">
+        <label>자간 (Letter Spacing) <span id="lsVal">-0.04em</span></label>
+        <input type="range" id="letterSpacing" min="-0.1" max="0.2" value="-0.04" step="0.01" oninput="update()">
+      </div>
+      
+      <!-- 형태 및 모션 -->
+      <div class="field">
+        <label>기준 여백 (Padding) <span id="padVal">24px</span></label>
+        <input type="range" id="padding" min="12" max="64" value="24" step="4" oninput="update()">
+      </div>
+      <div class="field">
+        <label>둥글기 (Border Radius) <span id="radVal">0px</span></label>
+        <input type="range" id="radius" min="0" max="40" value="0" step="2" oninput="update()">
+      </div>
+      <div class="field">
+        <label>테두리 두께 (Border) <span id="borderVal">2px</span></label>
+        <input type="range" id="borderWidth" min="0" max="8" value="2" step="1" oninput="update()">
+      </div>
+      <div class="field">
+        <label>그림자 강도 (Shadow) <span id="shadowVal">0px</span></label>
+        <input type="range" id="shadow" min="0" max="80" value="0" step="4" oninput="update()">
+      </div>
+      <div class="field">
+        <label>모션 속도 (Transition) <span id="speedVal">0.2s</span></label>
+        <input type="range" id="speed" min="0.1" max="1.0" value="0.2" step="0.1" oninput="update()">
+      </div>
+
+      <!-- 색상 -->
+      <div class="color-grid">
+        <div class="color-item"><label>Primary (주색)</label><input type="color" id="colorPrimary" value="#111111" oninput="update()"></div>
+        <div class="color-item"><label>Background (배경)</label><input type="color" id="colorBg" value="#f4f4f4" oninput="update()"></div>
+        <div class="color-item"><label>Surface (카드 배경)</label><input type="color" id="colorSurface" value="#ffffff" oninput="update()"></div>
+        <div class="color-item"><label>Text (글자색)</label><input type="color" id="colorText" value="#111111" oninput="update()"></div>
+        <div class="color-item"><label>Border (테두리색)</label><input type="color" id="colorBorder" value="#111111" oninput="update()"></div>
+        <div class="color-item"><label>Success (성공)</label><input type="color" id="colorSuccess" value="#10b981" oninput="update()"></div>
+      </div>
+    </div>
+
+    <!-- 액션 -->
+    <div class="group">
+      <h3>토큰 추출 (Code Export)</h3>
+      <div class="actions">
+        <button class="btn btn-secondary" onclick="showExport('json')">포맷 추출 (JSON/CSS)</button>
+        <button class="btn btn-secondary" onclick="downloadJSON()">토큰 다운로드</button>
+      </div>
+      <div class="drag-zone" id="dragZone" onclick="triggerFileInput()">
+        <p>JSON 파일을 드롭하거나 클릭하여 로드</p>
+        <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="handleFileSelect(event)">
+      </div>
+      <div class="token-output" id="tokenOutput">
+        <div class="export-tabs">
+          <button class="tab-btn active" onclick="switchFormat('json', this)">JSON</button>
+          <button class="tab-btn" onclick="switchFormat('css', this)">CSS</button>
+          <button class="tab-btn" onclick="switchFormat('tailwind', this)">Tailwind</button>
+        </div>
+        <pre id="tokenPre"></pre>
+        <button class="btn btn-secondary" style="width:100%; padding:10px; font-size:11px;" onclick="copyOutput()">코드 복사</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <div class="preview">
+    <p class="preview-label">실시간 복합 컴포넌트 프리뷰</p>
+    
+    <div class="adv-preview" id="advPreview">
+      
+      <!-- Hero -->
+      <div class="p-hero">
+        <h2>Design System Core<br><span style="font-size: 0.6em; font-weight: 700; opacity: 0.8; letter-spacing: inherit;">디자인 시스템 코어</span></h2>
+        <p>This advanced live preview demonstrates how your industry-standard tokens behave across complex UI structures in real-time.<br><span style="opacity: 0.8; letter-spacing: inherit;">이 고급 실시간 프리뷰는 산업 표준 토큰이 복잡한 UI 구조에서 어떻게 동작하는지 보여줍니다.</span></p>
+        <button class="p-btn">Get Started / 시작하기</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="p-grid">
+        <div class="p-stat-card">
+          <span class="label">Total Users (전체 사용자)</span>
+          <div class="value">24,592</div>
+          <div class="trend">+12.5%</div>
+        </div>
+        <div class="p-stat-card">
+          <span class="label">Revenue (매출액)</span>
+          <div class="value">$124K</div>
+          <div class="trend">+8.2%</div>
+        </div>
+        <div class="p-stat-card">
+          <span class="label">Bounce Rate (이탈률)</span>
+          <div class="value">42.1%</div>
+          <div class="trend" style="color:var(--text-muted)">-1.1%</div>
+        </div>
+      </div>
+
+      <!-- Profile Form -->
+      <div class="p-profile">
+        <div class="p-avatar"></div>
+        <div class="p-profile-info">
+          <h3>Architect Agent <span style="font-size: 0.7em; font-weight: normal; opacity: 0.6;">(아키텍트 에이전트)</span></h3>
+          <p>System structural planning and token management. <br><span style="opacity: 0.8;">시스템 구조 기획 및 토큰 관리.</span></p>
+          <input type="text" class="p-input" placeholder="Enter system prompt... (시스템 프롬프트 입력)">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentFormat = 'json';
+
+const PRESETS = {
+  vercel: {
+    bg: '#ffffff', surface: '#ffffff', text: '#000000', primary: '#000000', border: '#eaeaea',
+    rad: 6, pad: 24, bw: 1, shadow: 10, font: "'Geist Mono', 'Pretendard', monospace", speed: 0.15, ls: -0.04,
+    prompt: "[Vercel Design System Clone]\n- Goal: Create a high-contrast, ultra-snappy monochrome interface.\n- Font: Geist Mono (or similar sans-serif tight tracking).\n- Border-radius: Exact 6px, no circles.\n- Borders: 1px solid #eaeaea everywhere for cards.\n- Shadows: Extremely subtle drop-shadows (0 4px 10px rgba(0,0,0,0.05)), hover lifts the card -2px with slightly larger shadow.\n- Primary Button: Pure black (#000) with white text, no border radius rounding.\n- Focus: Speed, minimal padding, stark contrast."
+  },
+  linear: {
+    bg: '#000000', surface: '#0e0f11', text: '#f1f1f3', primary: '#5e6ad2', border: '#1f2125',
+    rad: 8, pad: 24, bw: 1, shadow: 20, font: "'Inter', 'Pretendard', sans-serif", speed: 0.2, ls: 0,
+    prompt: "[Linear Design System Clone]\n- Goal: Create a premium, dark-mode-first productivity tool aesthetic.\n- Font: Inter (medium/semibold for headers).\n- Colors: Pure black background (#000), dark grey surface (#0e0f11), subtle purple/blue primary (#5e6ad2).\n- Borders: 1px solid #1f2125. Use inner shadows/glows instead of outer shadows.\n- Radii: 8px for cards, 4px for buttons.\n- Micro-interactions: Very subtle opacity transitions (0.2s), glowing borders on hover instead of lifting.\n- Focus: Deep space contrast, glowing accents, supreme tidiness."
+  },
+  stripe: {
+    bg: '#f6f9fc', surface: '#ffffff', text: '#32325d', primary: '#635bff', border: '#e6ebf1',
+    rad: 8, pad: 32, bw: 0, shadow: 40, font: "'Inter', 'Pretendard', sans-serif", speed: 0.3, ls: 0,
+    prompt: "[Stripe Design System Clone]\n- Goal: Create a trustworthy, high-tech fintech dashboard.\n- Font: Inter (clean, highly legible).\n- Colors: Light cool grey background (#f6f9fc), pure white cards, vibrant blurple primary (#635bff).\n- Borders: No visible borders on cards (0px). Rely purely on large, soft, diffuse shadows (0 15px 35px rgba(50,50,93,0.1)).\n- Radii: 8px across the board.\n- Transitions: Smooth, 0.3s cubic-bezier. Elements float upward significantly on hover.\n- Focus: Trust, cleanliness, perfect whitespace, soft floating depth."
+  },
+  apple: {
+    bg: '#f5f5f7', surface: '#ffffff', text: '#1d1d1f', primary: '#0066cc', border: '#d2d2d7',
+    rad: 18, pad: 32, bw: 1, shadow: 30, font: "'Pretendard', sans-serif", speed: 0.4, ls: -0.01,
+    prompt: "[Apple Glass Design System Clone]\n- Goal: Premium hardware-like interface with translucent layers.\n- Font: SF Pro Display / Pretendard (thin, elegant tracking).\n- Colors: Light silver background (#f5f5f7), white surfaces. Text is deep charcoal (#1d1d1f).\n- Borders: Extremely faint 1px border (#d2d2d7), often replaced by backdrop-filter: blur(20px).\n- Radii: Large, continuous rounded corners (18px+).\n- Shadows: Broad, soft, very transparent drop shadows.\n- Focus: Apple-style elegance, large typography hierarchy, glassmorphism."
+  },
+  neobrutal: {
+    bg: '#f0f0f0', surface: '#ffcc00', text: '#000000', primary: '#000000', border: '#000000',
+    rad: 0, pad: 24, bw: 2, shadow: 0, font: "'Pretendard', sans-serif", speed: 0.1, ls: -0.05,
+    prompt: "[Neo-Brutalism Design System Clone]\n- Goal: High-impact, trendy, unpolished web3/startup aesthetic.\n- Font: Heavily weighted Monospace or stark Sans-serif.\n- Colors: Light grey bg, vibrant primary colors (yellow/pink/blue) for surfaces.\n- Borders: Solid pure black borders (#000), default 2px for clean contrast.\n- Shadows: Hard black drop shadows (e.g., box-shadow: 6px 6px 0px #000). No blur!\n- Radii: 0px. Sharp edges only.\n- Hover: Button physically translates down/right to 'press' into the hard shadow. Speed: Snappy (0.1s)."
+  },
+  awwwards: {
+    bg: '#e8e8e5', surface: '#e8e8e5', text: '#111111', primary: '#111111', border: '#111111',
+    rad: 0, pad: 40, bw: 1, shadow: 0, font: "'Pretendard', sans-serif", speed: 0.5, ls: -0.04,
+    prompt: "[Awwwards Editorial Design System Clone]\n- Goal: High-end fashion/editorial gallery feel.\n- Typography: MASSIVE scale differences. Headlines should be clamp(40px, 8vw, 120px) with negative tracking (-0.04em). Body text is small and elegant.\n- Colors: Warm gray background (#e8e8e5), pitch black text (#111). Monochrome.\n- Layout: Split screens, asymmetrical grids. Cards have no borders, no backgrounds, no shadows—just raw content floating in negative space.\n- Interactions: Smooth, slow reveals (0.5s+ cubic-bezier). Hover states reveal massive typography shifts or cursor changes."
+  },
+  untitled: {
+    bg: '#f9fafb', surface: '#ffffff', text: '#101828', primary: '#4f46e5', border: '#eaecf0',
+    rad: 8, pad: 24, bw: 1, shadow: 15, font: "'Inter', 'Pretendard', sans-serif", speed: 0.2, ls: 0,
+    prompt: "[Untitled UI Design System Clone]\n- Goal: The absolute standard for B2B SaaS interfaces.\n- Font: Inter (highly legible, neutral).\n- Colors: Off-white background (#f9fafb), pure white cards, indigo primary (#4f46e5). Text is dark slate (#101828).\n- Borders: Clean 1px solid #eaecf0 borders on all cards.\n- Radii: Perfect 8px border-radius everywhere.\n- Shadows: Very soft, realistic multi-layered drop shadows (e.g., 0 4px 6px -1px rgba(0,0,0,0.1)).\n- Focus: Extreme clarity, perfect alignment, trustworthy enterprise feel."
+  },
+  shadcn: {
+    bg: '#ffffff', surface: '#ffffff', text: '#09090b', primary: '#18181b', border: '#e4e4e7',
+    rad: 6, pad: 20, bw: 1, shadow: 5, font: "'Inter', 'Pretendard', sans-serif", speed: 0.15, ls: -0.02,
+    prompt: "[shadcn/ui Design System Clone]\n- Goal: Developer-centric, hyper-minimalist UI components.\n- Font: Inter (tight tracking).\n- Colors: Pure white bg, zinc/slate dark accents. Primary color is almost black (#18181b).\n- Borders: 1px solid #e4e4e7. Almost no shadows, heavy reliance on crisp borders for separation.\n- Radii: Sharp 6px radius.\n- Focus: Code-first precision, stripping away all unnecessary flair. Looks like a sleek developer tool."
+  },
+  glow: {
+    bg: '#050505', surface: '#111111', text: '#ededed', primary: '#00f0ff', border: '#222222',
+    rad: 12, pad: 32, bw: 1, shadow: 60, font: "'Pretendard', sans-serif", speed: 0.3, ls: 0,
+    prompt: "[Glow UI Design System Clone]\n- Goal: Next-gen AI/Web3 dark mode aesthetic with neon glows.\n- Font: Pretendard / Modern sans-serif.\n- Colors: Pitch black background (#050505), dark charcoal surfaces (#111). Primary is a neon cyan (#00f0ff).\n- Borders: 1px solid #222. Focus on inner borders (box-shadow inset) to give a 3D glass edge.\n- Shadows: Instead of drop shadows, use large spread, highly transparent colored glows (e.g., 0 0 60px rgba(0,240,255,0.15)).\n- Focus: Futuristic, deep space contrast, ethereal glowing accents."
+  },
+  google: {
+    bg: '#fffbff', surface: '#f3edf7', text: '#1c1b1f', primary: '#6750a4', border: '#cac4d0',
+    rad: 16, pad: 24, bw: 0, shadow: 25, font: "'Pretendard', sans-serif", speed: 0.25, ls: 0,
+    prompt: "[Google Material 3 Design System Clone]\n- Goal: Create an Android-like Material You interface.\n- Colors: Soft pastel backgrounds (#fffbff), slightly darker surface containers (#f3edf7), vibrant purple/tertiary primary (#6750a4).\n- Borders: No borders. Rely on surface elevation (shadows) and color fills.\n- Radii: Large, pill-like rounded corners (16px to full pill 999px for buttons).\n- Shadows: Soft elevation shadows (e.g., 0 4px 8px rgba(0,0,0,0.1)).\n- Focus: Accessibility, friendly rounded shapes, distinct layer elevations."
+  },
+  ant: {
+    bg: '#f0f2f5', surface: '#ffffff', text: '#000000', primary: '#1677ff', border: '#d9d9d9',
+    rad: 8, pad: 24, bw: 1, shadow: 10, font: "'Pretendard', sans-serif", speed: 0.2, ls: 0,
+    prompt: "[Ant Design System Clone]\n- Goal: Create a highly reliable, data-heavy enterprise dashboard.\n- Colors: Light grey background (#f0f2f5), white cards, classic tech blue primary (#1677ff).\n- Borders: 1px solid #d9d9d9. Very subtle, functional borders.\n- Radii: Sensible 8px default radius.\n- Shadows: Gentle hover shadows (0 4px 12px rgba(0,0,0,0.15)) to indicate interactivity.\n- Focus: Information density, alignment, traditional enterprise SaaS reliability."
+  },
+  carbon: {
+    bg: '#f4f4f4', surface: '#ffffff', text: '#161616', primary: '#0f62fe', border: '#e0e0e0',
+    rad: 0, pad: 32, bw: 1, shadow: 0, font: "'Geist Mono', 'Pretendard', monospace", speed: 0.15, ls: 0,
+    prompt: "[IBM Carbon Design System Clone]\n- Goal: High-density, industrial, engineering-focused interface.\n- Font: IBM Plex Sans / Monospace (structured, mechanical).\n- Colors: Strict grayscale with intense primary blue (#0f62fe).\n- Borders: 1px solid #e0e0e0. Extreme reliance on hard lines and grid structures.\n- Radii: 0px. Absolutely no rounded corners.\n- Shadows: No drop shadows. Use color contrast and borders for depth.\n- Focus: Serious enterprise tools, data visualization, brutalist grid alignment."
+  }
+};
+
+function applyPreset(name, element) {
+  document.querySelectorAll('.btn-preset').forEach(b => b.classList.remove('active'));
+  
+  let targetElement = element;
+  if (!targetElement && typeof event !== 'undefined' && event && event.target) {
+    targetElement = event.target;
+  }
+  
+  if (targetElement) {
+    targetElement.classList.add('active');
+  } else {
+    document.querySelectorAll('.btn-preset').forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${name}'`)) {
+        b.classList.add('active');
+      }
+    });
+  }
+  
+  const p = PRESETS[name];
+  document.getElementById('colorBg').value = p.bg;
+  document.getElementById('colorSurface').value = p.surface;
+  document.getElementById('colorText').value = p.text;
+  document.getElementById('colorPrimary').value = p.primary;
+  document.getElementById('colorBorder').value = p.border;
+  document.getElementById('radius').value = p.rad;
+  document.getElementById('padding').value = p.pad;
+  document.getElementById('borderWidth').value = p.bw;
+  document.getElementById('shadow').value = p.shadow;
+  document.getElementById('speed').value = p.speed;
+  document.getElementById('letterSpacing').value = p.ls;
+  document.getElementById('fontFamily').value = p.font;
+  
+  // Set the AI System Prompt
+  document.getElementById('aiPrompt').value = p.prompt;
+  
+  update();
+}
+
+function getValues() {
+  const fs = +document.getElementById('fontSize').value;
+  return {
+    fontFamily: document.getElementById('fontFamily').value,
+    fontSize: fs,
+    fsHero: (fs * 3.5) + 'px',
+    fsH2: (fs * 2.2) + 'px',
+    fsH3: (fs * 1.5) + 'px',
+    fsBody: fs + 'px',
+    fsSm: (fs * 0.8) + 'px',
+    letterSpacing: +document.getElementById('letterSpacing').value,
+    padding: +document.getElementById('padding').value,
+    radius: +document.getElementById('radius').value,
+    borderWidth: +document.getElementById('borderWidth').value,
+    shadow: +document.getElementById('shadow').value,
+    speed: +document.getElementById('speed').value,
+    colors: {
+      primary: document.getElementById('colorPrimary').value,
+      background: document.getElementById('colorBg').value,
+      surface: document.getElementById('colorSurface').value,
+      text: document.getElementById('colorText').value,
+      border: document.getElementById('colorBorder').value,
+      success: document.getElementById('colorSuccess').value,
+    }
+  };
+}
+
+function update() {
+  const v = getValues();
+  const f = document.getElementById('advPreview');
+  
+  document.getElementById('fsVal').textContent = v.fontSize + 'px';
+  document.getElementById('lsVal').textContent = v.letterSpacing.toFixed(2) + 'em';
+  document.getElementById('padVal').textContent = v.padding + 'px';
+  document.getElementById('radVal').textContent = v.radius + 'px';
+  document.getElementById('borderVal').textContent = v.borderWidth + 'px';
+  document.getElementById('shadowVal').textContent = v.shadow + 'px';
+  document.getElementById('speedVal').textContent = v.speed.toFixed(2) + 's';
+  
+  // Set CSS Vars for Preview Component
+  f.style.setProperty('--p-font', v.fontFamily);
+  f.style.setProperty('--p-fs-hero', v.fsHero);
+  f.style.setProperty('--p-fs-h2', v.fsH2);
+  f.style.setProperty('--p-fs-h3', v.fsH3);
+  f.style.setProperty('--p-fs-body', v.fsBody);
+  f.style.setProperty('--p-fs-sm', v.fsSm);
+  f.style.setProperty('--p-ls', v.letterSpacing + 'em');
+  f.style.setProperty('--p-pad', v.padding + 'px');
+  f.style.setProperty('--p-radius', v.radius + 'px');
+  f.style.setProperty('--p-border-width', v.borderWidth + 'px');
+  
+  // Custom shadow logic for NeoBrutalism
+  if(v.colors.border === '#000000' && v.borderWidth >= 3 && v.shadow === 0 && v.radius === 0) {
+     f.style.setProperty('--p-shadow', '6px 6px 0px #000');
+  } else {
+     f.style.setProperty('--p-shadow', v.shadow > 0 ? `0 ${v.shadow/2}px ${v.shadow}px rgba(0,0,0,0.15)` : 'none');
+  }
+
+  f.style.setProperty('--p-speed', v.speed + 's');
+  f.style.setProperty('--p-primary', v.colors.primary);
+  f.style.setProperty('--p-bg', v.colors.background);
+  f.style.setProperty('--p-surface', v.colors.surface);
+  f.style.setProperty('--p-text', v.colors.text);
+  f.style.setProperty('--p-border-color', v.colors.border);
+  f.style.setProperty('--p-success', v.colors.success);
+  
+  document.querySelector('.preview').style.background = v.colors.background;
+  
+  // Save globally for other HTML layers
+  localStorage.setItem('vasThemeTokens', JSON.stringify(v));
+  localStorage.setItem('vasThemeTokensVersion', '2.4.1');
+  
+  if(document.getElementById('tokenOutput').classList.contains('show')) {
+    renderOutput();
+  }
+}
+
+function getJSON() {
+  const v = getValues();
+  return JSON.stringify(v, null, 2);
+}
+
+function getCSS() {
+  const v = getValues();
+  return `:root {\n  --font-family: ${v.fontFamily};\n  --font-size-base: ${v.fontSize}px;\n  --letter-spacing: ${v.letterSpacing}em;\n  --color-primary: ${v.colors.primary};\n  --color-bg: ${v.colors.background};\n  --color-surface: ${v.colors.surface};\n  --color-text: ${v.colors.text};\n  --color-border: ${v.colors.border};\n  --border-radius: ${v.radius}px;\n  --border-width: ${v.borderWidth}px;\n  --padding-base: ${v.padding}px;\n  --transition-speed: ${v.speed}s;\n}`;
+}
+
+function getTailwind() {
+  const v = getValues();
+  return `module.exports = {\n  theme: {\n    extend: {\n      colors: {\n        primary: '${v.colors.primary}',\n        background: '${v.colors.background}',\n        surface: '${v.colors.surface}',\n        border: '${v.colors.border}',\n      },\n      borderRadius: {\n        DEFAULT: '${v.radius}px',\n      },\n      borderWidth: {\n        DEFAULT: '${v.borderWidth}px',\n      },\n      transitionDuration: {\n        DEFAULT: '${v.speed * 1000}ms',\n      }\n    }\n  }\n}`;
+}
+
+function renderOutput() {
+  let txt = '';
+  if(currentFormat === 'json') txt = getJSON();
+  else if(currentFormat === 'css') txt = getCSS();
+  else if(currentFormat === 'tailwind') txt = getTailwind();
+  document.getElementById('tokenPre').textContent = txt;
+}
+
+function showExport(fmt) {
+  document.getElementById('tokenOutput').classList.add('show');
+  renderOutput();
+}
+
+function switchFormat(fmt, btn) {
+  currentFormat = fmt;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderOutput();
+}
+
+function downloadJSON() {
+  const blob = new Blob([getJSON()], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'design-tokens.json';
+  a.click();
+  showToast('디자인 토큰 다운로드 완료!');
+}
+
+function triggerFileInput() {
+  document.getElementById('fileInput').click();
+}
+
+function handleFileSelect(e) {
+  const file = e.target.files[0];
+  if (file) importJSON(file);
+}
+
+function importJSON(file) {
+  if (!file.name.endsWith('.json')) {
+    showToast('JSON 형식의 파일만 지원합니다.');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const v = JSON.parse(e.target.result);
+      if (!v.colors || !v.fontSize || v.radius === undefined) {
+        showToast('유효하지 않은 디자인 토큰 파일입니다.');
+        return;
+      }
+      
+      // 값 반영
+      document.getElementById('colorBg').value = v.colors.background;
+      document.getElementById('colorSurface').value = v.colors.surface;
+      document.getElementById('colorText').value = v.colors.text;
+      document.getElementById('colorPrimary').value = v.colors.primary;
+      document.getElementById('colorBorder').value = v.colors.border;
+      document.getElementById('colorSuccess').value = v.colors.success || '#10b981';
+      document.getElementById('radius').value = v.radius;
+      document.getElementById('padding').value = v.padding;
+      document.getElementById('borderWidth').value = v.borderWidth;
+      document.getElementById('shadow').value = v.shadow;
+      document.getElementById('speed').value = v.speed;
+      document.getElementById('letterSpacing').value = v.letterSpacing;
+      document.getElementById('fontFamily').value = v.fontFamily;
+      document.getElementById('fontSize').value = v.fontSize;
+      
+      // 프리셋 선택 해제
+      document.querySelectorAll('.btn-preset').forEach(b => b.classList.remove('active'));
+      
+      update();
+      showToast('디자인 토큰 성공적으로 복원됨!');
+    } catch (err) {
+      showToast('파일 읽기 오류 또는 손상된 JSON입니다.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// 드래그 앤 드롭 이벤트 리스너 바인딩
+window.addEventListener('DOMContentLoaded', () => {
+  const dz = document.getElementById('dragZone');
+  if (dz) {
+    dz.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dz.classList.add('dragover');
+    });
+    dz.addEventListener('dragleave', () => {
+      dz.classList.remove('dragover');
+    });
+    dz.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dz.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file) importJSON(file);
+    });
+  }
+});
+
+function copyOutput() {
+  navigator.clipboard.writeText(document.getElementById('tokenPre').textContent).then(() => showToast(currentFormat.toUpperCase() + ' 코드 복사 완료!'));
+}
+
+function copyAgentPrompt() {
+  const p = document.getElementById('aiPrompt').value;
+  navigator.clipboard.writeText(p).then(() => showToast('에이전트용 프롬프트 복사 완료!'));
+}
+
+function showToast(msg) {
+  const t = document.getElementById('dc-toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Init with Neo-Brutalism as the signature system theme default
+applyPreset('neobrutal');
+</script>
+<div class="toast" id="dc-toast"></div>
+</body>
+</html>

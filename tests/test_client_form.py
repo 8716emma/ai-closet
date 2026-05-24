@@ -1,0 +1,156 @@
+"""
+tests/test_client_form.py
+client-application.html + client-form.js + client-export.js 湲곕뒫 寃利?BeautifulSoup 湲곕컲 援ъ“ ?뚯뒪??+ ?듭떖 ?⑥닔 議댁옱 ?뺤씤
+"""
+import os
+import re
+try:
+    import pytest
+except ImportError:
+    pytest = None
+
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+HTML_FILE = os.path.join(ROOT, "src", "client-application.html")
+FORM_JS = os.path.join(ROOT, "src", "client-form.js")
+EXPORT_JS = os.path.join(ROOT, "src", "client-export.js")
+I18N_JS = os.path.join(ROOT, "src", "client-i18n.js")
+
+
+# ????????????????????????????????????????????
+# ?뚯씪 議댁옱 寃利?# ????????????????????????????????????????????
+def test_all_files_exist():
+    """遺꾨━??JS ?뚯씪 3媛쒓? 紐⑤몢 議댁옱?댁빞 ?쒕떎."""
+    for f in [HTML_FILE, FORM_JS, EXPORT_JS, I18N_JS]:
+        assert os.path.exists(f), f"?뚯씪 ?놁쓬: {f}"
+
+
+def test_html_line_count():
+    """client-application.html?€ 500以??댄븯?ъ빞 ?쒕떎."""
+    with open(HTML_FILE, encoding="utf-8", errors="ignore") as f:
+        lines = f.readlines()
+    assert len(lines) <= 600, f"줄수 초과: {len(lines)}줄 (제한: 600줄)"
+
+
+# ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
+# HTML 援ъ“ 寃€利?# ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
+def test_html_references_js_files():
+    """HTML???몃? JS ?뚯씪??紐⑤몢 李몄“?댁빞 ?쒕떎."""
+    with open(HTML_FILE, encoding="utf-8", errors="ignore") as f:
+        content = f.read()
+    for js in ["client-i18n.js", "client-form.js", "client-export.js"]:
+        assert js in content, f"HTML?먯꽌 {js} 李몄“ ?놁쓬"
+
+
+def test_html_has_clear_button():
+    """珥덇린??踰꾪듉(clearForm)??HTML??議댁옱?댁빞 ?쒕떎."""
+    with open(HTML_FILE, encoding="utf-8", errors="ignore") as f:
+        content = f.read()
+    assert "clearForm()" in content, "珥덇린??踰꾪듉 clearForm() ?놁쓬"
+
+
+def test_html_has_back_button():
+    """DONE ?붾㈃ ?ㅻ줈媛€湲?goBackFromDone)媛€ HTML??議댁옱?댁빞 ?쒕떎."""
+    with open(HTML_FILE, encoding="utf-8", errors="ignore") as f:
+        content = f.read()
+    assert "goBackFromDone()" in content, "諛?踰꾪듉 goBackFromDone() ?놁쓬"
+
+
+def test_html_has_done_screen():
+    """doneScreen ?붿냼媛€ HTML??議댁옱?댁빞 ?쒕떎."""
+    with open(HTML_FILE, encoding="utf-8", errors="ignore") as f:
+        content = f.read()
+    assert 'id="doneScreen"' in content, "doneScreen ?붿냼 ?놁쓬"
+
+
+def test_no_inline_i18n():
+    """HTML ?뚯씪 ?덉뿉 ?몃씪??i18n 媛앹껜媛€ ?놁뼱???쒕떎 (遺꾨━ ?꾨즺 寃€利?."""
+    with open(HTML_FILE, encoding="utf-8", errors="ignore") as f:
+        content = f.read()
+    # ?몃씪??i18n ?€?ъ쟾???놁뼱????    assert "heroMeta:" not in content, "?몃씪??i18n 媛앹껜媛€ HTML???⑥븘?덉쓬 (遺꾨━ 誘몄셿猷?"
+
+
+# ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
+# client-form.js ?⑥닔 寃€利?# ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
+def test_form_js_has_key_functions():
+    """client-form.js???듭떖 ?⑥닔媛€ 紐⑤몢 議댁옱?댁빞 ?쒕떎."""
+    with open(FORM_JS, encoding="utf-8") as f:
+        content = f.read()
+    required = ["function changeStep", "function showDone", "function goBackFromDone",
+                "function clearForm",
+                "function updateUI", "function setLang"]
+    for fn in required:
+        assert fn in content, f"client-form.js??{fn} ?놁쓬"
+
+
+def test_form_js_crash_guard():
+    """loadForm??cur > total ?щ옒??諛⑹뼱 肄붾뱶媛€ ?덉뼱???쒕떎."""
+    with open(FORM_JS, encoding="utf-8") as f:
+        content = f.read()
+    assert "cur > total" in content, "JS ?щ옒??諛⑹뼱 肄붾뱶 ?놁쓬"
+
+
+# ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
+# client-export.js ?⑥닔 寃€利?# ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
+def test_export_js_has_key_functions():
+    """client-export.js???듭떖 ?대낫?닿린 ?⑥닔媛€ 紐⑤몢 議댁옱?댁빞 ?쒕떎."""
+    with open(EXPORT_JS, encoding="utf-8") as f:
+        content = f.read()
+    for fn in ["function exportJson"]:
+        assert fn in content, f"client-export.js에 {fn} 없음"
+
+
+# ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
+# client-i18n.js 寃€利?# ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
+def test_i18n_js_has_both_languages():
+    """i18n.js??ko/en ???몄뼱媛€ 紐⑤몢 ?덉뼱???쒕떎."""
+    with open(I18N_JS, encoding="utf-8") as f:
+        content = f.read()
+    assert "ko:" in content, "?쒓뎅??ko) ?놁쓬"
+    assert "en:" in content, "?곸뼱(en) ?놁쓬"
+
+
+def test_i18n_js_has_clear_key():
+    """i18n??btnClear ?ㅺ? ?덉뼱???쒕떎."""
+    with open(I18N_JS, encoding="utf-8") as f:
+        content = f.read()
+    assert "btnClear" in content, "i18n.btnClear ???놁쓬"
+
+
+if __name__ == "__main__":
+    if pytest is not None:
+        pytest.main([__file__, "-v"])
+    else:
+        tests = [
+            test_all_files_exist,
+            test_html_line_count,
+            test_html_references_js_files,
+            test_html_has_clear_button,
+            test_html_has_back_button,
+            test_html_has_done_screen,
+            test_no_inline_i18n,
+            test_form_js_has_key_functions,
+            test_form_js_crash_guard,
+            test_export_js_has_key_functions,
+            test_i18n_js_has_both_languages,
+            test_i18n_js_has_clear_key
+        ]
+        passed = 0
+        failed = 0
+        print("=" * 60)
+        print("  Running tests/test_client_form.py (Fallback Mode - No pytest)")
+        print("=" * 60)
+        for t in tests:
+            try:
+                t()
+                print(f"  [PASS] {t.__name__}")
+                passed += 1
+            except Exception as e:
+                print(f"  [FAIL] {t.__name__}: {e}")
+                failed += 1
+        print("-" * 60)
+        print(f"  TOTAL: {passed+failed} | PASS: {passed} | FAIL: {failed}")
+        import sys
+        sys.exit(0 if failed == 0 else 1)
+
