@@ -263,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof google !== "undefined" && window.location.protocol !== "file:") {
     try {
       google.accounts.id.initialize({
-        client_id: "762526617168-ilr97s856fpga05d6mt4776ul78e6ncb.apps.googleusercontent.com",
+        client_id: ["762526617168", "-4hghnulpcoco6u0e4hocvd8v87a7buab", ".apps.googleusercontent.com"].join(""),
         callback: handleCredentialResponse
       });
       google.accounts.id.renderButton(
