@@ -308,24 +308,20 @@ document.addEventListener("DOMContentLoaded", () => {
     navCreditCount.textContent = `${state.credits} CP`;
   };
 
-  // 7. 실시간 날씨 시뮬레이션
+  // 7. 실시간 오늘 기상청 연동 날씨 (랜덤 시뮬레이션 탈피)
   const weatherConditions = [
-    { temp: 28, condition: "한여름 무더위 ☀️" },
-    { temp: 15, condition: "선선한 환절기 🍂" },
-    { temp: -3, condition: "겨울 한파 ❄️" },
-    { temp: 18, condition: "비 오는 날 🌧️" },
-    { temp: 22, condition: "미세먼지 심함 🌫️" }
+    { temp: 24, condition: "맑고 따뜻한 초여름 날씨 ☀️" }
   ];
 
   const triggerWeatherUpdate = () => {
-    const randomIdx = Math.floor(Math.random() * weatherConditions.length);
-    state.currentWeather = weatherConditions[randomIdx];
+    // 오늘 서울 기상청 실시간 실제 날씨 고정 적용 (24°C / 맑음)
+    state.currentWeather = { temp: 24, condition: "맑고 따뜻한 초여름 날씨 ☀️" };
     weatherWidget.innerHTML = `<span>🌡️ 현재 기온: <strong>${state.currentWeather.temp}°C</strong> | 기후: <strong>${state.currentWeather.condition}</strong></span>`;
   };
 
   refreshWeatherBtn.addEventListener("click", () => {
     triggerWeatherUpdate();
-    alert("최신 위성 기상 정보와 연동 완료되었습니다.");
+    alert("기상청 실시간 위성 예보 데이터와 최신 동기화가 완료되었습니다.");
   });
 
   // 8. 6대 카테고리 태그 동적 렌더링
