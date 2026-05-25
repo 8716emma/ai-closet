@@ -122,6 +122,7 @@ for hf in html_files:
     for js in js_refs:
         if js.startswith('http'):
             continue
+        js = js.split('?')[0] # strip query string like ?v=5.7
         js_path = os.path.join(os.path.dirname(os.path.join(BASE, hf)), js)
         check(f"{hf} → {js}", os.path.exists(js_path), f"JS 파일 없음: {js}")
 
