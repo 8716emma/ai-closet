@@ -525,5 +525,25 @@ document.addEventListener("DOMContentLoaded", () => {
       showToast("설정이 성공적으로 저장되었습니다!");
     });
   }
+
+  const sidebarContactBtn = document.getElementById("sidebar-contact-btn");
+  const contactModal = document.getElementById("contact-modal");
+  if(sidebarContactBtn && contactModal){
+    sidebarContactBtn.addEventListener("click", () => contactModal.classList.add("active"));
+    document.getElementById("close-contact-modal-btn").addEventListener("click", () => contactModal.classList.remove("active"));
+    document.getElementById("send-contact-btn").addEventListener("click", () => {
+      const sub = document.getElementById("contact-subject").value, body = document.getElementById("contact-body").value;
+      window.location.href = `mailto:8716emma@gmail.com?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`;
+      contactModal.classList.remove("active");
+      showToast("메일 앱을 열어 전송을 준비합니다.");
+    });
+  }
+
+  const settingsDarkMode = document.getElementById("settings-dark-mode");
+  if(settingsDarkMode){
+    settingsDarkMode.addEventListener("change", (e) => {
+      document.documentElement.setAttribute('data-theme', e.target.checked ? 'dark' : 'light');
+    });
+  }
   renderTags();
 });

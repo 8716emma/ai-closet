@@ -196,7 +196,7 @@
     <ul class="sidebar-menu">
       <li class="sidebar-item" id="sidebar-profile-btn">👤 회원 정보</li>
       <li class="sidebar-item" id="sidebar-history-btn">📜 옷 추천 기록</li>
-      <li class="sidebar-item" onclick="window.location.href='mailto:8716emma@gmail.com'">💬 문의하기</li>
+      <li class="sidebar-item" id="sidebar-contact-btn">💬 문의하기</li>
       <li class="sidebar-item" id="sidebar-billing-btn">💳 결제 시스템</li>
       <li class="sidebar-item" id="sidebar-settings-btn">⚙️ 설정</li>
     </ul>
@@ -274,9 +274,24 @@
     </div>
   </div>
 
+  <!-- I. 문의하기 모달 -->
+  <div class="modal-overlay" id="contact-modal">
+    <div class="modal-card" style="padding: 24px;">
+      <div class="modal-header">
+        <h3>💬 문의하기</h3>
+      </div>
+      <div class="modal-body" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+        <input type="text" id="contact-subject" placeholder="제목을 입력하세요" style="width: 100%; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 1rem; background: var(--card-bg); color: var(--text);">
+        <textarea id="contact-body" placeholder="문의하실 내용을 자세히 적어주세요.&#10;(작성 후 메일 앱으로 전송됩니다)" style="width: 100%; height: 150px; padding: 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 1rem; resize: none; font-family: inherit; background: var(--card-bg); color: var(--text);"></textarea>
+      </div>
+      <button id="send-contact-btn" class="btn btn-accent" style="width: 100%; padding: 12px; margin-bottom: 8px;">이메일 전송</button>
+      <button id="close-contact-modal-btn" class="btn" style="width: 100%; padding: 12px;">취소</button>
+    </div>
+  </div>
+
   <!-- 비즈니스 로직 연동 (데이터셋 분리 적용) -->
-  <script src="src/closet-recommender-data.js?v=7.6"></script>
+  <script src="src/closet-recommender-data.js?v=7.7"></script>
   <!-- 구글 ID 토큰 파서 추가 및 메인 JS -->
-  <script src="src/closet-recommender.js?v=7.6"></script>
+  <script src="src/closet-recommender.js?v=7.7"></script>
 </body>
 </html>

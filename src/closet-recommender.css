@@ -27,6 +27,21 @@
   --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+[data-theme="dark"] {
+  --bg-ivory: #161616;
+  --bg-ivory-dark: #242424;
+  --primary-brown: #5a4b37;
+  --primary-light: #76654e;
+  --primary-dark: #d8c6ab;
+  --accent-orange: #c5b290;
+  --card-bg: #202020;
+  --border: #5a4b37;
+  --border-light: #333333;
+  --text: #e8e8e8;
+  --text-muted: #9a9a9a;
+  --white: #202020;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-main); color: var(--text); }
 body {
   background-color: var(--bg-ivory);
