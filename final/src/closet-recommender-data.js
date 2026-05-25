@@ -144,7 +144,8 @@ const CLOSER_DATA = {
       
       // 실시간 구글링(AI 생성) 이미지 URL 생성
       if (resultData.photoPrompt) {
-        resultData.referenceImageId = `https://image.pollinations.ai/prompt/${encodeURIComponent(resultData.photoPrompt)}?width=800&height=1000&nologo=true`;
+        // Unsplash/Pexels API 키 부재로 인한 차선책: Pollinations의 최신 모델(Flux)로 진짜 사진처럼 생성
+        resultData.referenceImageId = `https://image.pollinations.ai/prompt/${encodeURIComponent(resultData.photoPrompt)}?width=800&height=1000&nologo=true&model=flux&enhance=true`;
       } else {
         resultData.referenceImageId = refLook.imgId;
       }
