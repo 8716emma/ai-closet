@@ -39,37 +39,36 @@ const CLOSER_DATA = {
   // 스타일별 핀터레스트 레퍼런스 룩북 데이터베이스 (고화질 Unsplash 패션 화보 매핑)
   referenceLooks: {
     "캐주얼": { imgId: "src/assets/images/casual.jpg", descr: "스트릿한 무드의 오버핏 셔츠와 와이드 팬츠, 청키한 스니커즈 조합" },
-    "꾸안꾸": { imgId: "src/assets/images/casual.jpg", descr: "군더더기 없는 미니멀한 화이트 블라우스와 블랙 슬랙스, 미니멀 토트백" },
-    "오피스": { imgId: "src/assets/images/casual.jpg", descr: "깔끔한 블레이저 자켓, 이너 니트, 슬림핏 슬랙스와 로퍼 조합" },
-    "트레이닝": { imgId: "src/assets/images/casual.jpg", descr: "스포티한 레깅스와 크롭 탑, 그리고 가벼운 바람막이 자켓 조합" },
-    "남친·여친룩": { imgId: "src/assets/images/casual.jpg", descr: "데이트를 위한 러블리한 가디건과 스커트, 메리제인 슈즈 조합" },
-    "단정해": { imgId: "src/assets/images/casual.jpg", descr: "깔끔하고 단정한 미니멀 스타일의 니트와 슬랙스 조합" },
+    "꾸안꾸": { imgId: "src/assets/images/minimal.jpg", descr: "군더더기 없는 미니멀한 화이트 블라우스와 블랙 슬랙스, 미니멀 토트백" },
+    "오피스": { imgId: "src/assets/images/minimal.jpg", descr: "깔끔한 블레이저 자켓, 이너 니트, 슬림핏 슬랙스와 로퍼 조합" },
+    "트레이닝": { imgId: "src/assets/images/street.jpg", descr: "스포티한 레깅스와 크롭 탑, 그리고 가벼운 바람막이 자켓 조합" },
+    "남친·여친룩": { imgId: "src/assets/images/romantic.jpg", descr: "데이트를 위한 러블리한 가디건과 스커트, 메리제인 슈즈 조합" },
+    "단정해": { imgId: "src/assets/images/minimal.jpg", descr: "깔끔하고 단정한 미니멀 스타일의 니트와 슬랙스 조합" },
     "학생핏(교복+사복)": { imgId: "src/assets/images/casual.jpg", descr: "학생다운 풋풋한 맨투맨과 데님 팬츠, 캔버스화 조합" },
-    "Y2K": { imgId: "src/assets/images/casual.jpg", descr: "Y2K 감성의 크롭 티셔츠, 로우라이즈 팬츠, 볼드한 벨트 조합" },
-    "빈티지": { imgId: "src/assets/images/casual.jpg", descr: "빈티지한 아메카지 스타일의 카고 팬츠와 워크 자켓 조합" },
-    "화려함": { imgId: "src/assets/images/casual.jpg", descr: "컬러감이 돋보이는 화려한 패턴의 상의와 와이드 팬츠" },
-    "오너핏": { imgId: "src/assets/images/casual.jpg", descr: "고급스러운 수트 셋업과 레더 구두 조합" },
+    "Y2K": { imgId: "src/assets/images/y2k.jpg", descr: "Y2K 감성의 크롭 티셔츠, 로우라이즈 팬츠, 볼드한 벨트 조합" },
+    "빈티지": { imgId: "src/assets/images/street.jpg", descr: "빈티지한 아메카지 스타일의 카고 팬츠와 워크 자켓 조합" },
+    "화려함": { imgId: "src/assets/images/y2k.jpg", descr: "컬러감이 돋보이는 화려한 패턴의 상의와 와이드 팬츠" },
+    "오너핏": { imgId: "src/assets/images/minimal.jpg", descr: "고급스러운 수트 셋업과 레더 구두 조합" },
     "청스타일": { imgId: "src/assets/images/casual.jpg", descr: "트렌디한 데님 자켓과 데님 팬츠의 청청 코디" },
-    "수트": { imgId: "src/assets/images/casual.jpg", descr: "세련된 쓰리피스 수트와 옥스포드 슈즈 조합" },
+    "수트": { imgId: "src/assets/images/minimal.jpg", descr: "세련된 쓰리피스 수트와 옥스포드 슈즈 조합" },
     "캠퍼스룩": { imgId: "src/assets/images/casual.jpg", descr: "대학생 캠퍼스 룩의 정석, 후드티와 조거팬츠, 백팩" },
-    "깔끔": { imgId: "src/assets/images/casual.jpg", descr: "미니멀리즘 감성의 정갈한 셔츠와 슬랙스" },
-    "블랙정장": { imgId: "src/assets/images/casual.jpg", descr: "올블랙 포멀 수트와 시크한 로퍼" },
-    "드레스": { imgId: "src/assets/images/casual.jpg", descr: "우아하고 페미닌한 롱 드레스와 가디건" },
-    "러블리": { imgId: "src/assets/images/casual.jpg", descr: "사랑스러운 무드의 블라우스와 플리츠 스커트" },
-    "MZ스타일": { imgId: "src/assets/images/casual.jpg", descr: "힙하고 트렌디한 고프코어 룩, 나일론 자켓과 카고 팬츠" },
-    "선생님 스타일": { imgId: "src/assets/images/casual.jpg", descr: "신뢰감을 주는 단정한 셔츠와 테이퍼드 슬랙스" },
-    "운동복": { imgId: "src/assets/images/casual.jpg", descr: "편안한 기능성 스포츠웨어와 런닝화" },
+    "깔끔": { imgId: "src/assets/images/minimal.jpg", descr: "미니멀리즘 감성의 정갈한 셔츠와 슬랙스" },
+    "블랙정장": { imgId: "src/assets/images/minimal.jpg", descr: "올블랙 포멀 수트와 시크한 로퍼" },
+    "드레스": { imgId: "src/assets/images/romantic.jpg", descr: "우아하고 페미닌한 롱 드레스와 가디건" },
+    "러블리": { imgId: "src/assets/images/romantic.jpg", descr: "사랑스러운 무드의 블라우스와 플리츠 스커트" },
+    "MZ스타일": { imgId: "src/assets/images/street.jpg", descr: "힙하고 트렌디한 고프코어 룩, 나일론 자켓과 카고 팬츠" },
+    "선생님 스타일": { imgId: "src/assets/images/minimal.jpg", descr: "신뢰감을 주는 단정한 셔츠와 테이퍼드 슬랙스" },
+    "운동복": { imgId: "src/assets/images/street.jpg", descr: "편안한 기능성 스포츠웨어와 런닝화" },
     "편한 스타일": { imgId: "src/assets/images/casual.jpg", descr: "집 앞 마실에 제격인 스웨트 셋업" },
-    "종교 스타일": { imgId: "src/assets/images/casual.jpg", descr: "노출이 없는 단정하고 포멀한 니트와 롱 스커트/슬랙스" },
-    "화려한 스타일": { imgId: "src/assets/images/casual.jpg", descr: "시선을 사로잡는 비비드한 컬러와 화려한 패턴의 코디" },
+    "종교 스타일": { imgId: "src/assets/images/minimal.jpg", descr: "노출이 없는 단정하고 포멀한 니트와 롱 스커트/슬랙스" },
+    "화려한 스타일": { imgId: "src/assets/images/y2k.jpg", descr: "시선을 사로잡는 비비드한 컬러와 화려한 패턴의 코디" },
     "파자마": { imgId: "src/assets/images/casual.jpg", descr: "부드럽고 편안한 라운지웨어 셋업" },
-    "모나미룩": { imgId: "src/assets/images/casual.jpg", descr: "블랙 앤 화이트의 깔끔한 모나미룩" },
-    "형형색색": { imgId: "src/assets/images/casual.jpg", descr: "컬러 블록이 돋보이는 스트릿 캐주얼" },
-    "무채색": { imgId: "src/assets/images/casual.jpg", descr: "그레이, 블랙, 화이트로 구성된 시크한 무채색 코디" },
-    "귀여운 스타일": { imgId: "src/assets/images/casual.jpg", descr: "동글동글한 오버핏 맨투맨과 와이드 팬츠의 귀여운 조합" },
-    "하이틴": { imgId: "src/assets/images/casual.jpg", descr: "미국 하이틴 영화 감성의 크롭 가디건과 체크 스커트" },
+    "모나미룩": { imgId: "src/assets/images/minimal.jpg", descr: "블랙 앤 화이트의 깔끔한 모나미룩" },
+    "형형색색": { imgId: "src/assets/images/street.jpg", descr: "컬러 블록이 돋보이는 스트릿 캐주얼" },
+    "무채색": { imgId: "src/assets/images/minimal.jpg", descr: "그레이, 블랙, 화이트로 구성된 시크한 무채색 코디" },
+    "귀여운 스타일": { imgId: "src/assets/images/romantic.jpg", descr: "동글동글한 오버핏 맨투맨과 와이드 팬츠의 귀여운 조합" },
+    "하이틴": { imgId: "src/assets/images/y2k.jpg", descr: "미국 하이틴 영화 감성의 크롭 가디건과 체크 스커트" },
     "default": { imgId: "src/assets/images/casual.jpg", descr: "호불호 없는 깔끔한 놈코어 데일리 룩 (맨투맨과 데님 팬츠)" }
-  },
 
   fetchRealAIRecommendation: async (promptData, apiConfig) => {
     let provider = apiConfig.provider;
@@ -103,16 +102,16 @@ const CLOSER_DATA = {
 너는 반드시 **위 레퍼런스 사진 속 코디와 최대한 똑같은 룩을 연출할 수 있도록** 실제 무신사에서 살 수 있는 의류 4가지를 찾아 추천해줘야 해.
 
 [엄격한 금지사항]
-1. 언어: 출력은 오직 순수 한국어(한글)로만 작성해라. 한자(漢字)와 일본어(ひらがな, カタカナ, パンツ 등)는 단 한 글자라도 포함되면 절대 안 된다! (예: 感觉 -> 느낌, パンツ -> 팬츠, 合わせ면 -> 매치하면)
-2. 명품 브랜드 절대 금지: 발렌시아가, 샤넬, 구찌, 디올, 프라다, 톰브라운 등 고가의 명품 브랜드는 절대로 추천하지 마라! 유저가 살 수 있는 합리적인 가격대의 브랜드(예: 무신사 스탠다드, 토피, 커버낫, 스파오, 에잇세컨즈, 나이키, 뉴발란스, 쿠어, 드로우핏 등) 위주로 추천할 것.
-3. 추천 아이템은 무신사 검색 시 1~2개만 정확히 나오도록, 무조건 실제 쇼핑몰에 등록된 매우 구체적인 상품 풀네임으로 적어라. (예: "우먼즈 브레톤 스트라이프 크루 넥 티셔츠 [아이보리/블랙]", "우먼즈 텐셀 슬림 타이 백 캡 슬리브 티셔츠 [화이트]", "오리지널 핏 청바지 [미드 블루]").
-4. 검색 결과를 좁히기 위해 상품명에 색상이나 디테일을 나타내는 [블랙], [화이트], [아이보리/블랙] 같은 괄호 태그를 반드시 포함시켜라.
+1. 언어: 출력은 오직 순수 한국어(한글)로만 작성해라. 한자(漢字)와 일본어(ひらがな, カタカナ, ライト 등)는 단 한 글자라도 포함되면 절대 안 된다! 
+2. 명품 브랜드 절대 금지: 합리적인 가격대의 대중적인 브랜드(예: 무신사 스탠다드, 토피, 커버낫, 스파오, 에잇세컨즈, 나이키, 뉴발란스) 위주로 추천할 것.
+3. 검색 실패 방지(매우 중요!): 추천 아이템 이름이 너무 길거나 특수기호 대괄호([])가 들어가면 무신사에서 검색 결과가 없다고 뜹니다. 따라서 무조건 "브랜드명 + 색상 + 핵심 명사 1~2개" 형태로 간결하고 자연스럽게 작성하세요. 대괄호([])나 괄호는 절대 사용 금지!
+4. 올바른 상품명 예시: "무신사 스탠다드 라이트 블루 데님 팬츠", "뉴발란스 574 네이비 스니커즈", "토피 와이드 핏 카키 슬랙스". (대괄호 없이 색상을 자연스럽게 띄어쓰기로 포함할 것!)
 
 반드시 아래의 JSON 규격만을 출력해 (마크다운 없이 순수 JSON만):
 {
   "title": "추천 룩 이름 (레퍼런스 사진 느낌을 살린 매력적인 제목)",
   "descr": "레퍼런스 사진의 코디를 어떻게 매치하면 좋을지 상세히 설명하는 5~6문장의 길고 구체적인 스타일링 가이드. (100% 자연스러운 한국어 표준어만 사용할 것!)",
-  "items": ["(예: 우먼즈 브레톤 스트라이프 크루 넥 티셔츠 [아이보리/블랙])", "(예: 와이드 핏 밴딩 린넨 팬츠 [카키])", "(예: 척테일러 올스타 하이 [블랙])", "(예: 나일론 드로스트링 백팩 [차콜])"] 
+  "items": ["(예: 무신사 스탠다드 네이비 스트라이프 티셔츠)", "(예: 토피 카키 린넨 와이드 팬츠)", "(예: 컨버스 블랙 하이 스니커즈)", "(예: 에잇세컨즈 차콜 백팩)"] 
 }
     `;
 
@@ -143,12 +142,11 @@ const CLOSER_DATA = {
       
       resultData.referenceImageId = refLook.imgId;
       
-      resultData.description = (resultData.description || "").replace(/[一-龥]/g, '');
-      if (resultData.items) {
-        resultData.items.forEach(item => {
-          if(item.name) item.name = item.name.replace(/[一-龥]/g, '');
-          if(item.reason) item.reason = item.reason.replace(/[一-龥]/g, '');
-        });
+      // 한자, 일본어(히라가나, 가타카나) 정규식 원천 차단 필터
+      const invalidCharsRegex = /[一-龥ぁ-んァ-ヶ]/g;
+      resultData.description = (resultData.description || "").replace(invalidCharsRegex, '');
+      if (resultData.items && Array.isArray(resultData.items)) {
+        resultData.items = resultData.items.map(item => typeof item === 'string' ? item.replace(invalidCharsRegex, '') : item);
       }
       return resultData;
 } catch (error) {
