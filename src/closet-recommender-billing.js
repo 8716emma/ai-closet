@@ -5,7 +5,7 @@
  * - Detects payment success callback from URL
  */
 
-document.addEventListener("DOMContentLoaded", () => {
+const initBilling = () => {
   // 1. 결제 성공 파라미터 확인 후 토스트 알림 띄우기
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('payment') === 'success') {
@@ -72,4 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-});
+};
+
+// DOM이 이미 로드되었으면 즉시 실행, 아니면 이벤트 대기
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initBilling);
+} else {
+  initBilling();
+}
