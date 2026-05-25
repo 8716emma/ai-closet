@@ -38,17 +38,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const tossPayments = TossPayments(clientKey);
-  const tossPayBtn = document.getElementById("toss-pay-btn");
+  const tossMethodBtns = document.querySelectorAll(".toss-method-btn");
   const billingModal = document.getElementById("billing-modal");
 
-  if (tossPayBtn) {
-    tossPayBtn.addEventListener("click", () => {
+  tossMethodBtns.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const method = e.currentTarget.getAttribute("data-method") || "카드";
+      
       // 결제창 띄우기 (랜덤 주문번호 생성)
       const randomOrderId = "ORDER-" + new Date().getTime() + "-" + Math.floor(Math.random() * 1000);
       const currentOrigin = window.location.origin;
       const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
       
-      tossPayments.requestPayment('토스결제', {
+      tossPayments.requestPayment(method, {
         amount: 9900,
         orderId: randomOrderId,
         orderName: 'AI 옷 추천 10 CP 충전',
@@ -69,5 +71,5 @@ document.addEventListener("DOMContentLoaded", () => {
         billingModal.classList.remove("active");
       }
     });
-  }
+  });
 });

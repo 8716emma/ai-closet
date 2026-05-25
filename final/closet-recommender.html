@@ -307,11 +307,17 @@
         <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px;">
           (토스페이먼츠를 통한 신용카드/간편결제 지원)
         </p>
-        
-        <button id="toss-pay-btn" style="background: #3182f6; color: white; padding: 16px; border-radius: 8px; font-weight: 800; font-size: 1.1rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; margin-bottom: 12px; box-shadow: 0 4px 6px rgba(49, 130, 246, 0.2);">
-          <i class="fa-solid fa-bolt"></i> 토스페이 (계좌/포인트)로 결제하기
-        </button>
-        
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+          <button class="toss-method-btn" data-method="카드" style="background: var(--bg-card); color: var(--text); padding: 14px; border-radius: 8px; font-weight: 700; font-size: 1rem; border: 1px solid var(--border-light); cursor: pointer; transition: 0.2s;">
+            💳 신용/체크카드 결제
+          </button>
+          <button class="toss-method-btn" data-method="토스결제" style="background: #3182f6; color: white; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 1rem; border: none; cursor: pointer; transition: 0.2s;">
+            💙 토스페이 (계좌/포인트)
+          </button>
+          <button class="toss-method-btn" data-method="계좌이체" style="background: var(--bg-card); color: var(--text); padding: 14px; border-radius: 8px; font-weight: 700; font-size: 1rem; border: 1px solid var(--border-light); cursor: pointer; transition: 0.2s;">
+            🏦 실시간 계좌이체
+          </button>
+        </div>
         <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; background: var(--bg-card); border: 1px dashed var(--border-light); padding: 12px; border-radius: 8px;">
           안내: 현재는 테스트 모드로 작동합니다.<br>
           실제로 돈이 출금되지 않으며, 테스트 성공 시<br>가상의 포인트 10 CP가 즉시 충전됩니다.
