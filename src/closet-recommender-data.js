@@ -113,7 +113,7 @@ const CLOSER_DATA = {
   "title": "추천 룩 이름 (날씨와 스타일을 잘 살린 매력적인 제목)",
   "descr": "오늘 날씨와 유저의 선택지를 바탕으로 어떻게 매치하면 좋을지 상세히 설명하는 5~6문장의 스타일링 가이드.",
   "items": ["(예: 무신사 스탠다드 반팔 티셔츠 화이트)", "(예: 무신사 스탠다드 데님 팬츠 블루)", "(예: 컨버스 스니커즈 블랙)"],
-  "photoPrompt": "A highly detailed, photorealistic, 8k resolution street snap photography of a Korean (man 또는 woman 중 성별에 맞게 선택), wearing (의상 영문 상세 묘사), fashionable, aesthetic, cinematic lighting, full body shot"
+  "photoPrompt": "A highly detailed, photorealistic flat lay photography of the following outfit: (의상 영문 상세 묘사), neatly folded and arranged on a clean white background, top down view, studio lighting, 8k resolution"
 }
     `;
 
@@ -144,11 +144,8 @@ const CLOSER_DATA = {
       
       // 실시간 구글링(AI 생성) 이미지 URL 생성
       if (resultData.photoPrompt) {
-        // AI 생성 금지! 무조건 실제 사람이 찍은 리얼 사진(Flickr 기반)만 출력하도록 변경
-        const genderKeyword = (promptData.gender && promptData.gender.includes("남성")) ? "man" : "woman";
-        const styleKeyword = (promptData.style && promptData.style.length > 0) ? encodeURIComponent(promptData.style[0]) : "casual";
-        // 캐시 무효화를 위해 시간값(Date.now) 추가
-        resultData.referenceImageId = `https://loremflickr.com/800/1000/korean,fashion,outfit,${genderKeyword},${styleKeyword}?random=${Date.now()}`;
+        // 가짜 사람 모델 대신 코디 자체(옷)를 직관적으로 보여주기 위해 바닥 눕힘 컷(Flat Lay) 화보로 생성
+        resultData.referenceImageId = `https://image.pollinations.ai/prompt/${encodeURIComponent(resultData.photoPrompt)}?width=800&height=1000&nologo=true&model=flux&enhance=true`;
       } else {
         resultData.referenceImageId = refLook.imgId;
       }
