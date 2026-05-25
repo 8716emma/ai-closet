@@ -497,23 +497,22 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       historyModal.classList.add("active");
     });
-    
-    closeHistoryModalBtn.addEventListener("click", () => {
-      historyModal.classList.remove("active");
-    });
+    closeHistoryModalBtn.addEventListener("click", () => historyModal.classList.remove("active"));
   }
 
   if (sidebarSettingsBtn && settingsModal) {
-    sidebarSettingsBtn.addEventListener("click", () => {
-      settingsModal.classList.add("active");
-    });
-    closeSettingsModalBtn.addEventListener("click", () => {
-      settingsModal.classList.remove("active");
-    });
+    sidebarSettingsBtn.addEventListener("click", () => settingsModal.classList.add("active"));
+    closeSettingsModalBtn.addEventListener("click", () => settingsModal.classList.remove("active"));
     saveSettingsModalBtn.addEventListener("click", () => {
-      settingsModal.classList.remove("active");
-      showToast("설정이 성공적으로 저장되었습니다!");
+      settingsModal.classList.remove("active"); showToast("설정이 저장되었습니다!");
     });
+  }
+
+  const sidebarBillingBtn = document.getElementById("sidebar-billing-btn");
+  const billingModal = document.getElementById("billing-modal");
+  if(sidebarBillingBtn && billingModal){
+    sidebarBillingBtn.addEventListener("click", () => billingModal.classList.add("active"));
+    document.getElementById("close-billing-modal-btn").addEventListener("click", () => billingModal.classList.remove("active"));
   }
 
   const sidebarContactBtn = document.getElementById("sidebar-contact-btn");
