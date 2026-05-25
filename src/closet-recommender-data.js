@@ -146,12 +146,16 @@ const CLOSER_DATA = {
         resultData.referenceImageId = refLook.imgId;
       }
       
-      // 한자, 일본어(히라가나, 가타카나) 정규식 원천 차단 필터
+      // 한자, 일본어(히라가나, 가타카나) 정규식 원천 차단 필터 및 AI 오타 보정
       const invalidCharsRegex = /[一-龥ぁ-んァ-ヶ]/g;
+      resultData.title = (resultData.title || "").replace(invalidCharsRegex, '');
       resultData.descr = (resultData.descr || "").replace(invalidCharsRegex, '');
       resultData.description = resultData.descr; // 안전망
+      
+      const fixTypo = (str) => str.replace(invalidCharsRegex, '').replace(/무신사\s*스[탄탠타][다더트]드/g, '무신사 스탠다드');
+      
       if (resultData.items && Array.isArray(resultData.items)) {
-        resultData.items = resultData.items.map(item => typeof item === 'string' ? item.replace(invalidCharsRegex, '') : item);
+        resultData.items = resultData.items.map(item => typeof item === 'string' ? fixTypo(item) : item);
       }
       return resultData;
 } catch (error) {
