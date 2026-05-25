@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Closet Recommender - 스마트 옷 추천 스튜디오</title>
   <link rel="stylesheet" href="src/closet-recommender.css?v=2.5">
+  <!-- 아이콘 폰트 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Toss Payments SDK -->
+  <script src="https://js.tosspayments.com/v1"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
@@ -300,25 +305,27 @@
           <span style="font-size: 1.2rem;">10 CP — 9,900원</span>
         </div>
         <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px;">
-          (현재 무통장/토스 송금만 지원됩니다)
+          (토스페이먼츠를 통한 신용카드/간편결제 지원)
         </p>
-        <div style="background: #e8f0fe; color: #1a73e8; padding: 16px; border-radius: 8px; font-weight: 700; margin-bottom: 12px;">
-          💙 토스로 송금하기<br>
-          <span style="font-size: 0.85rem; font-weight: 400; display: block; margin-top: 4px;">나중에 링크가 추가될 예정입니다.</span>
-        </div>
+        
+        <button id="toss-pay-btn" style="background: #3182f6; color: white; padding: 16px; border-radius: 8px; font-weight: 800; font-size: 1.1rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; margin-bottom: 12px; box-shadow: 0 4px 6px rgba(49, 130, 246, 0.2);">
+          <i class="fa-solid fa-credit-card"></i> 토스페이먼츠로 결제하기
+        </button>
+        
         <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; background: var(--bg-card); border: 1px dashed var(--border-light); padding: 12px; border-radius: 8px;">
-          ✉️ 송금 후 내역 스크린샷을<br>
-          <strong>8716emma@gmail.com</strong> 으로 보내주시면<br>
-          관리자 확인 후 24시간 내에 지급해 드립니다.
+          안내: 현재는 테스트 모드로 작동합니다.<br>
+          실제로 돈이 출금되지 않으며, 테스트 성공 시<br>가상의 포인트 10 CP가 즉시 충전됩니다.
         </p>
       </div>
-      <button id="close-billing-modal-btn" class="btn btn-accent" style="width: 100%; padding: 12px;">확인</button>
+      <button id="close-billing-modal-btn" class="btn" style="width: 100%; padding: 12px; background: var(--bg-ivory); border: 1px solid var(--border-light); color: var(--text);">취소</button>
     </div>
   </div>
 
   <!-- 비즈니스 로직 연동 (데이터셋 분리 적용) -->
-  <script src="src/closet-recommender-data.js?v=8.1"></script>
+  <script src="src/closet-recommender-data.js?v=8.2"></script>
+  <!-- 결제 전용 분리 스크립트 -->
+  <script src="src/closet-recommender-billing.js?v=8.2"></script>
   <!-- 구글 ID 토큰 파서 추가 및 메인 JS -->
-  <script src="src/closet-recommender.js?v=8.1"></script>
+  <script src="src/closet-recommender.js?v=8.2"></script>
 </body>
 </html>
