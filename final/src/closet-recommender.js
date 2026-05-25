@@ -462,16 +462,9 @@ document.addEventListener("DOMContentLoaded", () => {
   
   const profileModal = document.getElementById("profile-modal");
   const closeProfileModalBtn = document.getElementById("close-profile-modal-btn");
-  const profileModalEmail = document.getElementById("profile-modal-email");
-  const profileModalCredits = document.getElementById("profile-modal-credits");
-
-  const historyModal = document.getElementById("history-modal");
-  const closeHistoryModalBtn = document.getElementById("close-history-modal-btn");
-  const historyModalContent = document.getElementById("history-modal-content");
-
-  const settingsModal = document.getElementById("settings-modal");
-  const closeSettingsModalBtn = document.getElementById("close-settings-modal-btn");
-  const saveSettingsModalBtn = document.getElementById("save-settings-modal-btn");
+  const profileModalEmail=$("profile-modal-email"), profileModalCredits=$("profile-modal-credits");
+  const historyModal=$("history-modal"), closeHistoryModalBtn=$("close-history-modal-btn"), historyModalContent=$("history-modal-content");
+  const settingsModal=$("settings-modal"), closeSettingsModalBtn=$("close-settings-modal-btn"), saveSettingsModalBtn=$("save-settings-modal-btn");
 
   if (sidebarProfileBtn && profileModal) {
     sidebarProfileBtn.addEventListener("click", () => {
@@ -479,10 +472,7 @@ document.addEventListener("DOMContentLoaded", () => {
       profileModalCredits.textContent = `${state.credits} CP`;
       profileModal.classList.add("active");
     });
-    
-    closeProfileModalBtn.addEventListener("click", () => {
-      profileModal.classList.remove("active");
-    });
+    closeProfileModalBtn.addEventListener("click", () => profileModal.classList.remove("active"));
   }
 
   if (sidebarHistoryBtn && historyModal) {
@@ -540,9 +530,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const settingsDarkMode = document.getElementById("settings-dark-mode");
-  if(settingsDarkMode){
+  if (settingsDarkMode) {
+    // 로컬스토리지에서 저장된 다크모드 상태 복원
+    const savedDark = localStorage.getItem("closet_dark_mode") === "true";
+    settingsDarkMode.checked = savedDark;
+    document.documentElement.setAttribute("data-theme", savedDark ? "dark" : "light");
+
     settingsDarkMode.addEventListener("change", (e) => {
-      document.documentElement.setAttribute('data-theme', e.target.checked ? 'dark' : 'light');
+      const isDark = e.target.checked;
+      document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+      localStorage.setItem("closet_dark_mode", isDark);
+      showToast(isDark ? "🌙 다크 모드 활성화" : "☀️ 라이트 모드 활성화");
     });
   }
   renderTags();

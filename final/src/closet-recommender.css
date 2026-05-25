@@ -28,18 +28,22 @@
 }
 
 [data-theme="dark"] {
-  --bg-ivory: #161616;
-  --bg-ivory-dark: #242424;
-  --primary-brown: #5a4b37;
-  --primary-light: #76654e;
-  --primary-dark: #d8c6ab;
-  --accent-orange: #c5b290;
-  --card-bg: #202020;
-  --border: #5a4b37;
-  --border-light: #333333;
-  --text: #e8e8e8;
-  --text-muted: #9a9a9a;
-  --white: #202020;
+  --bg-ivory: #1a1a1a;
+  --bg-ivory-dark: #252525;
+  --primary-brown: #7a6248;
+  --primary-light: #8f7358;
+  --primary-dark: #e0cdb0;
+  --accent-orange: #c5a87a;
+  --card-bg: #252525;
+  --border: #7a6248;
+  --border-light: #3a3a3a;
+  --text: #e8e2d9;
+  --text-muted: #a09080;
+  --white: #252525;
+}
+
+body, html {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-main); color: var(--text); }
@@ -150,7 +154,7 @@ header {
 .auth-divider:not(:empty)::before { margin-right: 1em; }
 .auth-divider:not(:empty)::after { margin-left: 1em; }
 .google-btn {
-  width: 100%; background: #FFF; border: 1px solid var(--border-light); padding: 12px;
+  width: 100%; background: var(--white); border: 1px solid var(--border-light); padding: 12px;
   font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px;
   cursor: pointer; border-radius: var(--br-sm); box-shadow: var(--shadow-sm); transition: var(--transition);
 }
