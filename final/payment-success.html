@@ -54,9 +54,23 @@
     // 현재는 프론트엔드 포트폴리오용이므로 로컬에서 바로 성공 처리합니다.
     setTimeout(() => {
       if (paymentKey && orderId) {
-        // 로컬스토리지에 결제 성공 기록 (CP 지급)
-        let currentCredits = parseInt(localStorage.getItem("closet_credits") || "5", 10);
-        localStorage.setItem("closet_credits", currentCredits + 10); // 10 CP 추가
+        // 로컬스토리지에 결제 성공 기록 (현재 로그인된 유저에게 CP 지급)
+        const session = localStorage.getItem("closet_current_session");
+        if (session) {
+          const raw = localStorage.getItem("closet_users");
+          if (raw) {
+            const users = JSON.parse(raw);
+            const user = users.find(u => u.email === session);
+            if (user) {
+              user.credits = (user.credits || 0) + 10;
+              localStorage.setItem("closet_users", JSON.stringify(users));
+            }
+          }
+        } else {
+          // 혹시 세션이 없다면 구버전 하위호환
+          let currentCredits = parseInt(localStorage.getItem("closet_credits") || "5", 10);
+          localStorage.setItem("closet_credits", currentCredits + 10);
+        }
         
         // 홈으로 이동하면서 파라미터 전달
         window.location.replace("closet-recommender.html?payment=success");

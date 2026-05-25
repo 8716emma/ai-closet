@@ -9,17 +9,11 @@ const API_CONFIG = {
 document.addEventListener("DOMContentLoaded", () => {
   // 가상 사용자 DB 로드 (localStorage 이용)
   const loadUsers = () => {
-  const raw = localStorage.getItem("closet_users");
-  if (!raw) {
-    const defaultUsers = [{ email: "test@naver.com", password: "123456", credits: 10 }];
-    localStorage.setItem("closet_users", JSON.stringify(defaultUsers));
-    return defaultUsers;
-  }
-  return JSON.parse(raw);
+    const raw = localStorage.getItem("closet_users");
+    if (!raw) { const d = [{ email: "test@naver.com", password: "123456", credits: 10 }]; localStorage.setItem("closet_users", JSON.stringify(d)); return d; }
+    return JSON.parse(raw);
   };
-  const saveUsers = (users) => {
-  localStorage.setItem("closet_users", JSON.stringify(users));
-  };
+  const saveUsers = (users) => { localStorage.setItem("closet_users", JSON.stringify(users)); };
   // 1. 상태 변수 관리
   let state = {
   isLoggedIn: false,
@@ -89,6 +83,15 @@ document.addEventListener("DOMContentLoaded", () => {
     sidebarCloseBtn.addEventListener("click", closeSidebar);
     sidebarOverlay.addEventListener("click", closeSidebar);
   }
+  
+  // 9. 초기화 및 이벤트 리스너 부착
+  const savedSession = localStorage.getItem("closet_current_session");
+  if (savedSession) {
+    const users = loadUsers(), user = users.find(u => u.email === savedSession);
+    if (user) { state.isLoggedIn = true; state.currentUserEmail = user.email; state.credits = user.credits ?? 10; enterApp(); }
+  }
+  window.updateGlobalCredits = (newCredits) => { state.credits = newCredits; updateCreditUI(); };
+
   // 4. 로그인 / 회원가입 상태 토글
   let isSignupMode = false;
   const AUTH_MODES = {
@@ -165,6 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
     users.push(newUser);
     saveUsers(users);
     state.isLoggedIn = true; state.credits = 20; state.currentUserEmail = idValue;
+    localStorage.setItem("closet_current_session", idValue);
     enterApp();
     if (isEmailFormat(idValue)) {
       showToast("이메일 형식으로 가입을 환영합니다! (20 CP 지급)");
@@ -187,9 +191,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (normId === "test@naver.com") err += " (데모 계정 비밀번호: 123456)";
     showToast(err); return;
     }
-    state.isLoggedIn = true; state.credits = user.credits ?? 10; state.currentUserEmail = user.email;
-    enterApp();
-    showToast("로그인 성공!");
+      state.isLoggedIn = true; state.currentUserEmail = user.email; state.credits = user.credits ?? 10;
+      localStorage.setItem("closet_current_session", user.email); enterApp(); showToast(`환영합니다, ${user.email}님!`);
   }
   };
   const handleCredentialResponse = (response) => {
@@ -201,6 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let user = users.find(u => u.email === googleEmail);
       if (!user) { user = { email: googleEmail, password: "sns", credits: 10 }; users.push(user); saveUsers(users); }
       state.isLoggedIn = true; state.credits = user.credits ?? 10; state.currentUserEmail = googleEmail;
+      localStorage.setItem("closet_current_session", googleEmail);
       enterApp(); showToast("구글 로그인 성공!");
     } catch (err) {
       console.error("구글 에러:", err); showToast("구글 인증 오류가 발생했습니다.");
@@ -218,6 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let user = users.find(u => u.email === googleEmail);
         if (!user) { user = { email: googleEmail, password: "sns", credits: 10 }; users.push(user); saveUsers(users); }
         state.isLoggedIn = true; state.credits = user.credits ?? 10; state.currentUserEmail = googleEmail;
+        localStorage.setItem("closet_current_session", googleEmail);
         enterApp(); showToast("구글 연동 성공!");
       });
     }
@@ -253,13 +258,10 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.removeItem("closet_users"); showToast("초기화 완료! 데모 계정으로 로그인하거나 새로 회원가입 하세요."); location.reload();
   }
   });
-  logoutBtn.addEventListener("click", (e) => {
-  if (e) e.preventDefault();
-  state.isLoggedIn = false; state.currentUserEmail = "";
-  emailInput.value = ""; passwordInput.value = "";
-  authScreen.style.display = "block"; mainScreen.style.display = "none";
-  headerCredits.style.display = "none"; sidebarToggleBtn.style.display = "none"; logoutBtn.style.display = "none";
-  showToast("로그아웃 되었습니다.");
+  logoutBtn.addEventListener("click", () => {
+    state.isLoggedIn = false; state.currentUserEmail = ""; localStorage.removeItem("closet_current_session");
+    mainScreen.style.display = "none"; authScreen.style.display = "flex"; headerCredits.style.display = "none";
+    sidebarToggleBtn.style.display = "none"; logoutBtn.style.display = "none"; showToast("로그아웃 되었습니다.");
   });
   // 6. 크레딧 차감 및 업데이트 로직
   const updateCreditUI = () => { navCreditCount.textContent = `${state.credits} CP`; };
