@@ -83,7 +83,7 @@ const CLOSER_DATA = {
     const chosenStyle = promptData.style[0] || "default";
     const refLook = CLOSER_DATA.referenceLooks[chosenStyle] || CLOSER_DATA.referenceLooks["default"];
 
-    const promptText = `
+    let promptText = `
 너는 전세계 최고의 퍼스널 패션 스타일리스트야.
 사용자가 다음 조건의 패션 스타일링을 원하고 있어:
 - 성별: ${promptData.gender && promptData.gender.length > 0 ? promptData.gender.join(", ") : "무관"}
