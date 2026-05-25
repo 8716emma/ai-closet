@@ -144,8 +144,11 @@ const CLOSER_DATA = {
       
       // 실시간 구글링(AI 생성) 이미지 URL 생성
       if (resultData.photoPrompt) {
-        // Unsplash/Pexels API 키 부재로 인한 차선책: Pollinations의 최신 모델(Flux)로 진짜 사진처럼 생성
-        resultData.referenceImageId = `https://image.pollinations.ai/prompt/${encodeURIComponent(resultData.photoPrompt)}?width=800&height=1000&nologo=true&model=flux&enhance=true`;
+        // AI 생성 금지! 무조건 실제 사람이 찍은 리얼 사진(Flickr 기반)만 출력하도록 변경
+        const genderKeyword = (promptData.gender && promptData.gender.includes("남성")) ? "man" : "woman";
+        const styleKeyword = (promptData.style && promptData.style.length > 0) ? encodeURIComponent(promptData.style[0]) : "casual";
+        // 캐시 무효화를 위해 시간값(Date.now) 추가
+        resultData.referenceImageId = `https://loremflickr.com/800/1000/korean,fashion,outfit,${genderKeyword},${styleKeyword}?random=${Date.now()}`;
       } else {
         resultData.referenceImageId = refLook.imgId;
       }
