@@ -508,7 +508,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const sidebarBillingBtn = document.getElementById("sidebar-billing-btn");
   const billingModal = document.getElementById("billing-modal");
   if(sidebarBillingBtn && billingModal){
     sidebarBillingBtn.addEventListener("click", () => billingModal.classList.add("active"));
