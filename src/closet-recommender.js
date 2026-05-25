@@ -161,11 +161,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const idValue = emailInput.value ? emailInput.value.trim() : "";
   const passwordValue = passwordInput.value ? passwordInput.value.trim() : "";
   if (!idValue || !passwordValue) {
-    alert("오류: 아이디(또는 이메일)와 비밀번호를 모두 입력해 주세요!");
+    showToast("오류: 아이디(또는 이메일)와 비밀번호를 모두 입력해 주세요!");
     return;
   }
   if (isSignupMode && !isEmailFormat(idValue) && !isValidId(idValue)) {
-    alert("오류: 아이디는 2~20자, 영문/숫자/한글/밑줄/점 조합만 가능합니다.");
+    showToast("오류: 아이디는 2~20자, 영문/숫자/한글/밑줄/점 조합만 가능합니다.");
     return;
   }
   const users = loadUsers();
@@ -173,20 +173,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const findUser = (norm) => users.find(u => (u.email || "").toLowerCase() === norm);
   if (isSignupMode) {
     if (findUser(normId)) {
-    switchToLoginMode();
-    const existUser = findUser(normId);
-    if (existUser && existUser.password === "sns") {
-      alert("이미 구글 간편 로그인으로 가입된 계정입니다! 아래 구글 로그인 버튼을 사용해 주세요.");
-    } else {
-      const type = isEmailFormat(idValue) ? "이메일" : "아이디";
-      let msg = `이미 가입된 ${type}입니다. 로그인 모드로 전환했으니 비밀번호를 입력해 로그인해 주세요!`;
-      if (normId === "test@naver.com") msg += " (데모 계정 비밀번호: 123456)";
-      alert(msg);
-    }
-    return;
-      showToast(msg);
-    }
-    return;
+      switchToLoginMode();
+      const existUser = findUser(normId);
+      if (existUser && existUser.password === "sns") {
+        showToast("이미 구글 간편 로그인으로 가입된 계정입니다! 아래 구글 로그인 버튼을 사용해 주세요.");
+      } else {
+        const type = isEmailFormat(idValue) ? "이메일" : "아이디";
+        let msg = `이미 가입된 ${type}입니다. 로그인 모드로 전환했으니 비밀번호를 입력해 로그인해 주세요!`;
+        if (normId === "test@naver.com") msg += " (데모 계정 비밀번호: 123456)";
+        showToast(msg);
+      }
+      return;
     }
     const newUser = { email: idValue, password: passwordValue, credits: 20 };
     users.push(newUser);
