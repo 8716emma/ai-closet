@@ -240,10 +240,10 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     
     setTimeout(() => {
-    if (googleLoginBtn && googleLoginBtn.innerHTML.trim() === "") {
+    if (googleLoginBtn && (googleLoginBtn.innerHTML.trim() === "" || googleLoginBtn.clientHeight < 10)) {
       showFallbackGoogleButton();
     }
-    }, 2500);
+    }, 500);
   } catch (e) {
     console.warn("구글 SDK 마운트 오류, 로컬 폴백을 기동합니다.", e);
     showFallbackGoogleButton();
