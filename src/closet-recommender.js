@@ -3,7 +3,7 @@
  * (500줄 이하 유지 규칙 준수)
  */
 const API_CONFIG = {
-  provider: "gemini",
+  provider: "groq",
   apiKey: ["gsk", "_AviwE95", "nrZFSLRaL1Hl", "nWGdyb3FYrjn", "NpKCwZTP9WIq", "TNfc7sjpl"].join("")
 };
 document.addEventListener("DOMContentLoaded", () => {
