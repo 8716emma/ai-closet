@@ -253,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   logoutBtn.addEventListener("click", () => {
     state.isLoggedIn = false; state.currentUserEmail = ""; localStorage.removeItem("closet_current_session");
-    mainScreen.style.display = "none"; authScreen.style.display = "flex"; headerCredits.style.display = "none";
+    mainScreen.style.display = "none"; authScreen.style.display = "block"; headerCredits.style.display = "none";
     sidebarToggleBtn.style.display = "none"; logoutBtn.style.display = "none"; showToast("로그아웃 되었습니다.");
   });
   // 6. 크레딧 차감 및 업데이트 로직
