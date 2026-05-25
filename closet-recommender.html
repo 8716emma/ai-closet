@@ -162,10 +162,12 @@
       
       <!-- 중앙 열: 이미지 및 설명 -->
       <div class="dash-col dash-col-center">
-        <div class="dash-image-wrapper">
-          <img id="dash-result-photo" src="" alt="추천 의상 프리뷰">
-          <span class="dash-badge">AI STYLING</span>
-        </div>
+        <a id="dash-pinterest-banner" href="#" target="_blank" class="dash-image-wrapper" style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #E60023 0%, #bd081c 100%); text-decoration:none; color:white; transition:transform 0.2s; box-shadow:0 8px 24px rgba(230,0,35,0.4);">
+          <div style="font-size: 48px; margin-bottom: 16px;">📌</div>
+          <div style="font-size: 22px; font-weight: 800; margin-bottom: 8px; text-align:center;">이 코디, 핀터레스트에서 보기</div>
+          <div style="font-size: 14px; opacity: 0.9; text-align:center;">실제 사람들이 입은 리얼 코디 스냅 사진 검색</div>
+          <span class="dash-badge" style="background: rgba(255,255,255,0.2); color:white; top:12px; right:12px;">REAL PHOTO</span>
+        </a>
         <div class="dash-content">
           <h2 id="dash-result-title">분석 중...</h2>
           <p id="dash-result-descr">잠시만 기다려주세요.</p>
@@ -219,8 +221,8 @@
   </div>
 
   <!-- 비즈니스 로직 연동 (데이터셋 분리 적용) -->
-  <script src="src/closet-recommender-data.js?v=6.8"></script>
+  <script src="src/closet-recommender-data.js?v=6.9"></script>
   <!-- 구글 ID 토큰 파서 추가 및 메인 JS -->
-  <script src="src/closet-recommender.js?v=6.8"></script>
+  <script src="src/closet-recommender.js?v=6.9"></script>
 </body>
 </html>

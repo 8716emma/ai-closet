@@ -63,9 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const fullscreenDashboard = document.getElementById("fullscreen-dashboard");
   const dashLinksTop = document.getElementById("dash-links-top");
   const dashLinksBottom = document.getElementById("dash-links-bottom");
-  const dashResultPhoto = document.getElementById("dash-result-photo");
   const dashResultTitle = document.getElementById("dash-result-title");
   const dashResultDescr = document.getElementById("dash-result-descr");
+  const dashPinterestBanner = document.getElementById("dash-pinterest-banner");
   const dashCloseBtn = document.getElementById("dash-close-btn");
   if (dashCloseBtn) {
   dashCloseBtn.addEventListener("click", () => {
@@ -368,7 +368,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const renderDashboardResult = (title, descr, photoUrl, items) => {
   dashResultTitle.textContent = title;
   dashResultDescr.innerHTML = descr;
-  dashResultPhoto.src = photoUrl;
+  if (dashPinterestBanner) {
+    const qGender = encodeURIComponent(state.selectedTags.gender[0] || "남자");
+    const qWhen = encodeURIComponent(state.selectedTags.when[0] || "봄");
+    const qStyle = encodeURIComponent(state.selectedTags.style[0] || "캐주얼");
+    dashPinterestBanner.href = `https://kr.pinterest.com/search/pins/?q=${qGender} ${qWhen} ${qStyle} 코디`;
+  }
   dashLinksTop.innerHTML = "";
   dashLinksBottom.innerHTML = "";
   const mid = Math.ceil(items.length / 2);
@@ -380,10 +385,11 @@ document.addEventListener("DOMContentLoaded", () => {
     linkContainer.style.gap = "8px";
     linkContainer.style.cursor = "default";
     
+    const searchKeyword = item.split(' ').slice(0, 2).join(' '); // 컬러 제외, 브랜드+카테고리만 검색
     linkContainer.innerHTML = `
     <div style="font-weight:600; color:#4a4a4a; display:flex; align-items:center; gap:6px;"><span>🏷️</span> ${item}</div>
     <div style="display:flex; gap:8px; align-items:center;">
-      <a href="https://www.musinsa.com/search/musinsa/integration?type=&q=${encodeURIComponent(item)}" target="_blank" style="box-sizing:border-box; display:flex; align-items:center; justify-content:center; flex:1; height:32px; background:#000000; color:white; border-radius:6px; font-size:13px; text-decoration:none; font-weight:700; transition:opacity 0.2s; padding:0; margin:0; line-height:1;">무신사 검색</a>
+      <a href="https://www.musinsa.com/search/musinsa/integration?type=&q=${encodeURIComponent(searchKeyword)}" target="_blank" style="box-sizing:border-box; display:flex; align-items:center; justify-content:center; flex:1; height:32px; background:#000000; color:white; border-radius:6px; font-size:13px; text-decoration:none; font-weight:700; transition:opacity 0.2s; padding:0; margin:0; line-height:1;">무신사 검색</a>
     </div>
     `;
     
@@ -396,16 +402,6 @@ document.addEventListener("DOMContentLoaded", () => {
     dashLinksBottom.appendChild(linkContainer);
     }
   });
-  
-  // 핀터레스트 실제 코디 검색 버튼 추가
-  const pinterestBtn = document.createElement("a");
-  pinterestBtn.href = `https://kr.pinterest.com/search/pins/?q=${encodeURIComponent(state.selectedTags.gender[0] || "남자")} ${encodeURIComponent(state.selectedTags.when[0] || "봄")} ${encodeURIComponent(state.selectedTags.style[0] || "캐주얼")} 코디`;
-  pinterestBtn.target = "_blank";
-  pinterestBtn.style.cssText = "display:flex; align-items:center; justify-content:center; width:100%; height:44px; background:#E60023; color:white; border-radius:8px; font-size:15px; text-decoration:none; font-weight:700; margin-top:16px; box-shadow:0 4px 12px rgba(230,0,35,0.3); transition:transform 0.2s;";
-  pinterestBtn.innerHTML = "📌 핀터레스트에서 실제 코디 사진 보기";
-  pinterestBtn.onmouseover = () => pinterestBtn.style.transform = "translateY(-2px)";
-  pinterestBtn.onmouseout = () => pinterestBtn.style.transform = "translateY(0)";
-  dashLinksBottom.appendChild(pinterestBtn);
   mainScreen.style.display = "none";
   fullscreenDashboard.style.display = "flex";
   };
