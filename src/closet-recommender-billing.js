@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const currentOrigin = window.location.origin;
       const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
       
-      tossPayments.requestPayment('카드', {
+      tossPayments.requestPayment('토스결제', {
         amount: 9900,
         orderId: randomOrderId,
         orderName: 'AI 옷 추천 10 CP 충전',
