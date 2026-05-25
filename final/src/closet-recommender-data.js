@@ -107,7 +107,7 @@ const CLOSER_DATA = {
 - [경고]: 절대로 아래 JSON 예시에 있는 옷(반팔 티셔츠 화이트, 데님 팬츠 블루 등)을 그대로 베끼지 마세요! 매번 유저의 상황에 맞춰 위 카테고리 내에서 완전히 다르고 신선한 색상과 조합(예: 카키색 셔츠, 차콜 슬랙스, 베이지 맨투맨 등)을 제안하세요. 동일한 코디 반복은 절대 금지됩니다!
 
 [엄격한 금지사항]
-1. 언어 (영어/일본어 절대 금지): title, descr, items 필드는 100% 순수 한국어로만 작성하세요. (photoPrompt는 영어 허용)
+1. 언어 (영어/일본어/한자 절대 금지): title, descr, items 필드는 100% 순수 한국어로만 작성하세요. 한자(예: 春, 秋 등)는 절대로 쓰지 마세요. (photoPrompt는 영어 허용)
 
 반드시 아래의 JSON 규격만을 출력해 (마크다운 없이 순수 JSON만):
 {
@@ -154,8 +154,8 @@ const CLOSER_DATA = {
       // 무조건 안전한 로컬 레퍼런스 이미지(refLook.imgId)를 사용함.
       resultData.referenceImageId = refLook.imgId;
       
-      // 한자, 일본어(히라가나, 가타카나) 정규식 원천 차단 필터 및 AI 오타 보정
-      const invalidCharsRegex = /[一-龥ぁ-んァ-ヶ]/g;
+      // 한자(Hanja), 일본어(히라가나, 가타카나) 정규식 원천 차단 필터 및 AI 오타 보정
+      const invalidCharsRegex = /[\u3400-\u9FBF\u3040-\u30FF]/g;
       resultData.title = (resultData.title || "").replace(invalidCharsRegex, '');
       resultData.descr = (resultData.descr || "").replace(invalidCharsRegex, '');
       resultData.description = resultData.descr; // 안전망
@@ -177,7 +177,11 @@ const CLOSER_DATA = {
       if (resultData.items && Array.isArray(resultData.items)) {
         resultData.items = resultData.items.map(item => {
           if (typeof item === 'string') return { name: fixTypo(item), reason: "체형과 스타일에 잘 어울리는 추천 아이템입니다." };
-          if (item && item.name) { item.name = fixTypo(item.name); return item; }
+          if (item && item.name) { 
+            item.name = fixTypo(item.name); 
+            if (item.reason) item.reason = item.reason.replace(invalidCharsRegex, '');
+            return item; 
+          }
           return item;
         });
       }
