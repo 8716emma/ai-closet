@@ -70,6 +70,7 @@ const CLOSER_DATA = {
     "하이틴": { imgId: "src/assets/images/y2k.jpg", descr: "미국 하이틴 영화 감성의 크롭 가디건과 체크 스커트" },
     "default": { imgId: "src/assets/images/casual.jpg", descr: "호불호 없는 깔끔한 놈코어 데일리 룩 (맨투맨과 데님 팬츠)" }
   },
+
   fetchRealAIRecommendation: async (promptData, apiConfig) => {
     let provider = apiConfig.provider;
     let apiKey = apiConfig.apiKey ? apiConfig.apiKey.trim() : "";
