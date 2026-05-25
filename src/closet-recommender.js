@@ -84,13 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
     sidebarOverlay.addEventListener("click", closeSidebar);
   }
   
-  // 9. 초기화 및 이벤트 리스너 부착
-  const savedSession = localStorage.getItem("closet_current_session");
-  if (savedSession) {
-    const users = loadUsers(), user = users.find(u => u.email === savedSession);
-    if (user) { state.isLoggedIn = true; state.currentUserEmail = user.email; state.credits = user.credits ?? 10; enterApp(); }
-  }
-  window.updateGlobalCredits = (newCredits) => { state.credits = newCredits; updateCreditUI(); };
 
   // 4. 로그인 / 회원가입 상태 토글
   let isSignupMode = false;
@@ -544,4 +537,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   renderTags();
+
+  // 9. 초기화 및 이벤트 리스너 부착
+  const savedSession = localStorage.getItem("closet_current_session");
+  if (savedSession) {
+    const users = loadUsers(), user = users.find(u => u.email === savedSession);
+    if (user) { state.isLoggedIn = true; state.currentUserEmail = user.email; state.credits = user.credits ?? 10; enterApp(); }
+  }
+  window.updateGlobalCredits = (newCredits) => { state.credits = newCredits; updateCreditUI(); };
 });
