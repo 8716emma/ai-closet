@@ -527,10 +527,21 @@ document.addEventListener("DOMContentLoaded", () => {
     showToast("프리미엄 구독이 출시 준비 중입니다.");
   });
   const sidebarProfileBtn = document.getElementById("sidebar-profile-btn");
-  if (sidebarProfileBtn) {
-  sidebarProfileBtn.addEventListener("click", () => {
-    alert(`회원 정보: ${state.currentUserEmail || "손님"} (현재 ${state.credits} CP 보유)`);
-  });
+  const profileModal = document.getElementById("profile-modal");
+  const closeProfileModalBtn = document.getElementById("close-profile-modal-btn");
+  const profileModalEmail = document.getElementById("profile-modal-email");
+  const profileModalCredits = document.getElementById("profile-modal-credits");
+
+  if (sidebarProfileBtn && profileModal) {
+    sidebarProfileBtn.addEventListener("click", () => {
+      profileModalEmail.textContent = state.currentUserEmail || "손님 (비로그인)";
+      profileModalCredits.textContent = `${state.credits} CP`;
+      profileModal.classList.add("active");
+    });
+    
+    closeProfileModalBtn.addEventListener("click", () => {
+      profileModal.classList.remove("active");
+    });
   }
   renderTags();
 });
