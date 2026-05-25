@@ -38,46 +38,19 @@ document.addEventListener("DOMContentLoaded", () => {
     body: []
   }
   };
-  // 2. DOM 요소 바인딩
-  const authScreen = document.getElementById("auth-screen");
-  const mainScreen = document.getElementById("main-screen");
-  const authTitle = document.getElementById("auth-title");
-  const authSubtitle = document.getElementById("auth-subtitle");
-  const emailInput = document.getElementById("user-email");
-  const submitLoginBtn = document.getElementById("submit-login-btn");
-  const toggleSignupBtn = document.getElementById("toggle-signup-btn");
-  const googleLoginBtn = document.getElementById("google-login-btn");
-  const passwordInput = document.getElementById("user-password");
-  const passwordToggleBtn = document.getElementById("password-toggle-btn");
-  const headerCredits = document.getElementById("header-credits");
-  const navCreditCount = document.getElementById("nav-credit-count");
-  const sidebarToggleBtn = document.getElementById("sidebar-toggle-btn");
-  const logoutBtn = document.getElementById("logout-btn");
-  const sidebarMenu = document.getElementById("sidebar-menu");
-  const sidebarOverlay = document.getElementById("sidebar-overlay");
-  const sidebarCloseBtn = document.getElementById("sidebar-close-btn");
-  const sidebarBillingBtn = document.getElementById("sidebar-billing-btn");
-  const weatherWidget = document.getElementById("weather-widget");
-  const refreshWeatherBtn = document.getElementById("refresh-weather-btn");
-  const getRecommendationBtn = document.getElementById("get-recommendation-btn");
-  const fullscreenDashboard = document.getElementById("fullscreen-dashboard");
-  const dashLinksTop = document.getElementById("dash-links-top");
-  const dashLinksBottom = document.getElementById("dash-links-bottom");
-  const dashResultTitle = document.getElementById("dash-result-title");
-  const dashResultDescr = document.getElementById("dash-result-descr");
-  const dashPinterestBanner = document.getElementById("dash-pinterest-banner");
-  const dashCloseBtn = document.getElementById("dash-close-btn");
-  if (dashCloseBtn) {
-  dashCloseBtn.addEventListener("click", () => {
-    fullscreenDashboard.style.display = "none";
-    mainScreen.style.display = "grid";
-  });
-  }
-  const emailSubscribeCheck = document.getElementById("email-subscribe-check");
-  const paymentModal = document.getElementById("payment-modal");
-  const closePaymentModalBtn = document.getElementById("close-payment-modal-btn");
-  const chargeCreditBtn = document.getElementById("charge-credit-btn");
-  const subscribePremiumBtn = document.getElementById("subscribe-premium-btn");
+  // 2. DOM 요소 바인딩 (최적화)
+  const $ = (id) => document.getElementById(id);
+  const authScreen=$("auth-screen"), mainScreen=$("main-screen"), authTitle=$("auth-title"), authSubtitle=$("auth-subtitle");
+  const emailInput=$("user-email"), submitLoginBtn=$("submit-login-btn"), toggleSignupBtn=$("toggle-signup-btn"), googleLoginBtn=$("google-login-btn");
+  const passwordInput=$("user-password"), passwordToggleBtn=$("password-toggle-btn");
+  const headerCredits=$("header-credits"), navCreditCount=$("nav-credit-count"), sidebarToggleBtn=$("sidebar-toggle-btn"), logoutBtn=$("logout-btn");
+  const sidebarMenu=$("sidebar-menu"), sidebarOverlay=$("sidebar-overlay"), sidebarCloseBtn=$("sidebar-close-btn"), sidebarBillingBtn=$("sidebar-billing-btn");
+  const weatherWidget=$("weather-widget"), refreshWeatherBtn=$("refresh-weather-btn"), getRecommendationBtn=$("get-recommendation-btn");
+  const fullscreenDashboard=$("fullscreen-dashboard"), dashLinksTop=$("dash-links-top"), dashLinksBottom=$("dash-links-bottom");
+  const dashResultTitle=$("dash-result-title"), dashResultDescr=$("dash-result-descr"), dashPinterestBanner=$("dash-pinterest-banner"), dashCloseBtn=$("dash-close-btn");
+  const emailSubscribeCheck=$("email-subscribe-check"), paymentModal=$("payment-modal"), closePaymentModalBtn=$("close-payment-modal-btn");
+  const chargeCreditBtn=$("charge-credit-btn"), subscribePremiumBtn=$("subscribe-premium-btn");
+  if (dashCloseBtn) dashCloseBtn.addEventListener("click", () => { fullscreenDashboard.style.display = "none"; mainScreen.style.display = "grid"; });
   // 3. 비밀번호 보임/숨김 토글
   passwordToggleBtn.addEventListener("click", () => {
   state.passwordVisible = !state.passwordVisible;
@@ -219,70 +192,35 @@ document.addEventListener("DOMContentLoaded", () => {
     showToast("로그인 성공!");
   }
   };
-  // 5-4. 실시간 구글 소셜 로그인 SDK 및 JWT 크레덴셜 파서
   const handleCredentialResponse = (response) => {
-  try {
-    const base64Url = response.credential.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-    const profile = JSON.parse(jsonPayload);
-    const googleEmail = profile.email;
-    if (!googleEmail) {
-    showToast("구글 계정 이메일을 가져올 수 없습니다.");
-    return;
+    try {
+      const jsonPayload = decodeURIComponent(window.atob(response.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+      const googleEmail = JSON.parse(jsonPayload).email;
+      if (!googleEmail) return showToast("구글 계정 이메일을 가져올 수 없습니다.");
+      const users = loadUsers();
+      let user = users.find(u => u.email === googleEmail);
+      if (!user) { user = { email: googleEmail, password: "sns", credits: 10 }; users.push(user); saveUsers(users); }
+      state.isLoggedIn = true; state.credits = user.credits ?? 10; state.currentUserEmail = googleEmail;
+      enterApp(); showToast("구글 로그인 성공!");
+    } catch (err) {
+      console.error("구글 에러:", err); showToast("구글 인증 오류가 발생했습니다.");
     }
-    const users = loadUsers();
-    let user = users.find(u => u.email === googleEmail);
-    if (!user) {
-    user = { email: googleEmail, password: "sns", credits: 10 };
-    users.push(user);
-    saveUsers(users);
-    }
-    state.isLoggedIn = true;
-    state.credits = user.credits ?? 10;
-    state.currentUserEmail = googleEmail;
-    enterApp();
-    showToast("구글 로그인 성공!");
-  } catch (err) {
-    console.error("구글 토큰 파싱 에러:", err);
-    showToast("구글 인증 정보를 읽어오는 도중 오류가 발생했습니다.");
-  }
   };
   // 5-5. 오프라인 및 로컬 직접 실행(file://) 폴백 버튼 렌더러
   const showFallbackGoogleButton = () => {
-  if (!googleLoginBtn) return;
-  googleLoginBtn.innerHTML = `
-    <button class="btn" type="button" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; border: 1px solid var(--border-light); padding: 10px; font-weight: 700; border-radius: var(--br-sm); box-shadow: var(--shadow-sm); transition: var(--transition); background: var(--white); cursor: pointer;">
-    <svg viewBox="0 0 24 24" style="width: 16px; height: 16px;">
-      <path fill="#EA4335" d="M12 5.04c1.62 0 3.08.56 4.22 1.64l3.15-3.15C17.45 1.68 14.9 1 12 1 7.35 1 3.39 3.65 1.5 7.5l3.6 2.8C6.01 7.15 8.79 5.04 12 5.04z"/>
-      <path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.34H12v4.44h6.44c-.28 1.48-1.12 2.73-2.38 3.58l3.6 2.8c2.1-1.94 3.33-4.8 3.33-8.48z"/>
-      <path fill="#FBBC05" d="M5.1 14.7c-.24-.7-.38-1.46-.38-2.25s.14-1.55.38-2.25l-3.6-2.8C.54 9.12 0 10.5 0 12s.54 2.88 1.5 4.6l3.6-2.8z"/>
-      <path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.6-2.8c-1.1.74-2.52 1.18-4.36 1.18-3.21 0-5.99-2.11-6.9-5.26l-3.6 2.8C3.39 20.35 7.35 23 12 23z"/>
-    </svg>
-    구글 계정으로 로그인 (로컬 간편)
-    </button>
-  `;
-  const btn = googleLoginBtn.querySelector("button");
-  if (btn) {
-    btn.addEventListener("click", (e) => {
-    if (e) e.preventDefault();
-    const googleEmail = "google@gmail.com";
-    const users = loadUsers();
-    let user = users.find(u => u.email === googleEmail);
-    if (!user) {
-      user = { email: googleEmail, password: "sns", credits: 10 };
-      users.push(user);
-      saveUsers(users);
+    if (!googleLoginBtn) return;
+    googleLoginBtn.innerHTML = `<button class="btn" type="button" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; border: 1px solid var(--border-light); padding: 10px; font-weight: 700; border-radius: var(--br-sm); box-shadow: var(--shadow-sm); background: var(--white); cursor: pointer;"><svg viewBox="0 0 24 24" style="width: 16px; height: 16px;"><path fill="#EA4335" d="M12 5.04c1.62 0 3.08.56 4.22 1.64l3.15-3.15C17.45 1.68 14.9 1 12 1 7.35 1 3.39 3.65 1.5 7.5l3.6 2.8C6.01 7.15 8.79 5.04 12 5.04z"/><path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.34H12v4.44h6.44c-.28 1.48-1.12 2.73-2.38 3.58l3.6 2.8c2.1-1.94 3.33-4.8 3.33-8.48z"/><path fill="#FBBC05" d="M5.1 14.7c-.24-.7-.38-1.46-.38-2.25s.14-1.55.38-2.25l-3.6-2.8C.54 9.12 0 10.5 0 12s.54 2.88 1.5 4.6l3.6-2.8z"/><path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.6-2.8c-1.1.74-2.52 1.18-4.36 1.18-3.21 0-5.99-2.11-6.9-5.26l-3.6 2.8C3.39 20.35 7.35 23 12 23z"/></svg> 구글 계정으로 로그인 (로컬 간편)</button>`;
+    const btn = googleLoginBtn.querySelector("button");
+    if (btn) {
+      btn.addEventListener("click", (e) => {
+        if (e) e.preventDefault();
+        const users = loadUsers(), googleEmail = "google@gmail.com";
+        let user = users.find(u => u.email === googleEmail);
+        if (!user) { user = { email: googleEmail, password: "sns", credits: 10 }; users.push(user); saveUsers(users); }
+        state.isLoggedIn = true; state.credits = user.credits ?? 10; state.currentUserEmail = googleEmail;
+        enterApp(); showToast("구글 연동 성공!");
+      });
     }
-    state.isLoggedIn = true;
-    state.credits = user.credits ?? 10;
-    state.currentUserEmail = googleEmail;
-    enterApp();
-    showToast("구글 연동 성공!");
-    });
-  }
   };
   // 5-6. 구글 Identity Services SDK 초기화 및 마운팅 (로컬 file 프로토콜 정책 예외 방어)
   if (typeof google !== "undefined" && window.location.protocol !== "file:") {
@@ -327,28 +265,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateCreditUI = () => { navCreditCount.textContent = `${state.credits} CP`; };
   // 7. 실시간 오늘 기상청 연동 날씨 (랜덤 시뮬레이션 탈피)
   const triggerWeatherUpdate = async () => {
-  try {
-    weatherWidget.innerHTML = `<span>🌡️ 현재 기온: <strong>로딩중...</strong> | 기후: <strong>조회중...</strong></span>`;
-    const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.9780&current_weather=true");
-    const data = await res.json();
-    const temp = Math.round(data.current_weather.temperature);
-    const code = data.current_weather.weathercode;
-    
-    let condition = "맑음 ☀️";
-    if (code === 1 || code === 2 || code === 3) condition = "구름 ☁️";
-    else if (code === 45 || code === 48) condition = "안개 🌫️";
-    else if (code >= 51 && code <= 67) condition = "비 🌧️";
-    else if (code >= 71 && code <= 86) condition = "눈 ❄️";
-    else if (code >= 95) condition = "뇌우 ⛈️";
-    else if (code >= 80 && code <= 82) condition = "비 🌧️";
-    
-    state.currentWeather = { temp, condition };
-    weatherWidget.innerHTML = `<span>🌡️ 현재 기온 (서울): <strong>${temp}°C</strong> | 기후: <strong>${condition}</strong></span>`;
-  } catch (e) {
-    console.error("날씨 연동 실패", e);
-    state.currentWeather = { temp: 24, condition: "맑고 따뜻한 날씨 ☀️ (오프라인)" };
-    weatherWidget.innerHTML = `<span>🌡️ 현재 기온: <strong>${state.currentWeather.temp}°C</strong> | 기후: <strong>${state.currentWeather.condition}</strong></span>`;
-  }
+    try {
+      weatherWidget.innerHTML = `<span>🌡️ 현재 기온: <strong>로딩중...</strong> | 기후: <strong>조회중...</strong></span>`;
+      const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.9780&current_weather=true");
+      const data = await res.json();
+      const temp = Math.round(data.current_weather.temperature), code = data.current_weather.weathercode;
+      let c = "맑음 ☀️"; if(code>0&&code<4)c="구름 ☁️"; else if(code==45||code==48)c="안개 🌫️"; else if((code>=51&&code<=67)||(code>=80&&code<=82))c="비 🌧️"; else if(code>=71&&code<=86)c="눈 ❄️"; else if(code>=95)c="뇌우 ⛈️";
+      state.currentWeather = { temp, condition: c };
+      weatherWidget.innerHTML = `<span>🌡️ 현재 기온 (서울): <strong>${temp}°C</strong> | 기후: <strong>${c}</strong></span>`;
+    } catch (e) {
+      console.error("날씨 실패", e);
+      state.currentWeather = { temp: 24, condition: "맑음 ☀️ (오프라인)" };
+      weatherWidget.innerHTML = `<span>🌡️ 현재 기온: <strong>24°C</strong> | 기후: <strong>맑음 ☀️</strong></span>`;
+    }
   };
   refreshWeatherBtn.addEventListener("click", async () => {
   await triggerWeatherUpdate();
@@ -356,40 +285,24 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   // 8. 6대 카테고리 태그 동적 렌더링
   const renderTags = () => {
-  const categories = ["gender", "when", "where", "role", "style", "why", "body"];
-  const closerData = window.CLOSER_DATA || (typeof CLOSER_DATA !== "undefined" ? CLOSER_DATA : null);
-  if (!closerData) {
-    console.error("CLOSER_DATA를 찾을 수 없습니다.");
-    return;
-  }
-  categories.forEach(cat => {
-    const container = document.getElementById(`${cat}-tags`);
-    if (!container) return;
-    container.innerHTML = "";
-    const items = closerData[cat];
-    if (!items) return;
-    items.forEach(tag => {
-    const btn = document.createElement("button");
-    btn.className = "tag-btn";
-    btn.textContent = tag;
-    btn.type = "button";
-    btn.addEventListener("click", () => {
-      toggleTagSelection(cat, tag, btn);
+    const closerData = window.CLOSER_DATA || (typeof CLOSER_DATA !== "undefined" ? CLOSER_DATA : null);
+    if (!closerData) return;
+    ["gender", "when", "where", "role", "style", "why", "body"].forEach(cat => {
+      const container = document.getElementById(`${cat}-tags`);
+      if (container && closerData[cat]) {
+        container.innerHTML = "";
+        closerData[cat].forEach(tag => {
+          const btn = document.createElement("button"); btn.className = "tag-btn"; btn.textContent = tag; btn.type = "button";
+          btn.addEventListener("click", () => toggleTagSelection(cat, tag, btn));
+          container.appendChild(btn);
+        });
+      }
     });
-    container.appendChild(btn);
-    });
-  });
   };
   const toggleTagSelection = (category, tag, element) => {
-  const arr = state.selectedTags[category];
-  const idx = arr.indexOf(tag);
-  if (idx > -1) {
-    arr.splice(idx, 1);
-    element.classList.remove("selected");
-  } else {
-    arr.push(tag);
-    element.classList.add("selected");
-  }
+    const arr = state.selectedTags[category], idx = arr.indexOf(tag);
+    if (idx > -1) { arr.splice(idx, 1); element.classList.remove("selected"); }
+    else { arr.push(tag); element.classList.add("selected"); }
   };
   // 9-4. 공통 결과 렌더링 헬퍼 (전체화면 대시보드)
   const renderDashboardResult = (title, descr, photoUrl, items) => {
@@ -428,6 +341,23 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   mainScreen.style.display = "none";
   fullscreenDashboard.style.display = "flex";
+
+  // 추천 기록 로컬 스토리지 저장
+  if (state.currentUserEmail) {
+    try {
+      const historyKey = `closet_history_${state.currentUserEmail}`;
+      const histories = JSON.parse(localStorage.getItem(historyKey) || "[]");
+      histories.unshift({
+        date: new Date().toLocaleString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+        title: title,
+        items: items
+      });
+      if (histories.length > 20) histories.pop();
+      localStorage.setItem(historyKey, JSON.stringify(histories));
+    } catch (e) {
+      console.error("히스토리 저장 실패", e);
+    }
+  }
   };
   // 9-3. 로컬 폴백 매칭 도우미
   const applyLocalFallback = (stylingData, chosenWhen, chosenWhere, chosenRole, body, chosenStyle) => {
@@ -527,10 +457,21 @@ document.addEventListener("DOMContentLoaded", () => {
     showToast("프리미엄 구독이 출시 준비 중입니다.");
   });
   const sidebarProfileBtn = document.getElementById("sidebar-profile-btn");
+  const sidebarHistoryBtn = document.getElementById("sidebar-history-btn");
+  const sidebarSettingsBtn = document.getElementById("sidebar-settings-btn");
+  
   const profileModal = document.getElementById("profile-modal");
   const closeProfileModalBtn = document.getElementById("close-profile-modal-btn");
   const profileModalEmail = document.getElementById("profile-modal-email");
   const profileModalCredits = document.getElementById("profile-modal-credits");
+
+  const historyModal = document.getElementById("history-modal");
+  const closeHistoryModalBtn = document.getElementById("close-history-modal-btn");
+  const historyModalContent = document.getElementById("history-modal-content");
+
+  const settingsModal = document.getElementById("settings-modal");
+  const closeSettingsModalBtn = document.getElementById("close-settings-modal-btn");
+  const saveSettingsModalBtn = document.getElementById("save-settings-modal-btn");
 
   if (sidebarProfileBtn && profileModal) {
     sidebarProfileBtn.addEventListener("click", () => {
@@ -541,6 +482,47 @@ document.addEventListener("DOMContentLoaded", () => {
     
     closeProfileModalBtn.addEventListener("click", () => {
       profileModal.classList.remove("active");
+    });
+  }
+
+  if (sidebarHistoryBtn && historyModal) {
+    sidebarHistoryBtn.addEventListener("click", () => {
+      if (!state.currentUserEmail) {
+        showToast("로그인 후 이용할 수 있습니다.");
+        return;
+      }
+      const histories = JSON.parse(localStorage.getItem(`closet_history_${state.currentUserEmail}`) || "[]");
+      if (histories.length === 0) {
+        historyModalContent.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px;">기록이 없습니다.<br>AI 추천을 받아보세요!</div>`;
+      } else {
+        historyModalContent.innerHTML = histories.map(h => `
+          <div style="background: var(--bg-card); padding: 16px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.05);">
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">${h.date}</div>
+            <div style="font-weight: 700; margin-bottom: 8px; font-size: 1.05rem;">${h.title}</div>
+            <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem; color: var(--text-main);">
+              ${h.items.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </div>
+        `).join('');
+      }
+      historyModal.classList.add("active");
+    });
+    
+    closeHistoryModalBtn.addEventListener("click", () => {
+      historyModal.classList.remove("active");
+    });
+  }
+
+  if (sidebarSettingsBtn && settingsModal) {
+    sidebarSettingsBtn.addEventListener("click", () => {
+      settingsModal.classList.add("active");
+    });
+    closeSettingsModalBtn.addEventListener("click", () => {
+      settingsModal.classList.remove("active");
+    });
+    saveSettingsModalBtn.addEventListener("click", () => {
+      settingsModal.classList.remove("active");
+      showToast("설정이 성공적으로 저장되었습니다!");
     });
   }
   renderTags();
