@@ -97,20 +97,23 @@ const CLOSER_DATA = {
 - 오늘 날씨: 기온 ${promptData.weather.temp}°C (${promptData.weather.condition})
 
 [가장 중요한 핵심 지시사항!!!]
-너는 현재 주어진 **'오늘 날씨(기온 및 상태)'와 '사용자 선택지'를 가장 완벽하게 반영한** 맞춤형 코디를 제안해야 해.
-여름이면 반팔/반바지나 얇은 소재를, 겨울이면 패딩이나 코트 등 날씨에 맞는 옷차림을 최우선으로 고려해.
+너는 현재 주어진 **'오늘 날씨(기온 및 상태)'와 '사용자 성별', '사용자 선택지'를 가장 완벽하게 반영한** 맞춤형 코디를 제안해야 해.
+여름이면 반팔/반바지나 얇은 소재를, 겨울이면 패딩/코트를 최우선으로 고려해. 성별(남성/여성)이 지정되었다면 반드시 그 성별에 맞는 코디와 사진 프롬프트를 작성해!
+
+[검색 실패 방지: 엄격한 아이템 규칙 (매우 중요!)]
+- items 배열의 각 문자열은 **무조건 3단어**여야 합니다: "[브랜드] [카테고리] [색상]"
+- [브랜드]: 의류, 모자, 가방은 무조건 "무신사 스탠다드"로 통일하세요. 신발은 "뉴발란스", "컨버스", "반스", "아디다스" 중 1개.
+- [카테고리]: 가짜 상품(터드, 베이스볼 등) 창조 절대 금지! 반드시 다음 중 하나만 사용하세요: 반팔 티셔츠, 긴팔 티셔츠, 셔츠, 맨투맨, 후드티, 니트, 블레이저, 가죽 자켓, 코트, 패딩, 데님 팬츠, 슬랙스, 코튼 팬츠, 트레이닝 팬츠, 반바지, 스니커즈, 런닝화, 슬립온, 로퍼, 구두, 샌들, 볼캡, 비니, 백팩, 크로스백.
 
 [엄격한 금지사항]
-1. title, descr, items 출력 언어 (영어/일본어 절대 금지!): 이 세 가지 필드는 **오직 100% 순수 한국어**로만 작성하세요. '_movement' 등 알파벳 영어나 한자, 일본어는 단 한 글자라도 섞어 쓰면 절대 안 됩니다.
-2. 검색 실패(환각) 완벽 차단을 위한 단일 브랜드 정책: 의류/가방 등 모든 아이템은 **무조건 "무신사 스탠다드" 딱 1개 브랜드만 사용하세요!** (가짜 상품 창조 금지). 단, 신발만 "뉴발란스", "반스", "컨버스" 중 하나를 쓰세요.
-3. 무조건 3단어 규칙: items 배열 안의 문자열은 **"[무신사 스탠다드] [의류명] [색상]"** 딱 3단어로만 작성하세요.
+1. 언어 (영어/일본어 절대 금지): title, descr, items 필드는 100% 순수 한국어로만 작성하세요. (photoPrompt는 영어 허용)
 
 반드시 아래의 JSON 규격만을 출력해 (마크다운 없이 순수 JSON만):
 {
   "title": "추천 룩 이름 (날씨와 스타일을 잘 살린 매력적인 제목)",
-  "descr": "오늘 날씨와 유저의 선택지를 바탕으로 어떻게 매치하면 좋을지 상세히 설명하는 5~6문장의 스타일링 가이드. (100% 자연스러운 한국어 표준어만 사용할 것!)",
-  "items": ["(예: 무신사 스탠다드 반팔 티셔츠 화이트)", "(예: 무신사 스탠다드 와이드 팬츠 라이트블루)", "(예: 컨버스 로우 스니커즈 블랙)", "(예: 무신사 스탠다드 볼캡 블랙)"],
-  "photoPrompt": "코디를 묘사하는 영어 프롬프트 (예: full body shot of a korean fashion model wearing white t-shirt and light blue wide denim pants, street photography, realistic, 8k)"
+  "descr": "오늘 날씨와 유저의 선택지를 바탕으로 어떻게 매치하면 좋을지 상세히 설명하는 5~6문장의 스타일링 가이드.",
+  "items": ["(예: 무신사 스탠다드 반팔 티셔츠 화이트)", "(예: 무신사 스탠다드 데님 팬츠 블루)", "(예: 컨버스 스니커즈 블랙)"],
+  "photoPrompt": "A highly detailed, photorealistic, 8k resolution street snap photography of a Korean (man 또는 woman 중 성별에 맞게 선택), wearing (의상 영문 상세 묘사), fashionable, aesthetic, cinematic lighting, full body shot"
 }
     `;
 
@@ -152,7 +155,19 @@ const CLOSER_DATA = {
       resultData.descr = (resultData.descr || "").replace(invalidCharsRegex, '');
       resultData.description = resultData.descr; // 안전망
       
-      const fixTypo = (str) => str.replace(invalidCharsRegex, '').replace(/무신사\s*스[탄탠타][다더트]드/g, '무신사 스탠다드');
+      const fixTypo = (str) => {
+        let clean = str.replace(invalidCharsRegex, '');
+        // 무신사 스탠다드 관련 모든 오타/변형을 완벽히 잡기 위한 전처리
+        if (clean.includes('무신사') || clean.includes('스탠다드') || clean.includes('스타다드')) {
+          const parts = clean.split(' ').filter(p => p.trim() !== '');
+          // "무신사 스탠다드 반바지 화이트" 형태로 맞추기 (브랜드명 강제 보정)
+          // 만약 "무신사 터드 반바지 화이트" 라면 parts 길이는 4. 앞 2개를 "무신사 스탠다드"로 덮어쓰기.
+          if (parts.length >= 3) {
+            return `무신사 스탠다드 ${parts[parts.length - 2]} ${parts[parts.length - 1]}`;
+          }
+        }
+        return clean;
+      };
       
       if (resultData.items && Array.isArray(resultData.items)) {
         resultData.items = resultData.items.map(item => typeof item === 'string' ? fixTypo(item) : item);
