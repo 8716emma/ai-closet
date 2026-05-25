@@ -97,23 +97,20 @@ const CLOSER_DATA = {
 - 오늘 날씨: 기온 ${promptData.weather.temp}°C (${promptData.weather.condition})
 
 [가장 중요한 핵심 지시사항!!!]
-유저에게 보여줄 실제 핀터레스트 레퍼런스 화보 사진의 코디는 다음과 같아:
-"${refLook.descr}"
-
-너는 반드시 **위 레퍼런스 사진 속 코디와 최대한 똑같은 룩을 연출할 수 있도록** 실제 무신사에서 살 수 있는 의류 4가지를 찾아 추천해줘야 해.
+너는 현재 주어진 **'오늘 날씨(기온 및 상태)'와 '사용자 선택지'를 가장 완벽하게 반영한** 맞춤형 코디를 제안해야 해.
+여름이면 반팔/반바지나 얇은 소재를, 겨울이면 패딩이나 코트 등 날씨에 맞는 옷차림을 최우선으로 고려해.
 
 [엄격한 금지사항]
-1. 언어 (영어/일본어 절대 금지!): 출력은 **오직 100% 순수 한국어**로만 작성하세요. '_movement' 등 알파벳(A-Z, a-z) 영어나 한자, 일본어는 단 한 글자라도 섞어 쓰면 절대 안 됩니다. 영단어는 무조건 한글 발음으로 적으세요 (예: 무브먼트).
-2. 검색 실패(환각) 완벽 차단을 위한 단일 브랜드 정책: 의류/가방 등 모든 아이템은 **무조건 "무신사 스탠다드" 딱 1개 브랜드만 사용하세요!** (쿠어 백팩 등 가짜 상품 창조 금지). 단, 신발만 "뉴발란스", "반스", "컨버스" 중 하나를 쓰세요.
-3. 무조건 3단어 규칙: **"[무신사 스탠다드] [의류명] [색상]"** 딱 3단어로만 작성하세요.
-4. 이미지(referenceImageId) 고정 필수: 무조건 다음 6개 중 상황에 맞는 1개의 텍스트만 정확히 값으로 넣으세요. 절대 다른 문자열이나 가짜 ID를 지어내면 안 됩니다.
-[선택지]: "src/assets/images/casual.jpg", "src/assets/images/street.jpg", "src/assets/images/office.jpg", "src/assets/images/techwear.jpg", "src/assets/images/sporty.jpg", "src/assets/images/minimal.jpg" 
+1. title, descr, items 출력 언어 (영어/일본어 절대 금지!): 이 세 가지 필드는 **오직 100% 순수 한국어**로만 작성하세요. '_movement' 등 알파벳 영어나 한자, 일본어는 단 한 글자라도 섞어 쓰면 절대 안 됩니다.
+2. 검색 실패(환각) 완벽 차단을 위한 단일 브랜드 정책: 의류/가방 등 모든 아이템은 **무조건 "무신사 스탠다드" 딱 1개 브랜드만 사용하세요!** (가짜 상품 창조 금지). 단, 신발만 "뉴발란스", "반스", "컨버스" 중 하나를 쓰세요.
+3. 무조건 3단어 규칙: items 배열 안의 문자열은 **"[무신사 스탠다드] [의류명] [색상]"** 딱 3단어로만 작성하세요.
 
 반드시 아래의 JSON 규격만을 출력해 (마크다운 없이 순수 JSON만):
 {
-  "title": "추천 룩 이름 (레퍼런스 사진 느낌을 살린 매력적인 제목)",
-  "descr": "레퍼런스 사진의 코디를 어떻게 매치하면 좋을지 상세히 설명하는 5~6문장의 길고 구체적인 스타일링 가이드. (100% 자연스러운 한국어 표준어만 사용할 것!)",
-  "items": ["(예: 무신사 스탠다드 네이비 스트라이프 티셔츠)", "(예: 토피 카키 린넨 와이드 팬츠)", "(예: 컨버스 블랙 하이 스니커즈)", "(예: 에잇세컨즈 차콜 백팩)"] 
+  "title": "추천 룩 이름 (날씨와 스타일을 잘 살린 매력적인 제목)",
+  "descr": "오늘 날씨와 유저의 선택지를 바탕으로 어떻게 매치하면 좋을지 상세히 설명하는 5~6문장의 스타일링 가이드. (100% 자연스러운 한국어 표준어만 사용할 것!)",
+  "items": ["(예: 무신사 스탠다드 반팔 티셔츠 화이트)", "(예: 무신사 스탠다드 와이드 팬츠 라이트블루)", "(예: 컨버스 로우 스니커즈 블랙)", "(예: 무신사 스탠다드 볼캡 블랙)"],
+  "photoPrompt": "코디를 묘사하는 영어 프롬프트 (예: full body shot of a korean fashion model wearing white t-shirt and light blue wide denim pants, street photography, realistic, 8k)"
 }
     `;
 
@@ -142,11 +139,17 @@ const CLOSER_DATA = {
         resultData = JSON.parse(resJson.choices[0].message.content.trim());
       }
       
-      resultData.referenceImageId = refLook.imgId;
+      // 실시간 구글링(AI 생성) 이미지 URL 생성
+      if (resultData.photoPrompt) {
+        resultData.referenceImageId = `https://image.pollinations.ai/prompt/${encodeURIComponent(resultData.photoPrompt)}?width=800&height=1000&nologo=true`;
+      } else {
+        resultData.referenceImageId = refLook.imgId;
+      }
       
       // 한자, 일본어(히라가나, 가타카나) 정규식 원천 차단 필터
       const invalidCharsRegex = /[一-龥ぁ-んァ-ヶ]/g;
-      resultData.description = (resultData.description || "").replace(invalidCharsRegex, '');
+      resultData.descr = (resultData.descr || "").replace(invalidCharsRegex, '');
+      resultData.description = resultData.descr; // 안전망
       if (resultData.items && Array.isArray(resultData.items)) {
         resultData.items = resultData.items.map(item => typeof item === 'string' ? item.replace(invalidCharsRegex, '') : item);
       }
