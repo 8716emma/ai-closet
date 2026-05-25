@@ -87,6 +87,9 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     passwordInput.type = "password";
     passwordToggleBtn.textContent = "👁️";
+  }
+  });
+
   // 3-0. 전역 Toast 알림 헬퍼
   const showToast = (message) => {
     const toast = document.createElement("div");
