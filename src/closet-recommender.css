@@ -258,8 +258,17 @@ details.tag-category[open] summary.step-title { margin-bottom: 12px; border-bott
   font-size: 0.85rem; font-weight: 700; display: flex; justify-content: space-between;
   border-radius: var(--br-sm); box-shadow: var(--shadow-sm);
 }
-
 /* Modal Dialog */
+@keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+@keyframes slideDown { from { transform: translate(-50%, 0); opacity: 1; } to { transform: translate(-50%, 20px); opacity: 0; } }
+.toast-notification {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--primary-dark); color: var(--white);
+  padding: 14px 28px; border-radius: var(--br-pill); font-weight: 800; font-size: 0.95rem;
+  box-shadow: var(--shadow-lg); z-index: 9999;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex; align-items: center; gap: 8px;
+}
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(62,39,35,0.3); backdrop-filter: blur(4px); z-index: 300; display: none; align-items: center; justify-content: center; }
 .modal-overlay.active { display: flex; }
 .modal-card {

@@ -87,17 +87,27 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     passwordInput.type = "password";
     passwordToggleBtn.textContent = "👁️";
-  }
-  });
-  
+  // 3-0. 전역 Toast 알림 헬퍼
+  const showToast = (message) => {
+    const toast = document.createElement("div");
+    toast.className = "toast-notification";
+    toast.innerHTML = `<span>✨</span> ${message}`;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.style.animation = "slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards";
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  };
+  window.showToast = showToast; // HTML 인라인 onclick용
+
   // 3-1. 사이드바 열기/닫기 토글
   if (sidebarToggleBtn && sidebarMenu && sidebarOverlay && sidebarCloseBtn) {
     sidebarToggleBtn.addEventListener("click", () => {
-      sidebarMenu.classList.add("active");
+      sidebarMenu.classList.add("open");
       sidebarOverlay.classList.add("active");
     });
     const closeSidebar = () => {
-      sidebarMenu.classList.remove("active");
+      sidebarMenu.classList.remove("open");
       sidebarOverlay.classList.remove("active");
     };
     sidebarCloseBtn.addEventListener("click", closeSidebar);
@@ -174,32 +184,39 @@ document.addEventListener("DOMContentLoaded", () => {
       alert(msg);
     }
     return;
+      showToast(msg);
     }
-    const newUser = { email: idValue, password: passwordValue, credits: 10 };
+    return;
+    }
+    const newUser = { email: idValue, password: passwordValue, credits: 20 };
     users.push(newUser);
     saveUsers(users);
-    state.isLoggedIn = true; state.credits = 10; state.currentUserEmail = idValue;
+    state.isLoggedIn = true; state.credits = 20; state.currentUserEmail = idValue;
     enterApp();
-    alert("회원가입 성공!");
+    if (isEmailFormat(idValue)) {
+      showToast("이메일 형식으로 가입을 환영합니다! (20 CP 지급)");
+    } else {
+      showToast("새로운 아이디로 가입을 환영합니다! (20 CP 지급)");
+    }
   } else {
     const user = findUser(normId);
     if (!user) {
     const type = isEmailFormat(idValue) ? "이메일" : "아이디";
-    alert(`오류: 가입된 ${type}이 없습니다! 회원가입을 먼저 해 주세요.`);
+    showToast(`오류: 가입된 ${type}이 없습니다! 회원가입을 먼저 해 주세요.`);
     return;
     }
     if (user.password === "sns") {
-    alert("오류: 구글 간편 로그인 계정입니다. 아래 '구글 계정으로 로그인' 버튼을 이용해 주세요!");
+    showToast("오류: 구글 간편 로그인 계정입니다. 아래 '구글 계정으로 로그인' 버튼을 이용해 주세요!");
     return;
     }
     if (user.password !== passwordValue) {
     let err = "오류: 비밀번호가 일치하지 않습니다! 다시 확인해 주세요.";
     if (normId === "test@naver.com") err += " (데모 계정 비밀번호: 123456)";
-    alert(err); return;
+    showToast(err); return;
     }
     state.isLoggedIn = true; state.credits = user.credits ?? 10; state.currentUserEmail = user.email;
     enterApp();
-    alert("로그인 성공!");
+    showToast("로그인 성공!");
   }
   };
   // 5-4. 실시간 구글 소셜 로그인 SDK 및 JWT 크레덴셜 파서
@@ -213,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const profile = JSON.parse(jsonPayload);
     const googleEmail = profile.email;
     if (!googleEmail) {
-    alert("구글 계정 이메일을 가져올 수 없습니다.");
+    showToast("구글 계정 이메일을 가져올 수 없습니다.");
     return;
     }
     const users = loadUsers();
@@ -227,10 +244,10 @@ document.addEventListener("DOMContentLoaded", () => {
     state.credits = user.credits ?? 10;
     state.currentUserEmail = googleEmail;
     enterApp();
-    alert("구글 로그인 성공!");
+    showToast("구글 로그인 성공!");
   } catch (err) {
     console.error("구글 토큰 파싱 에러:", err);
-    alert("구글 인증 정보를 읽어오는 도중 오류가 발생했습니다.");
+    showToast("구글 인증 정보를 읽어오는 도중 오류가 발생했습니다.");
   }
   };
   // 5-5. 오프라인 및 로컬 직접 실행(file://) 폴백 버튼 렌더러
@@ -249,7 +266,6 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
   const btn = googleLoginBtn.querySelector("button");
   if (btn) {
-    // 마이크로 스프링 모션 추가
     btn.addEventListener("click", (e) => {
     if (e) e.preventDefault();
     const googleEmail = "google@gmail.com";
@@ -264,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
     state.credits = user.credits ?? 10;
     state.currentUserEmail = googleEmail;
     enterApp();
-    alert("구글 연동 성공!");
+    showToast("구글 연동 성공!");
     });
   }
   };
@@ -280,7 +296,6 @@ document.addEventListener("DOMContentLoaded", () => {
     { theme: "outline", size: "large", width: 336, text: "signin_with" }
     );
     
-    // 구글 SDK가 정상 로드 및 렌더링될 기회를 넉넉히 제공 (1.2초 -> 2.5초 조율)
     setTimeout(() => {
     if (googleLoginBtn && googleLoginBtn.innerHTML.trim() === "") {
       showFallbackGoogleButton();
@@ -291,14 +306,13 @@ document.addEventListener("DOMContentLoaded", () => {
     showFallbackGoogleButton();
   }
   } else {
-  // 로컬 file:// 모드이거나 오프라인일 때 즉시 로컬 연동 폴백 마운트
   showFallbackGoogleButton();
   }
   submitLoginBtn.addEventListener("click", performLoginOrSignup);
   const resetUsersBtn = document.getElementById("reset-users-btn");
   if (resetUsersBtn) resetUsersBtn.addEventListener("click", () => {
   if (window.confirm("계정 데이터를 전체 삭제하고 다시 시작하시겠습니까?\n데모 계정: test@naver.com / 123456")) {
-    localStorage.removeItem("closet_users"); alert("초기화 완료! 데모 계정으로 로그인하거나 새로 회원가입 하세요."); location.reload();
+    localStorage.removeItem("closet_users"); showToast("초기화 완료! 데모 계정으로 로그인하거나 새로 회원가입 하세요."); location.reload();
   }
   });
   logoutBtn.addEventListener("click", (e) => {
@@ -307,7 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
   emailInput.value = ""; passwordInput.value = "";
   authScreen.style.display = "block"; mainScreen.style.display = "none";
   headerCredits.style.display = "none"; sidebarToggleBtn.style.display = "none"; logoutBtn.style.display = "none";
-  alert("로그아웃 되었습니다.");
+  showToast("로그아웃 되었습니다.");
   });
   // 6. 크레딧 차감 및 업데이트 로직
   const updateCreditUI = () => { navCreditCount.textContent = `${state.credits} CP`; };
@@ -315,7 +329,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const triggerWeatherUpdate = async () => {
   try {
     weatherWidget.innerHTML = `<span>🌡️ 현재 기온: <strong>로딩중...</strong> | 기후: <strong>조회중...</strong></span>`;
-    // Open-Meteo API for Seoul (Latitude 37.5665, Longitude 126.9780)
     const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.9780&current_weather=true");
     const data = await res.json();
     const temp = Math.round(data.current_weather.temperature);
@@ -327,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (code >= 51 && code <= 67) condition = "비 🌧️";
     else if (code >= 71 && code <= 86) condition = "눈 ❄️";
     else if (code >= 95) condition = "뇌우 ⛈️";
-    else if (code >= 80 && code <= 82) condition = "비 🌧️"; // 소나기
+    else if (code >= 80 && code <= 82) condition = "비 🌧️";
     
     state.currentWeather = { temp, condition };
     weatherWidget.innerHTML = `<span>🌡️ 현재 기온 (서울): <strong>${temp}°C</strong> | 기후: <strong>${condition}</strong></span>`;
@@ -339,7 +352,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   refreshWeatherBtn.addEventListener("click", async () => {
   await triggerWeatherUpdate();
-  alert("서울 실시간 기상 데이터와 최신 동기화가 완료되었습니다.");
+  showToast("서울 실시간 기상 데이터와 최신 동기화가 완료되었습니다.");
   });
   // 8. 6대 카테고리 태그 동적 렌더링
   const renderTags = () => {
@@ -399,7 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
     linkContainer.style.gap = "8px";
     linkContainer.style.cursor = "default";
     
-    const searchKeyword = item.split(' ').slice(0, 2).join(' '); // 컬러 제외, 브랜드+카테고리만 검색
+    const searchKeyword = item.split(' ').slice(0, -1).join(' ');
     linkContainer.innerHTML = `
     <div style="font-weight:600; color:#4a4a4a; display:flex; align-items:center; gap:6px;"><span>🏷️</span> ${item}</div>
     <div style="display:flex; gap:8px; align-items:center;">
@@ -407,9 +420,6 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
     `;
     
-    // index 0: Top, index 1: Bottom, index 2: Shoes, index 3: Accessory
-    // dashLinksTop: Top (0) and Accessory (3)
-    // dashLinksBottom: Bottom (1) and Shoes (2)
     if (index === 0 || index === 3) {
     dashLinksTop.appendChild(linkContainer);
     } else {
@@ -428,18 +438,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const bodyAdvice = body.length > 0 ? `선택하신 신체특성(${body.join(", ")})을 보완하기 위해 실루엣의 균형을 완벽히 잡았습니다.` : "";
   const descr = `<strong>[AI 분석 처방]</strong> ${chosenWhen} ${chosenWhere}에서 ${chosenRole}로서 가장 돋보일 수 있는 연출입니다. ${stylingData.descr} <br><br><em>${bodyAdvice}</em>`;
   renderDashboardResult(title, descr, photoUrl, stylingData.items);
-  setTimeout(() => { alert("추천 스타일링 처방이 안전하게 완료되었습니다! (-2 CP)"); }, 100);
+  setTimeout(() => { showToast("추천 스타일링 처방이 안전하게 완료되었습니다! (-2 CP)"); }, 100);
   };
   // 10. AI 옷 추천 실행 엔진
   getRecommendationBtn.addEventListener("click", () => {
-  if (state.credits < 2) {
-    paymentModal.style.display = "flex";
-    return;
-  }
   const { gender, when, where, role, style, why, body } = state.selectedTags;
   const customContext = document.getElementById('custom-context') ? document.getElementById('custom-context').value.trim() : '';
   if (style.length === 0) {
-    alert("원하시는 스타일(어떻게)을 최소 1개 이상 선택해 주세요!");
+    showToast("원하시는 스타일(어떻게)을 최소 1개 이상 선택해 주세요!");
+    return;
+  }
+  if (state.credits < 2) {
+    paymentModal.classList.add("active");
     return;
   }
   state.credits -= 2;
@@ -452,7 +462,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const closerData = window.CLOSER_DATA || (typeof CLOSER_DATA !== "undefined" ? CLOSER_DATA : null);
   const templates = (closerData && closerData.templates) ? closerData.templates : {};
   const stylingData = templates[chosenStyle] || templates["default"] || { title: "기본 룩", descr: "기본 스타일링입니다.", items: [], links: "#" };
-  // 실시간 AI API 연동 분기
+  
   if (API_CONFIG.apiKey && API_CONFIG.apiKey !== "YOUR_API_KEY_HERE" && API_CONFIG.apiKey.trim() !== "") {
     dashResultTitle.textContent = "AI가 패션 스타일 분석 중입니다...";
     dashResultDescr.textContent = "기온 정보와 신체 특징을 결합하여 최적의 패션 처방전을 빌드하고 있습니다. 잠시만 기다려주세요.";
@@ -470,10 +480,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const photoUrl = imgId;
       
       renderDashboardResult(title, descr, photoUrl, aiResult.items);
-      setTimeout(() => { alert("실시간 리얼 AI 스타일링 처방이 성공적으로 완료되었습니다! (-2 CP)"); }, 100);
+      setTimeout(() => { showToast("실시간 리얼 AI 스타일링 처방이 성공적으로 완료되었습니다! (-2 CP)"); }, 100);
       })
       .catch(err => {
-      alert("AI API 호출 도중 오류가 발생했습니다. API 키 및 설정을 확인해주세요. (임시 로컬 코디로 대체합니다.)");
+      console.error("AI API Error:", err);
+      showToast("연결이 지연되어 로컬 코디로 대체합니다.");
       applyLocalFallback(stylingData, chosenWhen, chosenWhere, chosenRole, body, chosenStyle);
       });
     } else {
@@ -490,7 +501,6 @@ document.addEventListener("DOMContentLoaded", () => {
   emailSubscribeCheck.addEventListener("change", (e) => {
   if (e.target.checked) {
     emailSubscribeInputGroup.style.display = "block";
-    // 로그인한 유저의 이메일이 있다면 자동 채우기
     if (state.currentUserEmail && state.currentUserEmail.includes("@")) {
     subscribeEmailInput.value = state.currentUserEmail;
     }
@@ -502,23 +512,19 @@ document.addEventListener("DOMContentLoaded", () => {
   saveSubscribeBtn.addEventListener("click", () => {
     const emailVal = subscribeEmailInput.value.trim();
     if (!emailVal || !emailVal.includes("@")) {
-    alert("정확한 이메일 주소를 입력해주세요!");
+    showToast("정확한 이메일 주소를 입력해주세요!");
     return;
     }
-    alert(`[${emailVal}] 주소로 매일 아침 8시 추천 메일 수신 등록이 완료되었습니다!`);
+    showToast(`[${emailVal}] 주소로 매일 아침 8시 추천 메일 수신 등록이 완료되었습니다!`);
   });
   }
   // 12. 결제 팝업 내 버튼 처리
-  closePaymentModalBtn.addEventListener("click", () => paymentModal.style.display = "none");
+  closePaymentModalBtn.addEventListener("click", () => paymentModal.classList.remove("active"));
   chargeCreditBtn.addEventListener("click", () => {
-  state.credits += 10; updateCreditUI(); syncUserCredits();
-  paymentModal.style.display = "none";
-  alert("🪙 10 크레딧(CP) 충전이 완료되었습니다!");
+    showToast("결제 시스템이 아직 연동되지 않았습니다.");
   });
   subscribePremiumBtn.addEventListener("click", () => {
-  state.credits = 9999; navCreditCount.textContent = "PREMIUM"; syncUserCredits();
-  paymentModal.style.display = "none";
-  alert("⭐ 프리미엄 무제한 정기 구독 멤버십이 활성화되었습니다!");
+    showToast("프리미엄 구독이 출시 준비 중입니다.");
   });
   const sidebarProfileBtn = document.getElementById("sidebar-profile-btn");
   if (sidebarProfileBtn) {
