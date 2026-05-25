@@ -113,7 +113,12 @@ const CLOSER_DATA = {
 {
   "title": "추천 룩 이름 (핀터레스트 무드의 인스타그래머블하고 트렌디한 제목, 예: '성수동 카페거리 미니멀 룩', '힙한 무드의 꾸안꾸 스트릿')",
   "descr": "이 조합을 추천하는 이유를 패션 매거진 에디터처럼 트렌디하고 감성적으로 설명해주세요. (핀터레스트 감성, 톤앤매너 강조, 2~3문장)",
-  "items": ["(이곳에 '[브랜드] [카테고리] [색상/디테일]' 형식으로 옷 3~4가지를 정확히 기재할 것. 예: 무신사 스탠다드 슬랙스 미디엄 그레이)"]
+  "items": [
+    {
+      "name": "(이곳에 '[브랜드] [카테고리] [색상/디테일]' 형식으로 옷 명칭 기재, 예: 무신사 스탠다드 슬랙스 그레이)",
+      "reason": "(이 아이템을 고른 이유, 추천하는 핏이나 소재 등 어떤 느낌으로 구매해야 하는지 팁을 1문장으로 작성)"
+    }
+  ]
 }
     `;
 
@@ -170,7 +175,11 @@ const CLOSER_DATA = {
       };
       
       if (resultData.items && Array.isArray(resultData.items)) {
-        resultData.items = resultData.items.map(item => typeof item === 'string' ? fixTypo(item) : item);
+        resultData.items = resultData.items.map(item => {
+          if (typeof item === 'string') return { name: fixTypo(item), reason: "체형과 스타일에 잘 어울리는 추천 아이템입니다." };
+          if (item && item.name) { item.name = fixTypo(item.name); return item; }
+          return item;
+        });
       }
       return resultData;
 } catch (error) {

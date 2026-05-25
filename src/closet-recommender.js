@@ -320,10 +320,14 @@ document.addEventListener("DOMContentLoaded", () => {
     linkContainer.style.gap = "8px";
     linkContainer.style.cursor = "default";
     
-    const searchKeyword = item.split(' ').slice(0, -1).join(' ');
+    const itemName = typeof item === 'string' ? item : (item.name || "아이템");
+    const itemReason = typeof item === 'string' ? "" : (item.reason || "");
+    const searchKeyword = itemName.split(' ').slice(0, -1).join(' ');
+    
     linkContainer.innerHTML = `
-    <div style="font-weight:600; color:#4a4a4a; display:flex; align-items:center; gap:6px;"><span>🏷️</span> ${item}</div>
-    <div style="display:flex; gap:8px; align-items:center;">
+    <div style="font-weight:600; color:#4a4a4a; display:flex; align-items:center; gap:6px;"><span>🏷️</span> ${itemName}</div>
+    ${itemReason ? `<div style="font-size: 13px; color: #7a7a7a; line-height: 1.4; padding-left: 2px; word-break: keep-all;">💡 ${itemReason}</div>` : ''}
+    <div style="display:flex; gap:8px; align-items:center; margin-top: 4px;">
       <a href="https://www.musinsa.com/search/musinsa/integration?type=&q=${encodeURIComponent(searchKeyword)}" target="_blank" style="box-sizing:border-box; display:flex; align-items:center; justify-content:center; flex:1; height:32px; background:#000000; color:white; border-radius:6px; font-size:13px; text-decoration:none; font-weight:700; transition:opacity 0.2s; padding:0; margin:0; line-height:1;">무신사 검색</a>
     </div>
     `;
@@ -445,12 +449,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   // 12. 결제 팝업 내 버튼 처리
   closePaymentModalBtn.addEventListener("click", () => paymentModal.classList.remove("active"));
-  chargeCreditBtn.addEventListener("click", () => {
-    showToast("결제 시스템이 아직 연동되지 않았습니다.");
-  });
-  subscribePremiumBtn.addEventListener("click", () => {
-    showToast("프리미엄 구독이 출시 준비 중입니다.");
-  });
+  chargeCreditBtn.addEventListener("click", () => showToast("결제 시스템이 아직 연동되지 않았습니다."));
+  subscribePremiumBtn.addEventListener("click", () => showToast("프리미엄 구독이 출시 준비 중입니다."));
   const sidebarProfileBtn = document.getElementById("sidebar-profile-btn");
   const sidebarHistoryBtn = document.getElementById("sidebar-history-btn");
   const sidebarSettingsBtn = document.getElementById("sidebar-settings-btn");
