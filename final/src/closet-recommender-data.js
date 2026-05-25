@@ -113,8 +113,7 @@ const CLOSER_DATA = {
 {
   "title": "추천 룩 이름 (날씨와 스타일을 잘 살린 매력적인 제목)",
   "descr": "오늘 날씨와 유저의 선택지를 바탕으로 어떻게 매치하면 좋을지 상세히 설명하는 5~6문장의 스타일링 가이드.",
-  "items": ["(이곳에 3단어 형식으로 옷 3~4가지를 작성. 단, 화이트 티셔츠나 블루 데님만 쓰지 말고 매번 다양한 색상/종류로 창의성을 발휘할 것)"],
-  "photoPrompt": "A highly detailed, photorealistic flat lay photography of the following outfit: (의상 영문 상세 묘사), neatly folded and arranged on a clean white background, top down view, studio lighting, 8k resolution"
+  "items": ["(이곳에 3단어 형식으로 옷 3~4가지를 작성. 단, 화이트 티셔츠나 블루 데님만 쓰지 말고 매번 다양한 색상/종류로 창의성을 발휘할 것)"]
 }
     `;
 
@@ -146,13 +145,9 @@ const CLOSER_DATA = {
         resultData = JSON.parse(resJson.choices[0].message.content.trim());
       }
       
-      // 실시간 구글링(AI 생성) 이미지 URL 생성
-      if (resultData.photoPrompt) {
-        // 가짜 사람 모델 대신 코디 자체(옷)를 직관적으로 보여주기 위해 바닥 눕힘 컷(Flat Lay) 화보로 생성
-        resultData.referenceImageId = `https://image.pollinations.ai/prompt/${encodeURIComponent(resultData.photoPrompt)}?width=800&height=1000&nologo=true&model=flux&enhance=true`;
-      } else {
-        resultData.referenceImageId = refLook.imgId;
-      }
+      // AI 사진 생성 전면 중단 (기괴한 AI 합성 방지)
+      // 무조건 안전한 로컬 레퍼런스 이미지(refLook.imgId)를 사용함.
+      resultData.referenceImageId = refLook.imgId;
       
       // 한자, 일본어(히라가나, 가타카나) 정규식 원천 차단 필터 및 AI 오타 보정
       const invalidCharsRegex = /[一-龥ぁ-んァ-ヶ]/g;

@@ -396,6 +396,16 @@ document.addEventListener("DOMContentLoaded", () => {
     dashLinksBottom.appendChild(linkContainer);
     }
   });
+  
+  // 핀터레스트 실제 코디 검색 버튼 추가
+  const pinterestBtn = document.createElement("a");
+  pinterestBtn.href = `https://kr.pinterest.com/search/pins/?q=${encodeURIComponent(state.selectedTags.gender[0] || "남자")} ${encodeURIComponent(state.selectedTags.when[0] || "봄")} ${encodeURIComponent(state.selectedTags.style[0] || "캐주얼")} 코디`;
+  pinterestBtn.target = "_blank";
+  pinterestBtn.style.cssText = "display:flex; align-items:center; justify-content:center; width:100%; height:44px; background:#E60023; color:white; border-radius:8px; font-size:15px; text-decoration:none; font-weight:700; margin-top:16px; box-shadow:0 4px 12px rgba(230,0,35,0.3); transition:transform 0.2s;";
+  pinterestBtn.innerHTML = "📌 핀터레스트에서 실제 코디 사진 보기";
+  pinterestBtn.onmouseover = () => pinterestBtn.style.transform = "translateY(-2px)";
+  pinterestBtn.onmouseout = () => pinterestBtn.style.transform = "translateY(0)";
+  dashLinksBottom.appendChild(pinterestBtn);
   mainScreen.style.display = "none";
   fullscreenDashboard.style.display = "flex";
   };
