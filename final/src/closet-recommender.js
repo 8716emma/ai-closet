@@ -89,6 +89,20 @@ document.addEventListener("DOMContentLoaded", () => {
     passwordToggleBtn.textContent = "👁️";
   }
   });
+  
+  // 3-1. 사이드바 열기/닫기 토글
+  if (sidebarToggleBtn && sidebarMenu && sidebarOverlay && sidebarCloseBtn) {
+    sidebarToggleBtn.addEventListener("click", () => {
+      sidebarMenu.classList.add("active");
+      sidebarOverlay.classList.add("active");
+    });
+    const closeSidebar = () => {
+      sidebarMenu.classList.remove("active");
+      sidebarOverlay.classList.remove("active");
+    };
+    sidebarCloseBtn.addEventListener("click", closeSidebar);
+    sidebarOverlay.addEventListener("click", closeSidebar);
+  }
   // 4. 로그인 / 회원가입 상태 토글
   let isSignupMode = false;
   const AUTH_MODES = {

@@ -160,10 +160,10 @@ const CLOSER_DATA = {
         // 무신사 스탠다드 관련 모든 오타/변형을 완벽히 잡기 위한 전처리
         if (clean.includes('무신사') || clean.includes('스탠다드') || clean.includes('스타다드')) {
           const parts = clean.split(' ').filter(p => p.trim() !== '');
-          // "무신사 스탠다드 반바지 화이트" 형태로 맞추기 (브랜드명 강제 보정)
-          // 만약 "무신사 터드 반바지 화이트" 라면 parts 길이는 4. 앞 2개를 "무신사 스탠다드"로 덮어쓰기.
           if (parts.length >= 3) {
-            return `무신사 스탠다드 ${parts[parts.length - 2]} ${parts[parts.length - 1]}`;
+            // 카테고리(예: 티셔츠, 슬랙스)가 지워지지 않도록 무신사 관련 단어만 제거하고 합침
+            const cleanedParts = parts.filter(p => !p.includes('무신사') && !p.includes('스탠다드') && !p.includes('스타다드') && !p.includes('터드') && !p.includes('탠다드'));
+            return `무신사 스탠다드 ${cleanedParts.join(' ')}`;
           }
         }
         return clean;
